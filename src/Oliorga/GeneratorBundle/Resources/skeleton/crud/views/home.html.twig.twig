@@ -1,0 +1,78 @@
+{{ '{# /src/'~projectName~'/'~bundleShort~'Bundle/Resources/views/'~entity~'/home.html.twig #}'}}
+
+{{ '{% extends "::layout.html.twig" %}' }}
+
+{{ '{% block title %}' }}
+{{ 'Home - '~bundleShort~' - {{ parent() }}' }}
+{{ '{% endblock %}' }}
+
+{{ '{% block body -%}' }}
+<h1>{{ entity }}s' list:</h1>
+<hr>
+
+<p>Quick search: <input type=text id="recherche"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#recherche 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>            
+        {%- for field, metadata in fields.simple %}
+            {%- if metadata.type in ['date', 'datetime', 'integer'] %}
+
+            <th data-type="numeric">{{ field[:1]|capitalize~field[1:] }}</th>
+
+            {%- else %}
+
+            <th>{{ field[:1]|capitalize~field[1:] }}</th>
+
+            {%- endif %}
+        {%- endfor %}
+
+        {%- for field, metadata in fields.association %}
+
+            <th>{{ field[:1]|capitalize~field[1:] }}</th>
+
+        {%- endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {{ '{%- for '~entity|lower~' in '~entity|lower~'s %}' }}
+        <tr>
+            <td></td>
+    {%- for field, metadata in fields.simple %}
+        {%- if loop.first %}
+
+            <td><a href="{{ '{{ path("'~route_name_prefix~'see", { "'~entity|lower~'_id": '~entity|lower~'.id }) }}' }}">{{ '{{'~entity|lower~'.'~field~'}}' }}</a></td>
+
+        {%- elseif metadata.type in ['date', 'datetime'] %}
+
+            <td data-value="{{ '{{ '~entity|lower~'.'~field~'|date("U") }}'}}">{{ '{{ '~( metadata.nullable == 'yes' ? entity|lower~'.'~field~' is not empty ? ' : '')~entity|lower~'.'~field~'|date("Y-m-d'~( metadata.type == 'datetime' ? ' H:i:s' : '')~ '") }}' }}</td>            
+
+        {%- else %}
+
+            <td>{{ '{{'~entity|lower~'.'~field~'}}' }}</td>
+
+        {%- endif %}
+    {%- endfor %}
+    {%- for field, metadata in fields.association %}
+
+            <td><a href="{{ '{{ path("'~metadata.route_name_prefix~'see", { "'~field~'_id": '~entity|lower~'.'~field~'.id }) }}' }}">{{ '{{'~entity|lower~'.'~field~'}}' }}</a></td>
+        
+    {%- endfor %}
+
+        </tr>
+    {{ '{%- endfor %}' }}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{{ '{% endblock %}' }}

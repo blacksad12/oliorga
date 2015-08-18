@@ -1,0 +1,48 @@
+{{ '{# /src/'~projectName~'/'~bundleShort~'Bundle/Resources/views/'~entity~'/see.html.twig #}'}}
+
+{{ '{% extends "::layout.html.twig" %}' }}
+
+{{ '{% block title %}' }}
+{{ '{{'~entity|lower~'}} - '~bundleShort~' - {{ parent() }}' }}
+{{ '{% endblock %}' }}
+
+{{ '{% block body -%}' }}
+<h1>{{entity}} {{ '{{'~entity|lower~'}}' }}</h1>
+
+{{ "{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}" }}
+{{ "{% include '::confirmDelete.html.twig' %}" }}
+<div class="nav subnav">    
+    {{ "{% set seeMenu = knp_menu_get( '"~bundle~":Builder"~entity~":seeMenu' , [], {'"~entity|lower~"': "~entity|lower~"}) %} " }}
+    {{ "{{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}" }}
+</div>
+
+{{ "{# -------------------------------------------------------------------------- #}
+{# ------------------------------ "~entity~" info -------------------------------- #}" }}
+<table class="table table-hover table-condensed">
+    {%- for field, metadata in fields.simple %}
+
+    <tr>
+        <th>{{ field[:1]|capitalize~field[1:] }}</th>
+        <td>
+        {%- if metadata.type in ['date', 'datetime'] -%}
+            {{ '{{ '~( metadata.nullable == 'yes' ? entity|lower~'.'~field~' is not empty ? ' : '')~entity|lower~'.'~field~'|date("Y-m-d'~( metadata.type == 'datetime' ? ' H:i:s' : '')~ '") }}' }}           
+        {%- else -%}
+            {{ '{{'~entity|lower~'.'~field~'}}' }}
+        {%- endif %}</td>
+    </tr>
+
+    {%- endfor %}
+
+    {%- for field, metadata in fields.association %}
+
+    <tr>
+        <th>{{ field[:1]|capitalize~field[1:] }}</th>
+        <td><a href="{{ '{{ path("'~metadata.route_name_prefix~'see", { "'~field~'_id": '~entity|lower~'.'~field~'.id }) }}' }}">{{ '{{'~entity|lower~'.'~field~'}}' }}</a></td>
+    </tr>
+
+    {%- endfor %}
+
+</table>
+
+{{ "{% endblock %}" }}

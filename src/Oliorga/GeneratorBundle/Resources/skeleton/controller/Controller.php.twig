@@ -1,0 +1,148 @@
+<?php
+
+namespace {{ namespace }}\Controller;
+
+{% block use_statements %}
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+{% if 'annotation' == format.routing -%}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+{% endif %}
+
+use {{ namespace }}\Entity\{{entity}};
+use {{ namespace }}\Form\{{entity}}Type;
+{% endblock use_statements %}
+
+{% block class_definition %}
+/** ****************************************************************************
+ * @Route("/{{entity|lower}}")     
+ ******************************************************************************/
+class {{ entity }}Controller extends Controller
+{% endblock class_definition %}
+{
+{% block class_body %}
+{% for action in actions %}
+{% if action.name == 'home' %}
+    /** ************************************************************************
+     * Display the {{entity}}'s homepage.
+     * @Route("/")
+     **************************************************************************/
+    public function {{ action.name }}Action()        
+    {
+        ${{entity|lower}}s = $this->getDoctrine()
+                ->getRepository('{{bundle}}:{{entity}}')
+                ->findAll();
+        
+        return $this->render('{{bundle}}:{{entity}}:home.html.twig', array(
+            '{{entity|lower}}s' => ${{entity|lower}}s
+        ));
+    }    
+{% elseif action.name == 'add' %}
+    /** ************************************************************************
+     * Create a new {{entity}} according to the information given in the form.
+     * @Route("/add")
+     **************************************************************************/
+    public function {{ action.name }}Action()        
+    {
+        ${{entity|lower}} = new {{entity}}();
+        
+        $form = $this->createForm(new {{entity}}Type(), ${{entity|lower}});
+
+        // ------------- Request Management ------------------------------------
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+          $form->bind($request);// Link Request and Form
+
+          if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist(${{entity|lower}});
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('{{seeRoute}}', array('{{entity|lower}}_id' => ${{entity|lower}}->getId())));
+          }
+        }
+
+        return $this->render('{{bundle}}:{{entity}}:add.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+{% elseif action.name == 'see' %}
+    /** ************************************************************************
+     * Display a {{entity}}
+     * @param {{entity}} ${{entity|lower}}
+     * @ParamConverter("{{entity|lower}}", options={"mapping": {"{{entity|lower}}_id": "id"}})
+     * @Route("/see/{{'{'}}{{entity|lower}}_id{{'}'}}", requirements={{'{'}}"{{entity|lower}}_id" = "\d+"{{'}'}})
+     **************************************************************************/
+    public function seeAction({{entity}} ${{entity|lower}})
+    {
+        
+        return $this->render('{{bundle}}:{{entity}}:see.html.twig', array(
+            '{{entity|lower}}'      => ${{entity|lower}},            
+          ));
+    }
+{% elseif action.name == 'modify' %}
+    /** ************************************************************************
+     * Modify a {{entity}} according to the information given in the form.
+     * 
+     * @param {{entity}} ${{entity|lower}}
+     * @ParamConverter("{{entity|lower}}", options={"mapping": {"{{entity|lower}}_id": "id"}})
+     * @Route("/modify/{{'{'}}{{entity|lower}}_id{{'}'}}", requirements={{'{'}}"{{entity|lower}}_id" = "\d+"{{'}'}})
+     **************************************************************************/
+    public function modifyAction({{entity}} ${{entity|lower}})
+    {
+        $form = $this->createForm(new {{entity}}Type(${{entity|lower}}), ${{entity|lower}});
+
+        // ------------- Request Management ------------------------------------
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+          $form->bind($request); // Link Request and Form
+
+          if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist(${{entity|lower}});
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('{{seeRoute}}', array('{{entity|lower}}_id' => ${{entity|lower}}->getId())));
+          }
+        }
+
+        return $this->render('{{bundle}}:{{entity}}:modify.html.twig', array(
+            '{{entity|lower}}' => ${{entity|lower}},
+            'form' => $form->createView(),           
+        ));
+    }
+{% elseif action.name == 'delete' %}
+    /** ************************************************************************
+     * Delete a {{entity}}.
+     * 
+     * @param {{entity}} ${{entity|lower}}
+     * @ParamConverter("{{entity|lower}}", options={"mapping": {"{{entity|lower}}_id": "id"}})
+     * @Route("/delete/{{'{'}}{{entity|lower}}_id{{'}'}}", requirements={{'{'}}"{{entity|lower}}_id" = "\d+"{{'}'}})
+     **************************************************************************/
+    public function deleteAction({{entity}} ${{entity|lower}})
+    {
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove(${{entity|lower}});
+            $em->flush();
+            return $this->redirect($this->generateUrl(/* Redirect to some page */));          
+        }
+        else{
+            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;
+        }
+    }
+{% else %}
+    /** ************************************************************************
+     * {{ action.name|capitalize }} a {{entity}}
+     * @Route("{{ action.route }}")
+     **************************************************************************/
+    public function {{ action.name }}Action()        
+    {
+        
+    }
+{%- endif %}
+
+{% endfor -%}
+{% endblock class_body %}
+}

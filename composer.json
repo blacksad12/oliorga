@@ -19,6 +19,9 @@
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
+        "knplabs/knp-menu":"~2.0",
+        "knplabs/knp-menu-bundle":"~2.0",
+        "friendsofsymfony/user-bundle": "~2.0@dev",
         "incenteev/composer-parameter-handler": "~2.0"
     },
     "require-dev": {

@@ -1,3 +1,14 @@
-app:
-    resource: "@AppBundle/Controller/"
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+oliorga_app:
+    resource: "@OliorgaAppBundle/Controller/"
     type:     annotation
+    prefix:   /
+
+nutri_ingredient:
+    resource: "@NutriIngredientBundle/Controller/"
+    type:     annotation
+    prefix:   /nutri/
+
+

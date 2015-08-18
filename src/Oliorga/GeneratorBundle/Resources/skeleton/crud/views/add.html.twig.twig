@@ -1,0 +1,14 @@
+{{ '{# /src/'~projectName~'/'~bundleShort~'Bundle/Resources/views/'~entity~'/add.html.twig #}'}}
+
+{{ '{% extends "::layout.html.twig" %}' }}
+
+{{ '{% block title %}' }}
+{{ 'New '~entity~' - '~bundleShort~' - {{ parent() }}' }}
+{{ '{% endblock %}' }}
+
+{{ '{% block body -%}' }}
+<h1>New {{ entity }}</h1>
+
+{{ "{% include '::form_default.html.twig' %}" }}
+
+{{ "{% endblock %}" }}

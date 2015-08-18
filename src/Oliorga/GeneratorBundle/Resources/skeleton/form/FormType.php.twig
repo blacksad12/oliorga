@@ -1,0 +1,87 @@
+<?php
+
+namespace {{ namespace }}\Form{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+{% block use_statements %}
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ form_class }} extends AbstractType
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {% if fields|length > 0 %}    
+    /** ************************************************************************
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     **************************************************************************/
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+{# Converter doctrine field type : form field type #}
+{% set typeConverter =
+            {
+                'string'    : 'text',
+                'text'      : 'textarea',
+                'datetime'  : 'datetime',
+                'date'      : 'date',
+                'boolean'   : 'choice',
+            }
+%}
+        {%- for field in fields.simple %}
+            
+            ->add('{{ field.fieldName }}', '{{typeConverter[field.type]}}', array(
+                'required'  => {{ field.nullable ? 'false' : 'true' }},
+{% if field.type == 'datetime' or field.type == 'date' %}
+                'widget'    => 'single_text',
+                'input'     => 'datetime',
+                'format'    => 'dd/MM/yyyy{{field.type == 'datetime' ? ' - HH:mm'}}',
+                'attr'      => array('class' => 'date{{field.type == 'datetime' ? 'picker' : 'only'}}'),
+{% elseif field.type == 'boolean' %}
+                'choices'   => array(
+                    false   => 'No',
+                    true    => 'Yes',
+                ),
+                'multiple'  => false,
+                'expanded'  => true,
+                'widget_type'  => 'inline',
+{% endif %}
+            ))
+            
+        {%- endfor %}
+        {%- for field in fields.association %}
+        {% set targetEntity = field.targetEntity|split('\\ '|trim) %}
+            
+            ->add('{{ field.fieldName }}', 'entity', array(
+                'class'         => "{{targetEntity[0]}}{{targetEntity[1]}}:{{targetEntity[3]}}",
+                'required'      => {{ field.joinColumns[0].nullable ? 'false' : 'true' }},
+                'query_builder' => function(\{{field.targetEntity}}Repository $r) {
+                        return $r->createQueryBuilder('{{field.fieldName|first}}')
+                                ;}
+            ))
+        
+        {%- endfor %}
+        ;
+    }
+    {% endif %}
+
+    /** ************************************************************************
+     * @param OptionsResolver $resolver
+     **************************************************************************/
+    public function configureOptions(OptionsResolver $resolver) {
+        $resolver->setDefaults(array(
+            'data_class' => '{{ namespace }}\Entity{{ entity_namespace ? '\\' ~ entity_namespace : '' }}\{{ entity_class }}'
+        ));
+    }
+
+    /** ************************************************************************
+     * @return string
+     **************************************************************************/
+    public function getName() {
+        return '{{ form_type_name }}';
+    }
+{% endblock class_body %}
+}

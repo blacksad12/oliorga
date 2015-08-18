@@ -1,0 +1,15 @@
+    /** ************************************************************************
+     * Display the {{entity}}'s homepage.
+     * @Route("/")
+     **************************************************************************/
+    public function homeAction()        
+    {
+        ${{entity|lower}}s = $this->getDoctrine()
+                ->getRepository('{{bundle}}:{{entity}}')
+                ->findAll();
+        
+        return $this->render('{{bundle}}:{{entity}}:home.html.twig', array(
+            '{{entity|lower}}s' => ${{entity|lower}}s
+        ));
+    }
+

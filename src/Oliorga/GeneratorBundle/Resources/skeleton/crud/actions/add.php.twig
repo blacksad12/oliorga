@@ -1,0 +1,29 @@
+    /** ************************************************************************
+     * Create a new {{entity}} according to the information given in the form.
+     * @Route("/add")
+     **************************************************************************/
+    public function addAction()        
+    {
+        ${{entity|lower}} = new {{entity}}();
+        
+        $form = $this->createForm(new {{entity}}Type(), ${{entity|lower}});
+
+        // ------------- Request Management ------------------------------------
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+          $form->bind($request);// Link Request and Form
+
+          if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist(${{entity|lower}});
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('{{ route_name_prefix }}see', array('{{entity|lower}}_id' => ${{entity|lower}}->getId())));
+          }
+        }
+
+        return $this->render('{{bundle}}:{{entity}}:add.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+    

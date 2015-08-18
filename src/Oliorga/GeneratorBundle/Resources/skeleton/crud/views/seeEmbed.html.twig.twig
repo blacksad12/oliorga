@@ -1,0 +1,106 @@
+{{ '{# /src/'~projectName~'/'~bundleShort~'Bundle/Resources/views/'~entity~'/seeEmbed.html.twig #}'}}
+
+{{ "{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of "~entity~"s.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which "~entity~"'s info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if "~entity|lower~"s is not defined%}        {% set "~entity|lower~"s        = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = '"~entity~"s' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if "~entity|lower~"PerPage is not defined%}  {% set "~entity|lower~"PerPage  = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}"}}
+{% for field, metadata in fields.association %}
+{{ "{% if display"~field[:1]|capitalize~field[1:]~" is not defined%}{% set display"~field[:1]|capitalize~field[1:]~" = true %}{%endif%}" }}
+{% endfor %}
+
+
+{{ "{% if not ("~entity|lower~"s is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if "~entity|lower~"s is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='"~entity|lower~"_search'></div>
+{% endif %}" }}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#{{entity|lower}}_search 
+       data-page-navigation="#{{entity|lower}}_pagination" 
+       data-page-size="{{entity|lower}}PerPage">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>            
+        {%- for field, metadata in fields.simple %}
+            {%- if metadata.type in ['date', 'datetime', 'integer'] %}
+
+            <th data-type="numeric">{{ field[:1]|capitalize~field[1:] }}</th>
+
+            {%- else %}
+
+            <th>{{ field[:1]|capitalize~field[1:] }}</th>
+
+            {%- endif %}
+        {%- endfor %}
+
+        {%- for field, metadata in fields.association %}
+
+            {{ "{% if display"~field[:1]|capitalize~field[1:]~" %}" }}<th>{{ field[:1]|capitalize~field[1:] }}</th>{{ "{% endif %}" }}
+
+        {%- endfor %}
+
+        </tr>
+    </thead>
+    <tbody>
+    {{ '{%- for '~entity|lower~' in '~entity|lower~'s %}' }}
+        <tr>
+            <td></td>
+    {%- for field, metadata in fields.simple %}
+        {%- if loop.first %}
+
+            <td><a href="{{ '{{ path("'~route_name_prefix~'see", { "'~entity|lower~'_id": '~entity|lower~'.id }) }}' }}">{{ '{{'~entity|lower~'.'~field~'}}' }}</a></td>
+
+        {%- elseif metadata.type in ['date', 'datetime'] %}
+
+            <td data-value="{{ '{{ '~entity|lower~'.'~field~'|date("U") }}'}}">{{ '{{ '~( metadata.nullable == 'yes' ? entity|lower~'.'~field~' is not empty ? ' : '')~entity|lower~'.'~field~'|date("Y-m-d'~( metadata.type == 'datetime' ? ' H:i:s' : '')~ '") }}' }}</td>            
+
+        {%- else %}
+
+            <td>{{ '{{'~entity|lower~'.'~field~'}}' }}</td>
+
+        {%- endif %}
+    {%- endfor %}
+    {%- for field, metadata in fields.association %}
+
+            {{ "{% if display"~field[:1]|capitalize~field[1:]~" %}" }}<td><a href="{{ '{{ path("'~metadata.route_name_prefix~'see", { "'~field|lower~'_id": '~entity|lower~'.'~field~'.id }) }}' }}">{{ '{{'~entity|lower~'.'~field~'}}' }}</a></td>{{ "{% endif %}" }}
+        
+    {%- endfor %}
+
+        </tr>
+    {{ '{%- endfor %}' }}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="{{entity|lower}}_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{{ "{%else %}" }}
+<p>There is no {{entity}}s for this {{ "{{entityCalling}}" }}.</p>
+{{ "{%endif%}" }}
+
+{{ "{% endif %}" }}

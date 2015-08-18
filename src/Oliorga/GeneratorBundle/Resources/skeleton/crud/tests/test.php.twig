@@ -1,0 +1,25 @@
+<?php
+
+namespace {{ namespace }}\Tests\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+use Oliorga\CoreBundle\Tests\Controller\AbstractControllerTest;
+
+class {{ entity }}ControllerTest extends AbstractControllerTest
+{
+    /** ************************************************************************
+     * Return an array containing one array per Controller's action, with the 
+     * route data.
+     * @return array
+     **************************************************************************/
+    public function getRouteData() {
+        ${{entity|lower}}Id = 1;
+        $rootUrl = '/{{bundleShort|lower}}/{{entity|lower}}';        
+        return array(
+            array('data' => array('method' => 'GET', 'url' => $rootUrl.'/')),
+            array('data' => array('method' => 'GET', 'url' => $rootUrl.'/add')),
+            array('data' => array('method' => 'GET', 'url' => $rootUrl.'/see/'.${{entity|lower}}Id)),
+            array('data' => array('method' => 'GET', 'url' => $rootUrl.'/modify/'.${{entity|lower}}Id)),
+            array('data' => array('method' => 'POST', 'url' => $rootUrl.'/delete/'.${{entity|lower}}Id)),
+        );
+    }
+}

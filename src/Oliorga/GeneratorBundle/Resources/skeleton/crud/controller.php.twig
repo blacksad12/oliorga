@@ -1,0 +1,47 @@
+<?php
+
+namespace {{ namespace }}\Controller{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+{% block use_statements %}
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+{% if 'annotation' == format -%}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+{%- endif %}
+
+use {{ namespace }}\Entity\{{ entity }};
+use {{ namespace }}\Form\{{ entity }}Type;
+{% endblock use_statements %}
+
+/**
+ * {{ entity }} controller.
+ *
+ * @Route("/{{ route_prefix }}")
+ */
+{% block class_definition %}
+class {{ entity_class }}Controller extends Controller
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {%- if 'home' in actions %}
+        {%- include 'crud/actions/home.php.twig' %}
+    {%- endif %}
+
+    {%- if 'add' in actions %}
+        {%- include 'crud/actions/add.php.twig' %}
+    {%- endif %}
+
+    {%- if 'see' in actions %}
+        {%- include 'crud/actions/see.php.twig' %}
+    {%- endif %}
+
+    {%- if 'modify' in actions %}
+        {%- include 'crud/actions/modify.php.twig' %}
+    {%- endif %}
+
+    {%- if 'delete' in actions %}
+        {%- include 'crud/actions/delete.php.twig' %}
+    {%- endif %}
+{% endblock class_body %}
+}

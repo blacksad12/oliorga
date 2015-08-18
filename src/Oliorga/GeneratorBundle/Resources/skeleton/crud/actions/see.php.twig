@@ -1,0 +1,14 @@
+    /** ************************************************************************
+     * Display a {{entity}}
+     * @param {{entity}} ${{entity|lower}}
+     * @ParamConverter("{{entity|lower}}", options={"mapping": {"{{entity|lower}}_id": "id"}})
+     * @Route("/see/{{'{'}}{{entity|lower}}_id{{'}'}}", requirements={{'{'}}"{{entity|lower}}_id" = "\d+"{{'}'}})
+     **************************************************************************/
+    public function seeAction({{entity}} ${{entity|lower}})
+    {
+        
+        return $this->render('{{bundle}}:{{entity}}:see.html.twig', array(
+            '{{entity|lower}}'      => ${{entity|lower}},            
+          ));
+    }
+    

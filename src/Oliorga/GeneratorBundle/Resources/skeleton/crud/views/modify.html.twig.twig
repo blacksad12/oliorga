@@ -1,0 +1,14 @@
+{{ '{# /src/'~projectName~'/'~bundleShort~'Bundle/Resources/views/'~entity~'/modify.html.twig #}'}}
+
+{{ '{% extends "::layout.html.twig" %}' }}
+
+{{ '{% block title %}' }}
+{{ 'Modify '~entity~' - '~bundleShort~' - {{ parent() }}' }}
+{{ '{% endblock %}' }}
+
+{{ '{% block body -%}' }}
+<h1>Modify {{ entity }} <a href="{{ '{{ path("'~route_name_prefix~'see", { "'~entity|lower~'_id": '~entity|lower~'.id }) }}' }}">{{ '{{'~entity|lower~'}}' }}</a></h1>
+
+{{ '{% include "::form_default.html.twig" %}' }}
+
+{{ "{% endblock %}" }}
