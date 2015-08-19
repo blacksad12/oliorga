@@ -39,8 +39,10 @@ class DoctrineEntityGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\D
             throw new \RuntimeException(sprintf('Entity "%s" already exists.', $entityClass));
         }
 
-        $class = new ClassMetadataInfo($entityClass);        
-        $class->table['name'] = strtolower(str_replace('Webobs', '', str_replace('Bundle', '', $bundle->getName()))).'__'.strtolower($entity);
+        $class = new ClassMetadataInfo($entityClass);
+        
+        $namingArray = Helper\NamingHelper::getNamingArray($bundle);
+        $class->table['name'] = $namingArray['vendor'].'__'.$namingArray['bundle'].'__'.strtolower($entity);
         if ($withRepository) {
             $class->customRepositoryClassName = $entityClass.'Repository';
         }

@@ -63,11 +63,11 @@ abstract class GeneratorCommand extends ContainerAwareCommand
 
     protected function getQuestionHelper()
     {
-        $dialog = $this->getHelperSet()->get('dialog');
-        if (!$dialog || get_class($dialog) !== 'Oliorga\GeneratorBundle\Command\Helper\QuestionHelper') {
-            $this->getHelperSet()->set($dialog = new QuestionHelper());
+        $questionHelper = $this->getHelperSet()->get('dialog');
+        if (!$questionHelper || get_class($questionHelper) !== 'Oliorga\GeneratorBundle\Command\Helper\QuestionHelper') {
+            $this->getHelperSet()->set($questionHelper = new QuestionHelper());
         }
 
-        return $dialog;
+        return $questionHelper;
     }
 }

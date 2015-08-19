@@ -1,0 +1,14 @@
+{# /app/Resources/views/form_default.html.twig #}
+
+{% extends "::form_layout.html.twig" %}
+
+{% block form %}
+
+<hr>
+{{ form_start(form) }}
+    {{ form_widget(form) }}    
+    <input value="Save" type="submit" class="btn btn-primary" />
+{{ form_end(form) }}
+
+
+{% endblock %}

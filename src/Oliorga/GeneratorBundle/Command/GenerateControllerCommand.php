@@ -23,10 +23,10 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
+        $questionHelper = $this->getQuestionHelper();
 
         if ($input->isInteractive()) {
-            if (!$dialog->askConfirmation($output, $dialog->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
+            if (!$questionHelper->askConfirmation($output, $questionHelper->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
                 $output->writeln('<error>Command aborted</error>');
 
                 return 1;
@@ -48,21 +48,21 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
             }
         }
         
-        $dialog->writeSection($output, 'Controller generation');
+        $questionHelper->writeSection($output, 'Controller generation');
 
         $generator = $this->getGenerator($bundle);
-        $generator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@AppGeneratorBundle/Resources/skeleton'));
+        $generator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@OliorgaGeneratorBundle/Resources/skeleton'));
         $generator->generate($bundle, $controller, $input->getOption('route-format'), $input->getOption('template-format'), $this->parseActions($input->getOption('actions')));
 
         $output->writeln('Generating the bundle code: <info>OK</info>');
 
-        $dialog->writeGeneratorSummary($output, array());
+        $questionHelper->writeGeneratorSummary($output, array());
     }
 
     public function interact(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
-        $dialog->writeSection($output, 'Welcome to the Symfony2 controller generator');
+        $questionHelper = $this->getQuestionHelper();
+        $questionHelper->writeSection($output, 'Welcome to the Symfony2 controller generator');
 
         // namespace
         $output->writeln(array(
@@ -77,7 +77,7 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
 
         $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
         while (true) {
-            $controller = $dialog->askAndValidate($output, $dialog->getQuestion('Controller name', $input->getOption('controller')), array('Oliorga\GeneratorBundle\Command\Validators', 'validateControllerName'), false, $input->getOption('controller'), $bundleNames);
+            $controller = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('Controller name', $input->getOption('controller')), array('Oliorga\GeneratorBundle\Command\Validators', 'validateControllerName'), false, $input->getOption('controller'), $bundleNames);
             list($bundle, $controller) = $this->parseShortcutNotation($controller);
 
             try {
@@ -103,7 +103,7 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
         $input->setOption('template-format', $templateFormat);
 
         // actions
-        $input->setOption('actions', $this->addActions($input, $output, $dialog));
+        $input->setOption('actions', $this->addActions($input, $output, $questionHelper));
 
         // summary
         $output->writeln(array(
@@ -116,7 +116,7 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
         ));
     }
 
-    public function addActions(InputInterface $input, OutputInterface $output, \Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper $dialog)
+    public function addActions(InputInterface $input, OutputInterface $output, \Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper $questionHelper)
     {
         $output->writeln(array(
             '',
@@ -143,7 +143,7 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
         while (true) {
             // name
             $output->writeln('');
-            $actionName = $dialog->askAndValidate($output, $dialog->getQuestion('New action name (press <return> to stop adding actions)', null), function ($name) use ($actions) {
+            $actionName = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('New action name (press <return> to stop adding actions)', null), function ($name) use ($actions) {
                 if (null == $name) {
                     return $name;
                 }
@@ -166,12 +166,12 @@ class GenerateControllerCommand extends \Sensio\Bundle\GeneratorBundle\Command\G
             } 
             else {
                 // route
-                $route = $dialog->ask($output, $dialog->getQuestion('Action route', '/'.$actionName), '/'.$actionName);
+                $route = $questionHelper->ask($output, $questionHelper->getQuestion('Action route', '/'.$actionName), '/'.$actionName);
                 $placeholders = $this->getPlaceholdersFromRoute($route);
 
                 // template
                 $defaultTemplate = $input->getOption('controller').':'.$actionName.'.html.'.$input->getOption('template-format');
-                $template = $dialog->askAndValidate($output, $dialog->getQuestion('Templatename (optional)', $defaultTemplate), $templateNameValidator, false, 'default');
+                $template = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('Templatename (optional)', $defaultTemplate), $templateNameValidator, false, 'default');
             }
                         
             // adding action

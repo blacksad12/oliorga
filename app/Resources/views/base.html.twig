@@ -3,11 +3,45 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block javascripts %}
+            {% javascripts 
+                '//code.jquery.com/jquery-1.11.1.min.js'
+                '../vendor/fooplugins/footable/bs3/lib/js/footable.js'    
+                '../vendor/fooplugins/footable/bs3/lib/js/footable.sort.js'
+                '../vendor/fooplugins/footable/bs3/lib/js/footable.filter.js'
+                '../vendor/fooplugins/footable/bs3/lib/js/footable.paginate.js'
+                output='js/compiled/main.js'
+            %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+
+            <script type="text/javascript">
+                $(document).ready(function () {   
+                    $('.footable').footable();
+                });
+            </script>
+        {% endblock %}
+        
+        {%- block stylesheets %}
+            {%- stylesheets 
+                '../vendor/twbs/bootstrap/dist/css/bootstrap.min.css'                
+                '../vendor/fooplugins/footable/css/footable.core.css'
+                filter='cssrewrite' output='css/compiled/main.css'
+             %}
+                <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+                <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" >
+            {%- endstylesheets %}
+        {%- endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body>        
+        <div class="container">
+            <div class="row">
+                <div id="content" class="col-md-12">
+                    {% block body %}{% endblock %}
+                </div><!-- #content -->
+            </div><!-- .row -->
+        </div>
+        
     </body>
 </html>

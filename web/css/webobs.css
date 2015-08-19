@@ -1,0 +1,77 @@
+
+/* override */
+.panel {
+  margin:5px 5px 5px 5px;
+}
+
+.panel-heading {
+    padding: 5px 8px;
+}
+
+.panel-heading-text {
+    font-weight: bold;
+    display: inline;
+}
+
+.panel-heading-action {
+    display: inline;
+    float: right;
+}
+
+.modal-fullscreen{
+    width:95%;
+}
+
+.progress{
+    margin-bottom: 5px;
+}
+
+
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > th,
+.table-condensed > tfoot > tr > th,
+.table-condensed > thead > tr > td,
+.table-condensed > tbody > tr > td,
+.table-condensed > tfoot > tr > td {
+  padding: 2px 8px;
+}
+
+.popover-menu > ul > li > a{
+    padding: 5px;
+}
+
+.panel-heading-action > ul > li > a{
+    padding: 0px 2px;
+}
+
+
+
+/******************************************************************************/
+/*                         Inline icon-only menu                              */
+.inline-icon-menu {
+    margin-bottom: 0px;
+    padding-left: 0px;
+}
+
+.inline-icon-menu > li{
+    display: inline; 
+    list-style: none;
+    margin-right: 4px;
+}
+
+.inline-icon-menu > li.disabled > a {
+  color: #999999;
+}
+.inline-icon-menu > li.disabled > a:hover,
+.inline-icon-menu > li.disabled > a:focus {
+  color: #999999;
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+/******************************************************************************/
+/*                                 Post-It                                    */
+.postit-body {
+    background:#FCF0AD;
+}

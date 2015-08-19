@@ -18,7 +18,7 @@ class GenerateDoctrineFormCommand extends \Sensio\Bundle\GeneratorBundle\Command
     protected function configure()
     {
         parent::configure();
-        $this->setAliases(array('webobs:generate:form'));
+        $this->setAliases(array('oliorga:generate:form'));
     }
 
     /**
@@ -34,7 +34,7 @@ class GenerateDoctrineFormCommand extends \Sensio\Bundle\GeneratorBundle\Command
         $bundle   = $this->getApplication()->getKernel()->getBundle($bundle);
 
         $generator = new \Oliorga\GeneratorBundle\Generator\DoctrineFormGenerator($this->getContainer()->get('filesystem'));
-        $generator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@AppGeneratorBundle/Resources/skeleton'));
+        $generator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@OliorgaGeneratorBundle/Resources/skeleton'));
         $generator->generate($bundle, $entity, $metadata[0]);
         
         $output->writeln(sprintf(

@@ -68,7 +68,10 @@ class DoctrineFormGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
      */
     private function getFieldsFromMetadata(ClassMetadataInfo $metadata)
     {
-        $fields = array();
+        $fields = array(
+            'simple'        => array(),
+            'association'   => array(),
+        );
         foreach ($metadata->fieldMappings as $fieldName => $fieldMetadata) {
             if (!in_array($fieldName, $metadata->identifier)) { // Remove the primary key field if it's not managed manually
                 $fields['simple'][] = $fieldMetadata;

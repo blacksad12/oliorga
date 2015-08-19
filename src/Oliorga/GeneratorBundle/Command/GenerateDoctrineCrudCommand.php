@@ -7,8 +7,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Sensio\Bundle\GeneratorBundle\Command\AutoComplete\EntitiesAutoCompleter;
+use Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use Oliorga\GeneratorBundle\Command\Helper\QuestionHelper;
 use Oliorga\GeneratorBundle\Generator\DoctrineCrudGenerator;
 use Oliorga\GeneratorBundle\Generator\DoctrineFormGenerator;
 use Oliorga\GeneratorBundle\Manipulator\RoutingManipulator;
@@ -24,7 +27,7 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
     protected function configure()
     {
         parent::configure();
-        $this->setAliases(array('webobs:generate:crud'));
+        $this->setAliases(array('oliorga:generate:crud'));
     }
 
     /**
@@ -32,10 +35,11 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
+        $questionHelper = $this->getQuestionHelper();
 
         if ($input->isInteractive()) {
-            if (!$dialog->askConfirmation($output, $dialog->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
+            $question = new ConfirmationQuestion($questionHelper->getQuestion('Do you confirm generation', 'yes', '?'), true);
+            if (!$questionHelper->ask($input, $output, $question)) {
                 $output->writeln('<error>Command aborted</error>');
 
                 return 1;
@@ -50,20 +54,20 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
         $withWrite = $input->getOption('with-write');
         $forceOverwrite = $input->getOption('overwrite');
 
-        $dialog->writeSection($output, 'CRUD generation');
+        $questionHelper->writeSection($output, 'CRUD generation');
 
         $entityClass = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle).'\\'.$entity;
         $metadata    = $this->getEntityMetadata($entityClass);
         $bundle      = $this->getContainer()->get('kernel')->getBundle($bundle);
 
         $generator = $this->getGenerator($bundle);
-        $generator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@AppGeneratorBundle/Resources/skeleton'));
+        $generator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@OliorgaGeneratorBundle/Resources/skeleton'));
         $generator->generate($bundle, $entity, $metadata[0], $format, $prefix, $withWrite, $forceOverwrite);
 
         $output->writeln('Generating the CRUD code: <info>OK</info>');
 
         $errors = array();
-        $runner = $dialog->getRunner($output, $errors);
+        $runner = $questionHelper->getRunner($output, $errors);
 
         // form
         if ($withWrite) {
@@ -71,13 +75,13 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
             $output->writeln('Generating the Form code: <info>OK</info>');
         }
         
-        $dialog->writeGeneratorSummary($output, $errors);
+        $questionHelper->writeGeneratorSummary($output, $errors);
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
-        $dialog->writeSection($output, 'Welcome to the Doctrine2 CRUD generator');
+        $questionHelper = $this->getQuestionHelper();
+        $questionHelper->writeSection($output, 'Welcome to the Doctrine2 CRUD generator');
 
         // namespace
         $output->writeln(array(
@@ -92,8 +96,18 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
             '',
         ));
 
-        $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
-        $entity = $dialog->askAndValidate($output, $dialog->getQuestion('The Entity shortcut name', $input->getOption('entity')), array('Oliorga\GeneratorBundle\Command\Validators', 'validateEntityName'), false, $input->getOption('entity'), $bundleNames);
+        if ($input->hasArgument('entity') && $input->getArgument('entity') != '') {
+            $input->setOption('entity', $input->getArgument('entity'));
+        }
+
+        $question = new Question($questionHelper->getQuestion('The Entity shortcut name', $input->getOption('entity')), $input->getOption('entity'));
+        $question->setValidator(array('Sensio\Bundle\GeneratorBundle\Command\Validators', 'validateEntityName'));
+
+        $autocompleter = new EntitiesAutoCompleter($this->getContainer()->get('doctrine')->getManager());
+        $autocompleteEntities = $autocompleter->getSuggestions();
+        $question->setAutocompleterValues($autocompleteEntities);
+        $entity = $questionHelper->ask($input, $output, $question);
+
         $input->setOption('entity', $entity);
         list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
@@ -113,7 +127,7 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
             'prefix: /prefix/, /prefix/new, ...).',
             '',
         ));
-        $prefix = $dialog->ask($output, $dialog->getQuestion('Routes prefix', '/'.$prefix), '/'.$prefix);
+        $prefix = $questionHelper->ask($input, $output, new Question($questionHelper->getQuestion('Routes prefix', '/'.$prefix), '/'.$prefix));
         $input->setOption('route-prefix', $prefix);
 
         // summary
@@ -159,7 +173,7 @@ class GenerateDoctrineCrudCommand extends \Sensio\Bundle\GeneratorBundle\Command
     {
         if (null === $this->formGenerator) {
             $this->formGenerator = new \Oliorga\GeneratorBundle\Generator\DoctrineFormGenerator($this->getContainer()->get('filesystem'));
-            $this->formGenerator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@AppGeneratorBundle/Resources/skeleton'));
+            $this->formGenerator->setSkeletonDirs($this->getContainer()->get('kernel')->locateResource('@OliorgaGeneratorBundle/Resources/skeleton'));
         }
 
         return $this->formGenerator;

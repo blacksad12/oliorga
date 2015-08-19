@@ -1,0 +1,62 @@
+{# app/Ressource/views/form_layout.html.twig #}
+ 
+{# -------------------------------------------------------------------------- #}
+{# This is the main form template. Calls the Javascripts use for dynamic forms #}
+
+
+{% block formJavascripts %}
+    {% javascripts 
+        '../vendor/select2/select2/dist/js/select2.full.min.js'
+        output='js/compiled/formScripts.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+        
+    {# Not included in Assetic because of relative path to TinyMCE plugins #}
+    <script type="text/javascript" src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/tinymce/jquery.tinymce.min.js') }}"></script>
+       
+    <script>
+        $(function (){
+            // For all input with 'attr' => array('class' => 'datepicker'), diplay a datetimepicker
+            $(".datepicker").datetimepicker({
+                weekStart: 1,
+                format : 'dd/mm/yyyy - hh:ii',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1
+            });
+            // jQuery-UI Datepicker
+            $(".dateonly").datepicker({
+                firstDay: 1,
+                dateFormat : 'dd/mm/yy'
+            });
+            // TinyMCE
+            tinyMCE.init({
+                "language":"en",
+                "theme":"modern",
+                "mode":"textareas",
+                editor_deselector : "disableTinyMCE",
+                plugins: "link,advlist,autoresize,code",
+                autoresize_min_height: 200,
+                autoresize_max_height: 600
+            });
+            // Select2
+            $('select').select2({
+                placeholder: 'Select a value',
+                width: '100%',
+                allowClear: true,
+                minimumInputLength: 0
+            });
+        });
+    </script>
+{% endblock %}
+        
+{% block formCss %}
+    <link rel="stylesheet" href="{{ asset('../vendor/select2/select2/dist/css/select2.min.css') }}" type="text/css" />
+{% endblock %}
+
+{% block form %}
+    
+{% endblock %}
+

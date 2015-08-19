@@ -35,6 +35,8 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    form:
+        resources:    ['bootstrap_3_horizontal_layout.html.twig']
 
 # Assetic Configuration
 assetic:
@@ -83,3 +85,7 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Oliorga\AppBundle\Entity\User
+
+knp_menu:
+    twig:
+        template: "::knp_menu.html.twig"

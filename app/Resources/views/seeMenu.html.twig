@@ -1,0 +1,12 @@
+{#{% include '::confirmDelete.html.twig' %}#}
+{#{% set entityId = entityName~'_id' %}
+#}
+<div class="nav subnav">    
+    <ul class="nav nav-pills">
+        {% block menuItems %}
+        <li><a href="{{ path(routePrefix~'home') }}"><span class="glyphicon glyphicon-list"></span> List</a></li>
+        <li><a href="{{ path(routePrefix~'add') }}"><span class="glyphicon glyphicon-plus"></span> Add</a></li>
+        <li><a href="{{ path(routePrefix~'modify', {(entityId) : entity.id}) }}"><span class="glyphicon glyphicon-edit"></span> Modify</a></li>
+        {% endblock %}
+    </ul>
+</div>

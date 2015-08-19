@@ -18,6 +18,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     protected $actions;
     protected $bundleShort;
     protected $projectName;
+    protected $namingArray;
     
     /**
      * Generate the CRUD controller.
@@ -33,10 +34,9 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
      */
     public function generate(BundleInterface $bundle, $entity, ClassMetadataInfo $metadata, $format, $routePrefix, $needWriteActions, $forceOverwrite)
     {
-        $this->projectName = 'Webobs';
+        $this->namingArray = Helper\NamingHelper::getNamingArray($bundle);
         $this->routePrefix = $routePrefix;
-        $this->bundleShort = substr($bundle->getName(), strlen($this->projectName), strlen($bundle->getName())-(strlen('Bundle')+strlen($this->projectName)));
-        $this->routeNamePrefix = strtolower($this->projectName).'_'.strtolower($this->bundleShort).'_'.strtolower($entity).'_';
+        $this->routeNamePrefix = $this->namingArray['vendor'].'_'.$this->namingArray['bundle'].'_'.strtolower($entity).'_';
         $this->actions = $needWriteActions ? array('home', 'add', 'modify', 'see', 'delete') : array('home', 'see');
 
         if (count($metadata->identifier) > 1) {
@@ -149,7 +149,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/tests/test.php.twig', $target, array(
             'entity'            => $this->entity,
             'bundle'            => $this->bundle->getName(),
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'namespace'         => $this->bundle->getNamespace(),
             'entity_namespace'  => $entityNamespace,            
         ));
@@ -170,7 +170,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/menu/builder.php.twig', $target, array(
             'entity'            => $this->entity,
             'bundle'            => $this->bundle->getName(),
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'namespace'         => $this->bundle->getNamespace(),
             'route_name_prefix' => $this->routeNamePrefix,          // Expl: webobs_equipment_model_
         ));
@@ -186,7 +186,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/views/home.html.twig.twig', $dir.'/home.html.twig', array(
             'projectName'       => $this->projectName,              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,                   // Expl: Model
             'fields'            => $this->getFieldsFromMetadata($this->metadata),  // key=>value array of non-associative ('simple') and associative ('association') fields
             'route_name_prefix' => $this->routeNamePrefix,          // Expl: webobs_equipment_model_
@@ -203,7 +203,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/views/see.html.twig.twig', $dir.'/see.html.twig', array(
             'projectName'       => $this->projectName,              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,
             'fields'            => $this->getFieldsFromMetadata($this->metadata),  // key=>value array of non-associative ('simple') and associative ('association') fields
         ));
@@ -219,7 +219,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/views/seeEmbed.html.twig.twig', $dir.'/seeEmbed.html.twig', array(
             'projectName'       => $this->projectName,              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,
             'fields'            => $this->getFieldsFromMetadata($this->metadata),  // key=>value array of non-associative ('simple') and associative ('association') fields
             'route_name_prefix' => $this->routeNamePrefix,          // Expl: webobs_equipment_model_
@@ -236,7 +236,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/views/add.html.twig.twig', $dir.'/add.html.twig', array(
             'projectName'       => $this->projectName,              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,
         ));
     }
@@ -251,7 +251,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
         $this->renderFile('crud/views/modify.html.twig.twig', $dir.'/modify.html.twig', array(
             'projectName'       => $this->projectName,              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
-            'bundleShort'       => $this->bundleShort,              // Expl: Equipment
+            'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'route_name_prefix' => $this->routeNamePrefix,
             'entity'            => $this->entity,
         ));
@@ -266,7 +266,10 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
      */
     private function getFieldsFromMetadata(ClassMetadataInfo $metadata)
     {
-        $fields = array();
+        $fields = array(
+            'simple'        => array(),
+            'association'   => array(),
+        );
         foreach ($metadata->fieldMappings as $fieldName => $fieldMetadata) {
             if (!in_array($fieldName, $metadata->identifier)) { // Remove the primary key field
                 $fields['simple'][$fieldName] = $fieldMetadata;

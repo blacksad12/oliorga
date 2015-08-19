@@ -63,10 +63,10 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
+        $questionHelper = $this->getQuestionHelper();
 
         if ($input->isInteractive()) {
-            if (!$dialog->askConfirmation($output, $dialog->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
+            if (!$questionHelper->askConfirmation($output, $questionHelper->getQuestion('Do you confirm generation', 'yes', '?'), true)) {
                 $output->writeln('<error>Command aborted</error>');
 
                 return 1;
@@ -91,7 +91,7 @@ EOT
         $format = Validators::validateFormat($input->getOption('format'));
         $structure = $input->getOption('structure');
 
-        $dialog->writeSection($output, 'Bundle generation');
+        $questionHelper->writeSection($output, 'Bundle generation');
 
         if (!$this->getContainer()->get('filesystem')->isAbsolutePath($dir)) {
             $dir = getcwd().'/'.$dir;
@@ -103,31 +103,31 @@ EOT
         $output->writeln('Generating the bundle code: <info>OK</info>');
 
         $errors = array();
-        $runner = $dialog->getRunner($output, $errors);
+        $runner = $questionHelper->getRunner($output, $errors);
 
         // check that the namespace is already autoloaded
         $runner($this->checkAutoloader($output, $namespace, $bundle, $dir));
 
         // register the bundle in the Kernel class
-        $runner($this->updateKernel($dialog, $input, $output, $this->getContainer()->get('kernel'), $namespace, $bundle));
+        $runner($this->updateKernel($questionHelper, $input, $output, $this->getContainer()->get('kernel'), $namespace, $bundle));
 
         // routing
-        $runner($this->updateRouting($dialog, $input, $output, $bundle, $format));
+        $runner($this->updateRouting($questionHelper, $input, $output, $bundle, $format));
 
-        $dialog->writeGeneratorSummary($output, $errors);
+        $questionHelper->writeGeneratorSummary($output, $errors);
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
-        $dialog->writeSection($output, 'Welcome to the Symfony2 bundle generator');
+        $questionHelper = $this->getQuestionHelper();
+        $questionHelper->writeSection($output, 'Welcome to the Symfony2 bundle generator');
 
         // namespace
         $namespace = null;
         try {
             $namespace = $input->getOption('namespace') ? Validators::validateBundleNamespace($input->getOption('namespace')) : null;
         } catch (\Exception $error) {
-            $output->writeln($dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+            $output->writeln($questionHelper->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
 
         if (null === $namespace) {
@@ -149,7 +149,7 @@ EOT
                 '',
             ));
 
-            $namespace = $dialog->askAndValidate($output, $dialog->getQuestion('Bundle namespace', $input->getOption('namespace')), array('Oliorga\GeneratorBundleCommand\Validators', 'validateBundleNamespace'), false, $input->getOption('namespace'));
+            $namespace = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('Bundle namespace', $input->getOption('namespace')), array('Oliorga\GeneratorBundleCommand\Validators', 'validateBundleNamespace'), false, $input->getOption('namespace'));
             $input->setOption('namespace', $namespace);
         }
 
@@ -158,7 +158,7 @@ EOT
         try {
             $bundle = $input->getOption('bundle-name') ? Validators::validateBundleName($input->getOption('bundle-name')) : null;
         } catch (\Exception $error) {
-            $output->writeln($dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+            $output->writeln($questionHelper->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
 
         if (null === $bundle) {
@@ -172,7 +172,7 @@ EOT
                 'Based on the namespace, we suggest <comment>'.$bundle.'</comment>.',
                 '',
             ));
-            $bundle = $dialog->askAndValidate($output, $dialog->getQuestion('Bundle name', $bundle), array('Oliorga\GeneratorBundleCommand\Validators', 'validateBundleName'), false, $bundle);
+            $bundle = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('Bundle name', $bundle), array('Oliorga\GeneratorBundleCommand\Validators', 'validateBundleName'), false, $bundle);
             $input->setOption('bundle-name', $bundle);
         }
 
@@ -181,7 +181,7 @@ EOT
         try {
             $dir = $input->getOption('dir') ? Validators::validateTargetDir($input->getOption('dir'), $bundle, $namespace) : null;
         } catch (\Exception $error) {
-            $output->writeln($dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+            $output->writeln($questionHelper->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
 
         if (null === $dir) {
@@ -193,7 +193,7 @@ EOT
                 'the standard conventions.',
                 '',
             ));
-            $dir = $dialog->askAndValidate($output, $dialog->getQuestion('Target directory', $dir), function ($dir) use ($bundle, $namespace) { return Validators::validateTargetDir($dir, $bundle, $namespace); }, false, $dir);
+            $dir = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('Target directory', $dir), function ($dir) use ($bundle, $namespace) { return Validators::validateTargetDir($dir, $bundle, $namespace); }, false, $dir);
             $input->setOption('dir', $dir);
         }
 
@@ -202,7 +202,7 @@ EOT
         try {
             $format = $input->getOption('format') ? Validators::validateFormat($input->getOption('format')) : null;
         } catch (\Exception $error) {
-            $output->writeln($dialog->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
+            $output->writeln($questionHelper->getHelperSet()->get('formatter')->formatBlock($error->getMessage(), 'error'));
         }
 
         if (null === $format) {
@@ -211,7 +211,7 @@ EOT
                 'Determine the format to use for the generated configuration.',
                 '',
             ));
-            $format = $dialog->askAndValidate($output, $dialog->getQuestion('Configuration format (yml, xml, php, or annotation)', $input->getOption('format')), array('Oliorga\GeneratorBundleCommand\Validators', 'validateFormat'), false, $input->getOption('format'));
+            $format = $questionHelper->askAndValidate($output, $questionHelper->getQuestion('Configuration format (yml, xml, php, or annotation)', $input->getOption('format')), array('Oliorga\GeneratorBundleCommand\Validators', 'validateFormat'), false, $input->getOption('format'));
             $input->setOption('format', $format);
         }
 
@@ -224,7 +224,7 @@ EOT
         ));
 
         $structure = $input->getOption('structure');
-        if (!$structure && $dialog->askConfirmation($output, $dialog->getQuestion('Do you want to generate the whole directory structure', 'no', '?'), false)) {
+        if (!$structure && $questionHelper->askConfirmation($output, $questionHelper->getQuestion('Do you want to generate the whole directory structure', 'no', '?'), false)) {
             $structure = true;
         }
         $input->setOption('structure', $structure);
@@ -251,11 +251,11 @@ EOT
         }
     }
 
-    protected function updateKernel(QuestionHelper $dialog, InputInterface $input, OutputInterface $output, KernelInterface $kernel, $namespace, $bundle)
+    protected function updateKernel(QuestionHelper $questionHelper, InputInterface $input, OutputInterface $output, KernelInterface $kernel, $namespace, $bundle)
     {
         $auto = true;
         if ($input->isInteractive()) {
-            $auto = $dialog->askConfirmation($output, $dialog->getQuestion('Confirm automatic update of your Kernel', 'yes', '?'), true);
+            $auto = $questionHelper->askConfirmation($output, $questionHelper->getQuestion('Confirm automatic update of your Kernel', 'yes', '?'), true);
         }
 
         $output->write('Enabling the bundle inside the Kernel: ');
@@ -282,11 +282,11 @@ EOT
         }
     }
 
-    protected function updateRouting(QuestionHelper $dialog, InputInterface $input, OutputInterface $output, $bundle, $format)
+    protected function updateRouting(QuestionHelper $questionHelper, InputInterface $input, OutputInterface $output, $bundle, $format)
     {
         $auto = true;
         if ($input->isInteractive()) {
-            $auto = $dialog->askConfirmation($output, $dialog->getQuestion('Confirm automatic update of the Routing', 'yes', '?'), true);
+            $auto = $questionHelper->askConfirmation($output, $questionHelper->getQuestion('Confirm automatic update of the Routing', 'yes', '?'), true);
         }
 
         $output->write('Importing the bundle routing resource: ');

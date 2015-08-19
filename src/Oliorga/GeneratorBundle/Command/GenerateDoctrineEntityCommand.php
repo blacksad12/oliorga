@@ -8,6 +8,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -18,13 +20,13 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
     protected function configure()
     {
         parent::configure();
-        $this->setAliases(array('webobs:generate:entity'));
+        $this->setAliases(array('oliorga:generate:entity'));
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $dialog = $this->getQuestionHelper();
-        $dialog->writeSection($output, 'Welcome to the Doctrine2 entity generatorXXX');
+        $questionHelper = $this->getQuestionHelper();
+        $questionHelper->writeSection($output, 'Welcome to the Doctrine2 entity generator');
 
         // namespace
         $output->writeln(array(
@@ -39,7 +41,10 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
         $bundleNames = array_keys($this->getContainer()->get('kernel')->getBundles());
 
         while (true) {
-            $entity = $dialog->askAndValidate($output, $dialog->getQuestion('The Entity shortcut name', $input->getOption('entity')), array('Oliorga\GeneratorBundle\Command\Validators', 'validateEntityName'), false, $input->getOption('entity'), $bundleNames);
+            $question = new Question($questionHelper->getQuestion('The Entity shortcut name', $input->getOption('entity')), $input->getOption('entity'));
+            $question->setValidator(array('Oliorga\GeneratorBundle\Command\Validators', 'validateEntityName'));
+            $question->setAutocompleterValues($bundleNames);
+            $entity = $questionHelper->ask($input, $output, $question);
 
             list($bundle, $entity) = $this->parseShortcutNotation($entity);
 
@@ -68,7 +73,7 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
         $input->setOption('format', $format);
 
         // fields
-        $input->setOption('fields', $this->addFields($input, $output, $dialog));
+        $input->setOption('fields', $this->addFields($input, $output, $questionHelper));
 
         // repository?
         $input->setOption('with-repository', 'yes');
@@ -107,7 +112,7 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
         return $fields;
     }
 
-    protected function addFields(InputInterface $input, OutputInterface $output, \Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper $dialog)
+    protected function addFields(InputInterface $input, OutputInterface $output, \Sensio\Bundle\GeneratorBundle\Command\Helper\QuestionHelper $questionHelper)
     {
         $fields = $this->parseFields($input->getOption('fields'));
         $output->writeln(array(
@@ -163,18 +168,21 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
         while (true) {
             $output->writeln('');
             $generator = $this->getGenerator();
-            $columnName = $dialog->askAndValidate($output, $dialog->getQuestion('New field name (press <return> to stop adding fields)', null), function ($name) use ($fields, $generator) {
+            $question = new Question($questionHelper->getQuestion('New field name (press <return> to stop adding fields)', null), null);
+            $question->setValidator(function ($name) use ($fields, $generator) {
                 if (isset($fields[$name]) || 'id' == $name) {
                     throw new \InvalidArgumentException(sprintf('Field "%s" is already defined.', $name));
                 }
 
                 // check reserved words
-                if ($generator->isReservedKeyword($name)){
+                if ($generator->isReservedKeyword($name)) {
                     throw new \InvalidArgumentException(sprintf('Name "%s" is a reserved word.', $name));
                 }
 
                 return $name;
             });
+
+            $columnName = $questionHelper->ask($input, $output, $question);            
             if (!$columnName) {
                 break;
             }
@@ -192,7 +200,10 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
                 $defaultType = 'boolean';
             }
 
-            $type = $dialog->askAndValidate($output, $dialog->getQuestion('Field type', $defaultType), $fieldValidator, false, $defaultType, $types);
+            $question = new Question($questionHelper->getQuestion('Field type', $defaultType), $defaultType);
+            $question->setValidator($fieldValidator);
+            $question->setAutocompleterValues($types);
+            $type = $questionHelper->ask($input, $output, $question);
             
             // isNullable
             $defaultIsNullable = 'yes';
@@ -203,15 +214,20 @@ class GenerateDoctrineEntityCommand extends \Sensio\Bundle\GeneratorBundle\Comma
                 }
                 return $isNullable;
             };
-            $isNullable = $dialog->askAndValidate($output, $dialog->getQuestion('Nullable?', $defaultIsNullable), $isNullableValidator, false, $defaultIsNullable, $possibleIsNullable);
+            $question = new Question($questionHelper->getQuestion('Nullable?', $defaultIsNullable), $defaultIsNullable);
+            $question->setValidator($isNullableValidator);
+            $question->setAutocompleterValues($possibleIsNullable);
+            $isNullable = $questionHelper->ask($input, $output, $question);
             $isNullable = $isNullable === 'yes';
             
             $data = array('columnName' => $columnName, 'fieldName' => lcfirst(Container::camelize($columnName)), 'type' => $type, 'nullable' => $isNullable);
 
             if ($type == 'string') {
-                $data['length'] = $dialog->askAndValidate($output, $dialog->getQuestion('Field length', 255), $lengthValidator, false, 255);
+                $question = new Question($questionHelper->getQuestion('Field length', 255), 255);
+                $question->setValidator($lengthValidator);
+                $data['length'] = $questionHelper->ask($input, $output, $question);
             }
-
+            
             $fields[$columnName] = $data;
         }
 
