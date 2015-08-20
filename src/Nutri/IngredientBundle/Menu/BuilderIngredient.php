@@ -7,7 +7,7 @@ use Knp\Menu\MenuItem;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 
-class BuilderAliment extends ContainerAware
+class BuilderIngredient extends ContainerAware
 {
     /** ************************************************************************
      * Get the sub-menu displayed at the top of the "see" view.
@@ -21,8 +21,8 @@ class BuilderAliment extends ContainerAware
         
         $this->addChildList($menu);
         $this->addChildNew($menu);
-//        $this->addChildModify($menu, $options);
-//        $this->addChildDelete($menu, $options);
+        $this->addChildModify($menu, $options);
+        $this->addChildDelete($menu, $options);
         
         return $menu;
     }
@@ -32,7 +32,7 @@ class BuilderAliment extends ContainerAware
      * @param \Knp\Menu\MenuItem $menu
      **************************************************************************/
     protected function addChildList(MenuItem $menu) {
-        $menu->addChild('List', array('route' => 'nutri_ingredient_aliment_home'))->setAttribute('icon', 'glyphicon-list');
+        $menu->addChild('List', array('route' => 'nutri_ingredient_ingredient_home'))->setAttribute('icon', 'glyphicon-list');
     }
     
     /** ************************************************************************
@@ -40,7 +40,7 @@ class BuilderAliment extends ContainerAware
      * @param \Knp\Menu\MenuItem $menu
      **************************************************************************/
     protected function addChildNew(MenuItem $menu) {
-        $menu->addChild('New Aliment', array('route' => 'nutri_ingredient_aliment_add'))->setAttribute('icon', 'glyphicon-plus');
+        $menu->addChild('New Ingredient', array('route' => 'nutri_ingredient_ingredient_add'))->setAttribute('icon', 'glyphicon-plus');
     }
     
     /** ************************************************************************
@@ -50,8 +50,8 @@ class BuilderAliment extends ContainerAware
      **************************************************************************/
     protected function addChildModify(MenuItem $menu, array $options) {
         $menu->addChild('Modify', array(
-                    'route' => 'nutri_ingredient_aliment_modify', 
-                    'routeParameters' => array('aliment_id' => $options['aliment']->getId())))
+                    'route' => 'nutri_ingredient_ingredient_modify', 
+                    'routeParameters' => array('ingredient_id' => $options['ingredient']->getId())))
              ->setAttribute('icon', 'glyphicon-edit');
     }
     
@@ -65,7 +65,7 @@ class BuilderAliment extends ContainerAware
             ->setAttribute('icon', 'glyphicon-trash')
             ->setLinkAttribute('data-toggle', 'modal')
             ->setLinkAttribute('data-target', '#confirm-delete')
-            ->setLinkAttribute('data-href', $this->container->get('router')->generate('nutri_ingredient_aliment_delete', array('aliment_id' => $options['aliment']->getId())))
+            ->setLinkAttribute('data-href', $this->container->get('router')->generate('nutri_ingredient_ingredient_delete', array('ingredient_id' => $options['ingredient']->getId())))
             ;
     }
     

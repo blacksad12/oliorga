@@ -1,0 +1,6 @@
+services:
+    nutriingredient.ciqualingredientimporter:
+        class: Nutri\IngredientBundle\Service\Importer\CiqualIngredientImporter
+        arguments: [ @doctrine, "@doctrine.orm.entity_manager" ]
+        
+    

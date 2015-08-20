@@ -12,10 +12,17 @@
 {{ "{# -------------------------------------------------------------------------- #}
 {# ------------------------------- Sub nav ---------------------------------- #}" }}
 {{ "{% include '::confirmDelete.html.twig' %}" }}
-<div class="nav subnav">    
+{{ "{#" }}<div class="nav subnav">    
     {{ "{% set seeMenu = knp_menu_get( '"~bundle~":Builder"~entity~":seeMenu' , [], {'"~entity|lower~"': "~entity|lower~"}) %} " }}
     {{ "{{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}" }}
-</div>
+</div>{{ "#}" }}
+{{ "{% embed '::seeMenu.html.twig' with {
+    routePrefix:    '"~projectName|lower~"_"~bundleShort|lower~"_"~entity|lower~"_',
+    entityId:       '"~entity|lower~"_id',
+    entity:         "~entity|lower~"
+} %}
+{% endembed %}" }}
+
 
 {{ "{# -------------------------------------------------------------------------- #}
 {# ------------------------------ "~entity~" info -------------------------------- #}" }}

@@ -1,0 +1,64 @@
+{# /src/Nutri/IngredientBundle/Resources/views/Ingredient/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+Home - Ingredient - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Ingredients' list:</h1>
+<hr>
+
+<p>Quick search: <input type=text id="recherche"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#recherche 
+       data-page-navigation="#pagination" 
+       data-page-size="20">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>Name</th>
+            <th data-hide="all" data-type="numeric">Barcode</th>
+            <th data-hide="all" data-type="numeric">Ciqualcode</th>
+            <th data-type="numeric">Energy (kcal/100g)</th>
+            <th data-type="numeric">Fat (g/100g)</th>
+            <th data-type="numeric">SaturatedFat (g/100g)</th>
+            <th data-type="numeric">Carbohydrate (g/100g)</th>
+            <th data-type="numeric">Sugars (g/100g)</th>
+            <th data-type="numeric">Fiber (g/100g)</th>
+            <th data-type="numeric">Proteins (g/100g)</th>
+            <th data-type="numeric">Salt (g/100g)</th>
+            <th data-type="numeric">Sodium (g/100g)</th> 
+        </tr>
+    </thead>
+    <tbody>
+    {%- for ingredient in ingredients %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredient.id }) }}">{{ingredient.name}}</a></td>
+            <td>{{ingredient.barcode}}</td>
+            <td>{{ingredient.ciqualcode}}</td>
+            <td>{{ingredient.energyKcal}}</td>
+            <td>{{ingredient.fat}}</td>
+            <td>{{ingredient.saturatedFat}}</td>
+            <td>{{ingredient.carbohydrate}}</td>
+            <td>{{ingredient.sugars}}</td>
+            <td>{{ingredient.fiber}}</td>
+            <td>{{ingredient.proteins}}</td>
+            <td>{{ingredient.salt}}</td>
+            <td>{{ingredient.sodium}}</td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="12">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

@@ -1,0 +1,30 @@
+{# /app/Resources/views/confirmDelete.html.twig #}
+
+<script type="text/javascript">
+    $(function () {
+        $('#confirm-delete').on('shown.bs.modal', function(e) {
+            $("#delete-form").attr("action", $(e.relatedTarget).data('href'));
+        });
+    });
+</script>
+
+<div class="modal" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <b>Confirm delete?</b>
+            </div>
+            <div class="modal-body">
+                {%block confirmDeleteBody %}
+                <p>Are you sure you want to delete this?</p>
+                <p>WARNING! This action is <b>not reversible</b>!</p>
+                {%endblock%}
+                <form id="delete-form" action="#" method="post">             
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <input class="btn btn-danger danger" type="submit" value="Confirm delete">
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>

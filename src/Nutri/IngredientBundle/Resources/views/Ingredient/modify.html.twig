@@ -1,0 +1,14 @@
+{# /src/Nutri/IngredientBundle/Resources/views/Ingredient/modify.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+Modify Ingredient - Ingredient - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Modify Ingredient <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredient.id }) }}">{{ingredient}}</a></h1>
+
+{% include "::form_default.html.twig" %}
+
+{% endblock %}

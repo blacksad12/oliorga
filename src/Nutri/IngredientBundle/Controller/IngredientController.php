@@ -6,40 +6,40 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Nutri\IngredientBundle\Entity\Aliment;
-use Nutri\IngredientBundle\Form\AlimentType;
+use Nutri\IngredientBundle\Entity\Ingredient;
+use Nutri\IngredientBundle\Form\IngredientType;
 
 /**
- * Aliment controller.
+ * Ingredient controller.
  *
- * @Route("/aliment")
+ * @Route("/ingredient")
  */
-class AlimentController extends Controller
+class IngredientController extends Controller
 {
     /** ************************************************************************
-     * Display the Aliment's homepage.
+     * Display the Ingredient's homepage.
      * @Route("/")
      **************************************************************************/
     public function homeAction()        
     {
-        $aliments = $this->getDoctrine()
-                ->getRepository('NutriIngredientBundle:Aliment')
+        $ingredients = $this->getDoctrine()
+                ->getRepository('NutriIngredientBundle:Ingredient')
                 ->findAll();
-        
-        return $this->render('NutriIngredientBundle:Aliment:home.html.twig', array(
-            'aliments' => $aliments
+        //$this->get('nutriingredient.ciqualingredientimporter')->import();
+        return $this->render('NutriIngredientBundle:Ingredient:home.html.twig', array(
+            'ingredients' => $ingredients
         ));
     }
 
     /** ************************************************************************
-     * Create a new Aliment according to the information given in the form.
+     * Create a new Ingredient according to the information given in the form.
      * @Route("/add")
      **************************************************************************/
     public function addAction()        
     {
-        $aliment = new Aliment();
+        $ingredient = new Ingredient();
         
-        $form = $this->createForm(new AlimentType(), $aliment);
+        $form = $this->createForm(new IngredientType(), $ingredient);
 
         // ------------- Request Management ------------------------------------
         $request = $this->get('request');
@@ -48,42 +48,42 @@ class AlimentController extends Controller
 
           if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($aliment);
+            $em->persist($ingredient);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('nutri_ingredient_aliment_see', array('aliment_id' => $aliment->getId())));
+            return $this->redirect($this->generateUrl('nutri_ingredient_ingredient_see', array('ingredient_id' => $ingredient->getId())));
           }
         }
 
-        return $this->render('NutriIngredientBundle:Aliment:add.html.twig', array(
+        return $this->render('NutriIngredientBundle:Ingredient:add.html.twig', array(
             'form' => $form->createView(),
         ));
     }
     
     /** ************************************************************************
-     * Display a Aliment
-     * @param Aliment $aliment
-     * @ParamConverter("aliment", options={"mapping": {"aliment_id": "id"}})
-     * @Route("/see/{aliment_id}", requirements={"aliment_id" = "\d+"})
+     * Display a Ingredient
+     * @param Ingredient $ingredient
+     * @ParamConverter("ingredient", options={"mapping": {"ingredient_id": "id"}})
+     * @Route("/see/{ingredient_id}", requirements={"ingredient_id" = "\d+"})
      **************************************************************************/
-    public function seeAction(Aliment $aliment)
+    public function seeAction(Ingredient $ingredient)
     {
         
-        return $this->render('NutriIngredientBundle:Aliment:see.html.twig', array(
-            'aliment'      => $aliment,            
+        return $this->render('NutriIngredientBundle:Ingredient:see.html.twig', array(
+            'ingredient'      => $ingredient,            
           ));
     }
     
     /** ************************************************************************
-     * Modify a Aliment according to the information given in the form.
+     * Modify a Ingredient according to the information given in the form.
      * 
-     * @param Aliment $aliment
-     * @ParamConverter("aliment", options={"mapping": {"aliment_id": "id"}})
-     * @Route("/modify/{aliment_id}", requirements={"aliment_id" = "\d+"})
+     * @param Ingredient $ingredient
+     * @ParamConverter("ingredient", options={"mapping": {"ingredient_id": "id"}})
+     * @Route("/modify/{ingredient_id}", requirements={"ingredient_id" = "\d+"})
      **************************************************************************/
-    public function modifyAction(Aliment $aliment)
+    public function modifyAction(Ingredient $ingredient)
     {
-        $form = $this->createForm(new AlimentType($aliment), $aliment);
+        $form = $this->createForm(new IngredientType($ingredient), $ingredient);
 
         // ------------- Request Management ------------------------------------
         $request = $this->get('request');
@@ -92,32 +92,32 @@ class AlimentController extends Controller
 
           if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($aliment);
+            $em->persist($ingredient);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('nutri_ingredient_aliment_see', array('aliment_id' => $aliment->getId())));
+            return $this->redirect($this->generateUrl('nutri_ingredient_ingredient_see', array('ingredient_id' => $ingredient->getId())));
           }
         }
 
-        return $this->render('NutriIngredientBundle:Aliment:modify.html.twig', array(
-            'aliment' => $aliment,
+        return $this->render('NutriIngredientBundle:Ingredient:modify.html.twig', array(
+            'ingredient' => $ingredient,
             'form' => $form->createView(),           
         ));
     }
     
     /** ************************************************************************
-     * Delete a Aliment.
+     * Delete a Ingredient.
      * 
-     * @param Aliment $aliment
-     * @ParamConverter("aliment", options={"mapping": {"aliment_id": "id"}})
-     * @Route("/delete/{aliment_id}", requirements={"aliment_id" = "\d+"})
+     * @param Ingredient $ingredient
+     * @ParamConverter("ingredient", options={"mapping": {"ingredient_id": "id"}})
+     * @Route("/delete/{ingredient_id}", requirements={"ingredient_id" = "\d+"})
      **************************************************************************/
-    public function deleteAction(Aliment $aliment)
+    public function deleteAction(Ingredient $ingredient)
     {
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($aliment);
+            $em->remove($ingredient);
             $em->flush();
             return $this->redirect($this->generateUrl(/* Redirect to some page */));          
         }

@@ -184,7 +184,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     protected function generateHomeView($dir)
     {
         $this->renderFile('crud/views/home.html.twig.twig', $dir.'/home.html.twig', array(
-            'projectName'       => $this->projectName,              // Expl: Webobs
+            'projectName'       => $this->namingArray['Vendor'],              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
             'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,                   // Expl: Model
@@ -201,7 +201,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     protected function generateSeeView($dir)
     {
         $this->renderFile('crud/views/see.html.twig.twig', $dir.'/see.html.twig', array(
-            'projectName'       => $this->projectName,              // Expl: Webobs
+            'projectName'       => $this->namingArray['Vendor'],              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
             'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,
@@ -217,7 +217,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     protected function generateSeeEmbedView($dir)
     {
         $this->renderFile('crud/views/seeEmbed.html.twig.twig', $dir.'/seeEmbed.html.twig', array(
-            'projectName'       => $this->projectName,              // Expl: Webobs
+            'projectName'       => $this->namingArray['Vendor'],              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
             'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,
@@ -234,7 +234,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     protected function generateAddView($dir)
     {
         $this->renderFile('crud/views/add.html.twig.twig', $dir.'/add.html.twig', array(
-            'projectName'       => $this->projectName,              // Expl: Webobs
+            'projectName'       => $this->namingArray['Vendor'],              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
             'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'entity'            => $this->entity,
@@ -249,7 +249,7 @@ class DoctrineCrudGenerator extends \Sensio\Bundle\GeneratorBundle\Generator\Doc
     protected function generateModifyView($dir)
     {
         $this->renderFile('crud/views/modify.html.twig.twig', $dir.'/modify.html.twig', array(
-            'projectName'       => $this->projectName,              // Expl: Webobs
+            'projectName'       => $this->namingArray['Vendor'],              // Expl: Webobs
             'bundle'            => $this->bundle->getName(),        // Expl: WebobsEquipmentBundle
             'bundleShort'       => $this->namingArray['Bundle'],              // Expl: Equipment
             'route_name_prefix' => $this->routeNamePrefix,

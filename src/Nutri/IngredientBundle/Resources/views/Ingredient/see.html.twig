@@ -1,0 +1,80 @@
+{# /src/Nutri/IngredientBundle/Resources/views/Ingredient/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{ingredient}} - Ingredient - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Ingredient {{ingredient}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'NutriIngredientBundle:BuilderIngredient:seeMenu' , [], {'ingredient': ingredient}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'nutri_ingredient_ingredient_',
+    entityId:       'ingredient_id',
+    entity:         ingredient
+} %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Ingredient info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Name</th>
+        <td>{{ingredient.name}}</td>
+    </tr>
+    <tr>
+        <th>Barcode</th>
+        <td>{{ingredient.barcode}}</td>
+    </tr>
+    <tr>
+        <th>Ciqualcode</th>
+        <td>{{ingredient.ciqualcode}}</td>
+    </tr>
+    <tr>
+        <th>EnergyKcal</th>
+        <td>{{ingredient.energyKcal}}</td>
+    </tr>
+    <tr>
+        <th>Fat</th>
+        <td>{{ingredient.fat}}</td>
+    </tr>
+    <tr>
+        <th>SaturatedFat</th>
+        <td>{{ingredient.saturatedFat}}</td>
+    </tr>
+    <tr>
+        <th>Carbohydrate</th>
+        <td>{{ingredient.carbohydrate}}</td>
+    </tr>
+    <tr>
+        <th>Sugars</th>
+        <td>{{ingredient.sugars}}</td>
+    </tr>
+    <tr>
+        <th>Fiber</th>
+        <td>{{ingredient.fiber}}</td>
+    </tr>
+    <tr>
+        <th>Proteins</th>
+        <td>{{ingredient.proteins}}</td>
+    </tr>
+    <tr>
+        <th>Salt</th>
+        <td>{{ingredient.salt}}</td>
+    </tr>
+    <tr>
+        <th>Sodium</th>
+        <td>{{ingredient.sodium}}</td>
+    </tr>
+</table>
+
+{% endblock %}
