@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Ingredient
 {
+    const UNIT_UNIT  = 'u';
+    const UNIT_GRAM  = 'g';
+    const UNIT_LITER = 'l';
+    
     /**
      * @var integer
      *
@@ -108,6 +112,21 @@ class Ingredient
      */
     private $sodium;
 
+    /**
+     * Recipes where this Ingredient is used
+     * @var Nutri\RecipeBundle\Entity\IngredientForRecipe[]
+     * 
+     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForRecipe", mappedBy="ingredient", cascade={"persist"})
+     */
+    private $ingredientForRecipes;
+
+    /**************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Constructor
+    ////////////////////////////////////////////////////////////////////////////
+    public function __construct() {
+        $this->ingredientForRecipes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**************************************************************************/
     ////////////////////////////////////////////////////////////////////////////
@@ -349,5 +368,38 @@ class Ingredient
      */
     public function getSodium() {
         return $this->sodium;
+    }
+     
+    /**
+     * Add ingredientForRecipes
+     *
+     * @param \Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientForRecipes
+     * @return Ingredient
+     */
+    public function addIngredientForRecipe(\Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientForRecipes)
+    {
+        $this->ingredientForRecipes[] = $ingredientForRecipes;
+
+        return $this;
+    }
+
+    /**
+     * Remove ingredientForRecipes
+     *
+     * @param \Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientForRecipes
+     */
+    public function removeIngredientForRecipe(\Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientForRecipes)
+    {
+        $this->ingredientForRecipes->removeElement($ingredientForRecipes);
+    }
+
+    /**
+     * Get ingredientForRecipes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIngredientForRecipes()
+    {
+        return $this->ingredientForRecipes;
     }
 }

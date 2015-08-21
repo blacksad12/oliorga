@@ -24,7 +24,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "incenteev/composer-parameter-handler": "~2.0",
         "twbs/bootstrap": "^3.3",
-        "select2/select2": "^4.0"
+        "select2/select2": "^4.0",
+        "tinymce/tinymce": ">= 4"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

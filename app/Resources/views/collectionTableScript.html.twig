@@ -1,0 +1,52 @@
+{# /app/Resources/views/collectionTableScript.html.twig #}
+
+{# #############################################################################
+ # This template contains the script which manage the "add line" and "remove line"  
+ # for an embeded collection form. 
+ # 
+ # 
+ # 
+ ##############################################################################}
+
+<script>
+    // Get the tbody containing the collection's lines
+    var collectionHolder = $('tbody.collectionHolder');
+
+    jQuery(document).ready(function() {
+        $('.add_button').on('click', function(e) {
+            e.preventDefault();            
+            addLineForm(collectionHolder);
+        });
+        
+        // Add a link in the last column to delete the row
+        collectionHolder.find('tr').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+        $('select').select2({width:'100%'});
+    });    
+    
+    // Add a new form line in the collection
+    function addLineForm(collectionHolder) {
+        // Get the HTML code of the prototype
+        var prototype = collectionHolder.attr('data-prototype');
+
+        // Replace '__name__' in the HTML of the protoype by a number based on the current collection's length
+        var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+
+        // Display a new line at the end of the table
+        var $newFormTr = $('<tr></tr>').append(newForm);
+        $('.collectionHolder').append($newFormTr);
+        addTagFormDeleteLink($newFormTr);
+        $('select').select2({width:'100%'});
+    }
+    
+    function addTagFormDeleteLink($tagFormTr) {
+        var $removeFormA = $('<td><a class="btn btn-sm btn-danger" href="#"> <span class="glyphicon glyphicon-trash"></span></a></td>');
+        $tagFormTr.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            e.preventDefault();
+            $tagFormTr.remove();
+        });
+    }
+</script>

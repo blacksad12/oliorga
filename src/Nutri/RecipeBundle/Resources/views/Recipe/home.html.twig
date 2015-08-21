@@ -1,0 +1,59 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Recipe/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+Home - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Recipes' list:</h1>
+<hr>
+
+<p>Quick search: <input type=text id="recherche"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#recherche 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>Name</th>
+            <th data-type="numeric">NbPeople</th>
+            <th data-type="numeric">PreparationTime</th>
+            <th data-type="numeric">CookingTime</th>
+            <th data-type="numeric">CookingTemperature</th>
+            <th>Ingredients</th>
+            <th data-hide="all">Detail</th>        </tr>
+    </thead>
+    <tbody>
+    {%- for recipe in recipes %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("nutri_recipe_recipe_see", { "recipe_id": recipe.id }) }}">{{recipe.name}}</a></td>
+            <td>{{recipe.nbPeople}}</td>
+            <td>{{recipe.preparationTime}}</td>
+            <td>{{recipe.cookingTime}}</td>
+            <td>{{recipe.cookingTemperature}}</td>
+            <td>
+                <ul>
+                {% for ingredientForRecipe in recipe.ingredientsForRecipe %}
+                    <li>{{ingredientForRecipe.quantity}}{{ingredientForRecipe.unit == 'g' ? 'g de'}}{{ingredientForRecipe.unit == 'l' ? 'L de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForRecipe.ingredient.id }) }}">{{ingredientForRecipe.ingredient}}</a> {{ingredientForRecipe.comment is not empty ? '('~ingredientForRecipe.comment~')'}} </li>
+                {% endfor %}
+                </ul>
+            </td>
+            <td>{{recipe.detail|raw}}</td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="7">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

@@ -1,0 +1,14 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Recipe/modify.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+Modify Recipe - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Modify Recipe <a href="{{ path("nutri_recipe_recipe_see", { "recipe_id": recipe.id }) }}">{{recipe}}</a></h1>
+
+{% include 'NutriRecipeBundle:Recipe:form.html.twig' %}
+
+{% endblock %}

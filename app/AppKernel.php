@@ -19,8 +19,8 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Oliorga\AppBundle\OliorgaAppBundle(),
-            new Oliorga\GeneratorBundle\OliorgaGeneratorBundle(),
             new Nutri\IngredientBundle\NutriIngredientBundle(),
+            new Nutri\RecipeBundle\NutriRecipeBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -28,6 +28,8 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            $bundles[] = new Oliorga\GeneratorBundle\OliorgaGeneratorBundle();
+            
         }
 
         return $bundles;

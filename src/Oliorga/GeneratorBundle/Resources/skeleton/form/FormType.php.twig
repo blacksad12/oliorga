@@ -29,8 +29,8 @@ class {{ form_class }} extends AbstractType
                 'datetime'  : 'datetime',
                 'date'      : 'date',
                 'boolean'   : 'choice',
-                'integer'   : 'number',
-                'float'     : 'number',
+                'integer'   : 'integer',
+                'float'     : 'integer',
             }
 %}
         {%- for field in fields.simple %}

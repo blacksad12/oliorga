@@ -13,13 +13,13 @@
     {% endjavascripts %}
         
     {# Not included in Assetic because of relative path to TinyMCE plugins #}
-    <script type="text/javascript" src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/tinymce/jquery.tinymce.min.js') }}"></script>
-       
+    <script type="text/javascript" src="{{ asset('../vendor/tinymce/tinymce/tinymce.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('../vendor/tinymce/tinymce/jquery.tinymce.min.js') }}"></script>
+    
     <script>
         $(function (){
             // For all input with 'attr' => array('class' => 'datepicker'), diplay a datetimepicker
-            $(".datepicker").datetimepicker({
+            {#$(".datepicker").datetimepicker({
                 weekStart: 1,
                 format : 'dd/mm/yyyy - hh:ii',
                 todayBtn: 1,
@@ -30,10 +30,10 @@
             $(".dateonly").datepicker({
                 firstDay: 1,
                 dateFormat : 'dd/mm/yy'
-            });
+            });#}
             // TinyMCE
             tinyMCE.init({
-                "language":"en",
+                "language":"fr_FR",
                 "theme":"modern",
                 "mode":"textareas",
                 editor_deselector : "disableTinyMCE",

@@ -1,0 +1,75 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Recipe/form.html.twig #}
+
+{% extends "::form_layout.html.twig" %}
+
+{% block form %}
+
+{% set prototype = 
+ '<td style="width:30%">'~form_widget(form.ingredientsForRecipe.vars.prototype.ingredient)~'</td>
+  <td style="width:100px">'~form_widget(form.ingredientsForRecipe.vars.prototype.quantity)~'</td>
+  <td>'~form_widget(form.ingredientsForRecipe.vars.prototype.unit)~'</td>
+  <td>'~form_widget(form.ingredientsForRecipe.vars.prototype.comment)~'</td>'
+ %}
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------- "New Recipe" form ------------------------- #}
+<hr>
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-7 col-sm-7">
+            {{ form_row(form.name) }} 
+            {{ form_row(form.nbPeople) }} 
+            {{ form_row(form.preparationTime) }} 
+            {{ form_row(form.cookingTime) }} 
+            {{ form_row(form.cookingTemperature) }} 
+        </div>
+        <div class="col-md-5 col-sm-5">
+            <div class="alert alert-info">
+                <ul>
+                    <li>1 CàS = 0.015 L</li>
+                    <li>1 CàC comble = 0.010 L</li>
+                    <li>1 CàC rase = 0.005 L</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    {{ form_label(form.ingredientsForRecipe) }} 
+    <div class="col-lg-10 col-md-10 col-sm-10">
+    <table align="center" class="table">
+        <thead>
+            <tr>
+                <th>Ingredient</th>
+                <th>Quantité</th>
+                <th>Unité</th>
+                <th>Commentaire</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody class="collectionHolder"  data-prototype="{{ prototype|e }}">
+            {% for ingredientsForRecipe in form.ingredientsForRecipe %}
+            <tr>
+                <td>{{ form_widget(ingredientsForRecipe.ingredient) }}</td>
+                <td>{{ form_widget(ingredientsForRecipe.quantity) }}</td>
+                <td>{{ form_widget(ingredientsForRecipe.unit) }}</td>
+                <td>{{ form_widget(ingredientsForRecipe.comment) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">
+                    <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+    {% do form.ingredientsForRecipe.setRendered %}
+    {{ form_row(form.detail) }}   
+    <input type="submit" class="btn btn-primary" />
+{{ form_end(form) }}
+
+{% include "::collectionTableScript.html.twig" %}
+
+{% endblock %}

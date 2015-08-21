@@ -1,3 +1,8 @@
+nutri_recipe:
+    resource: "@NutriRecipeBundle/Controller/"
+    type:     annotation
+    prefix:   /nutri/recipe/
+
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
@@ -9,6 +14,6 @@ oliorga_app:
 nutri_ingredient:
     resource: "@NutriIngredientBundle/Controller/"
     type:     annotation
-    prefix:   /nutri/
+    prefix:   /nutri/ingredient/
 
 

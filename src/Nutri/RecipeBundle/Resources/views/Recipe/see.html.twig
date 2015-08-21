@@ -1,0 +1,66 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Recipe/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{recipe}} - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Recipe {{recipe}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'NutriRecipeBundle:BuilderRecipe:seeMenu' , [], {'recipe': recipe}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'nutri_recipe_recipe_',
+    entityId:       'recipe_id',
+    entity:         recipe
+} %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Recipe info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Name</th>
+        <td>{{recipe.name}}</td>
+    </tr>
+    <tr>
+        <th>NbPeople</th>
+        <td>{{recipe.nbPeople}}</td>
+    </tr>
+    <tr>
+        <th>PreparationTime</th>
+        <td>{{recipe.preparationTime}}</td>
+    </tr>
+    <tr>
+        <th>CookingTime</th>
+        <td>{{recipe.cookingTime}}</td>
+    </tr>
+    <tr>
+        <th>CookingTemperature</th>
+        <td>{{recipe.cookingTemperature}}</td>
+    </tr>
+    <tr>
+        <th>Ingredients</th>
+        <td>
+            <ul>
+            {% for ingredientForRecipe in recipe.ingredientsForRecipe %}
+                <li>{{ingredientForRecipe.quantity}}{{ingredientForRecipe.unit == 'g' ? 'g de'}}{{ingredientForRecipe.unit == 'l' ? 'L de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForRecipe.ingredient.id }) }}">{{ingredientForRecipe.ingredient}}</a> {{ingredientForRecipe.comment is not empty ? '('~ingredientForRecipe.comment~')'}} </li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Detail</th>
+        <td>{{recipe.detail|raw}}</td>
+    </tr>
+</table>
+
+{% endblock %}
