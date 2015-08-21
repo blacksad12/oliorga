@@ -87,5 +87,22 @@ fos_user:
     user_class: Oliorga\AppBundle\Entity\User
 
 knp_menu:
-    twig:
-        template: "::knp_menu.html.twig"
+    twig:  
+        template: "OliorgaAppBundle:Menu:knp_menu.html.twig"
+    templating: false # if true, enables the helper for PHP templates
+    default_renderer: twig # The renderer to use, list is also available by default
+    
+mopa_bootstrap:
+    form: 
+      horizontal_label_class:  col-lg-3 col-md-3 col-sm-3 control-label                 #Unused. See app/Resources/views/form_theme.html.twig
+      horizontal_label_offset_class:  col-lg-offset-3 col-md-offset-3 col-sm-offset-3   #Unused. See app/Resources/views/form_theme.html.twig
+      horizontal_input_wrapper_class:  col-lg-9 col-md-9 col-sm-9                       #Unused. See app/Resources/views/form_theme.html.twig
+      show_legend: false # default is true
+      collection:
+            widget_remove_btn:
+                icon: trash
+                label: Remove
+            widget_add_btn:
+                icon: plus-sign
+    menu: 
+      template: "OliorgaAppBundle:Menu:knp_menu.html.twig"

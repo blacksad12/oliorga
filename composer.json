@@ -25,7 +25,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "twbs/bootstrap": "^3.3",
         "select2/select2": "^4.0",
-        "tinymce/tinymce": ">= 4"
+        "tinymce/tinymce": ">= 4",
+        "mopa/bootstrap-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

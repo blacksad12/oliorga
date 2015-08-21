@@ -6,6 +6,7 @@
         {% block javascripts %}
             {% javascripts 
                 '//code.jquery.com/jquery-1.11.1.min.js'
+                '../vendor/twbs/bootstrap/dist/js/bootstrap.min.js'                
                 '../vendor/fooplugins/footable/bs3/lib/js/footable.js'    
                 '../vendor/fooplugins/footable/bs3/lib/js/footable.sort.js'
                 '../vendor/fooplugins/footable/bs3/lib/js/footable.filter.js'
@@ -36,6 +37,7 @@
     </head>
     <body>        
         <div class="container">
+            {% include '::navbar.html.twig' %}
             <div class="row">
                 <div id="content" class="col-md-12">
                     {% block body %}{% endblock %}

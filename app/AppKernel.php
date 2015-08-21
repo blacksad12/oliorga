@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Oliorga\AppBundle\OliorgaAppBundle(),
             new Nutri\IngredientBundle\NutriIngredientBundle(),
             new Nutri\RecipeBundle\NutriRecipeBundle(),
+            new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

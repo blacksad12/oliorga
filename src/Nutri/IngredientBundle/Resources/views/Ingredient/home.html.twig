@@ -9,7 +9,7 @@ Home - Ingredient - {{ parent() }}
 {% block body -%}
 <h1>Ingredients' list:</h1>
 <hr>
-
+<a class="btn btn-default" href="{{path('nutri_ingredient_ingredient_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> Add</a>
 <p>Quick search: <input type=text id="recherche"></p>
 
 <table class="footable table table-hover table-bordered table-condensed" 

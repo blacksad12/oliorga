@@ -9,7 +9,7 @@ Home - Recipe - {{ parent() }}
 {% block body -%}
 <h1>Recipes' list:</h1>
 <hr>
-
+<a class="btn btn-default" href="{{path('nutri_recipe_recipe_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> Add</a>
 <p>Quick search: <input type=text id="recherche"></p>
 
 <table class="footable table table-hover table-bordered table-condensed" 
