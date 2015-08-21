@@ -1,0 +1,66 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Shoplist/seeEmbed.html.twig #}
+
+{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of Shoplists.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which Shoplist's info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if shoplists is not defined%}        {% set shoplists        = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = 'Shoplists' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if shoplistPerPage is not defined%}  {% set shoplistPerPage  = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}
+
+
+{% if not (shoplists is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if shoplists is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='shoplist_search'></div>
+{% endif %}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#shoplist_search 
+       data-page-navigation="#shoplist_pagination" 
+       data-page-size="shoplistPerPage">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th data-type="numeric">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    {%- for shoplist in shoplists %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("nutri_recipe_shoplist_see", { "shoplist_id": shoplist.id }) }}">{{shoplist.date}}</a></td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="shoplist_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{%else %}
+<p>There is no Shoplists for this {{entityCalling}}.</p>
+{%endif%}
+
+{% endif %}

@@ -1,0 +1,72 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Shoplist/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{shoplist}} - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Shoplist {{shoplist}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'NutriRecipeBundle:BuilderShoplist:seeMenu' , [], {'shoplist': shoplist}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'nutri_recipe_shoplist_',
+    entityId:       'shoplist_id',
+    entity:         shoplist
+} %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Shoplist info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Date</th>
+        <td>{{ shoplist.date|date("Y-m-d") }}</td>
+    </tr>
+    <tr>
+        <th>Ingredients</th>
+        <td>
+            <ul>
+            {% for ingredientForShoplist in shoplist.ingredientsForShoplist %}
+                <li>{{ingredientForShoplist.quantity}}{{ingredientForShoplist.unit == 'g' ? 'g de'}}{{ingredientForShoplist.unit == 'l' ? 'L de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForShoplist.ingredient.id }) }}">{{ingredientForShoplist.ingredient}}</a></li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Recipes</th>
+        <td>
+            <ul>
+            {% for recipeForShoplist in shoplist.recipesForShoplist %}
+                <li><a href="{{ path("nutri_recipe_recipe_see", { "recipe_id": recipeForShoplist.recipe.id }) }}">{{recipeForShoplist.recipe}}</a> pour {{recipeForShoplist.nbPeople}} personnes</li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+</table>
+         
+            <h2>Totaux</h2>
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Ingredients</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+    </tr>
+    {% for ingredient in ingredientList %}
+    <tr>
+        <td>{{ingredient.ingredient}}</td>
+        <td>{{ingredient.quantity}}</td>
+        <td>{{ingredient.unit == 'g' ? 'grammes'}}{{ingredient.unit == 'l' ? 'Litres'}}</td>
+    </tr>
+    {% endfor %}
+</table>       
+
+{% endblock %}

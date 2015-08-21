@@ -1,0 +1,90 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Shoplist/form.html.twig #}
+
+{% extends "::form_layout.html.twig" %}
+
+{% block form %}
+
+{% set prototype_ingredientsForShoplist = 
+ '<td>'~form_widget(form.ingredientsForShoplist.vars.prototype.ingredient)~'</td>
+  <td style="width:100px">'~form_widget(form.ingredientsForShoplist.vars.prototype.quantity)~'</td>
+  <td>'~form_widget(form.ingredientsForShoplist.vars.prototype.unit)~'</td>'
+ %}
+
+{% set prototype_recipesForShoplist = 
+ '<td>'~form_widget(form.recipesForShoplist.vars.prototype.recipe)~'</td>
+  <td style="width:100px">'~form_widget(form.recipesForShoplist.vars.prototype.nbPeople)~'</td>'
+ %}
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------- "New Recipe" form ------------------------- #}
+<hr>
+{{ form_start(form) }}
+    {{ form_row(form.date) }}
+    {# -------------- ingredientForShoplist -------------- #}
+    {{ form_label(form.ingredientsForShoplist) }} 
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <table align="center" class="table">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Quantité</th>
+                    <th>Unité</th>                
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="collectionHolder" id="ingredientsForShoplist" data-prototype="{{ prototype_ingredientsForShoplist|e }}">
+                {% for ingredientForShoplist in form.ingredientsForShoplist %}
+                <tr>
+                    <td>{{ form_widget(ingredientForShoplist.ingredient) }}</td>
+                    <td style="width:100px">{{ form_widget(ingredientForShoplist.quantity) }}</td>
+                    <td>{{ form_widget(ingredientForShoplist.unit) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    {% do form.ingredientsForShoplist.setRendered %}
+      
+    {# -------------- recipeForShoplist -------------- #}
+    {{ form_label(form.recipesForShoplist) }} 
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <table align="center" class="table">
+            <thead>
+                <tr>
+                    <th>Recipe</th>
+                    <th>Pour X pers.</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="collectionHolder" id="recipesForShoplist" data-prototype="{{ prototype_recipesForShoplist|e }}">
+                {% for recipeForShoplist in form.recipesForShoplist %}
+                <tr>
+                    <td>{{ form_widget(recipeForShoplist.recipe) }}</td>
+                    <td style="width:100px">{{ form_widget(recipeForShoplist.nbPeople) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    {% do form.recipesForShoplist.setRendered %}
+      
+    <input type="submit" class="btn btn-primary" />
+{{ form_end(form) }}
+
+{% include "::collectionTableScript.html.twig" %}
+
+{% endblock %}

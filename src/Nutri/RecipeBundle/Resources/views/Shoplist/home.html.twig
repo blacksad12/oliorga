@@ -1,0 +1,41 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Shoplist/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+Home - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Shoplists' list:</h1>
+<hr>
+
+<p>Quick search: <input type=text id="recherche"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#recherche 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th data-type="numeric">Date</th>        </tr>
+    </thead>
+    <tbody>
+    {%- for shoplist in shoplists %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("nutri_recipe_shoplist_see", { "shoplist_id": shoplist.id }) }}">{{shoplist.date}}</a></td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="2">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

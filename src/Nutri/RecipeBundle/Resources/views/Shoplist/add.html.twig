@@ -1,0 +1,14 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Shoplist/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+New Shoplist - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>New Shoplist</h1>
+
+{% include 'NutriRecipeBundle:Shoplist:form.html.twig' %}
+
+{% endblock %}

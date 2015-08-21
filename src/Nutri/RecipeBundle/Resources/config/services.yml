@@ -1,1 +1,6 @@
 services:
+    nutrirecipe.shoplisthelper:
+        class: Nutri\RecipeBundle\Service\Helper\ShoplistHelper
+        arguments: [ @doctrine, "@doctrine.orm.entity_manager" ]
+        
+    

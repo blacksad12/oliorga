@@ -48,7 +48,7 @@ class RecipeController extends Controller
 
           if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            foreach($recipe->getIngredientsForRecipe() as $ingredientForRecipe){
+            foreach($form['ingredientsForRecipe']->getData() as $ingredientForRecipe){
                 $ingredientForRecipe->setRecipe($recipe);
                 $em->persist($ingredientForRecipe);
             }
@@ -89,11 +89,6 @@ class RecipeController extends Controller
     {
         $form = $this->createForm(new RecipeType($recipe), $recipe);
 
-//        $existingIngredientsForRecipe = array();
-//        foreach($recipe->getIngredientsForRecipe() as $existingIngredientForRecipe){
-//            $existingIngredientsForRecipe[] = clone $existingIngredientForRecipe;
-//        }
-//        dump($existingIngredientsForRecipe);
         $existingIngredientsForRecipe = $recipe->getIngredientsForRecipe()->toArray();
             
         $form['ingredientsForRecipe']->setData($existingIngredientsForRecipe);

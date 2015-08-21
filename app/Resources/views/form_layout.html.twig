@@ -7,6 +7,7 @@
 {% block formJavascripts %}
     {% javascripts 
         '../vendor/select2/select2/dist/js/select2.full.min.js'
+        'js/bootstrap-datetimepicker.min.js'
         output='js/compiled/formScripts.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
@@ -25,12 +26,16 @@
                 todayBtn: 1,
                 autoclose: 1,
                 todayHighlight: 1
-            });
-            // jQuery-UI Datepicker
-            $(".dateonly").datepicker({
-                firstDay: 1,
-                dateFormat : 'dd/mm/yy'
             });#}
+            // jQuery-UI Datepicker
+            $(".dateonly").datetimepicker({
+                weekStart: 1,
+                format : 'dd/mm/yyyy',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                minView: 'month',
+            });
             // TinyMCE
             tinyMCE.init({
                 "language":"fr_FR",
@@ -54,6 +59,7 @@
         
 {% block formCss %}
     <link rel="stylesheet" href="{{ asset('../vendor/select2/select2/dist/css/select2.min.css') }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" type="text/css" />
 {% endblock %}
 
 {% block form %}

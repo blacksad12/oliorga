@@ -6,20 +6,19 @@
  # 
  # 
  # 
- ##############################################################################}
+ ############################################################################# #}
 
-<script>
-    // Get the tbody containing the collection's lines
-    var collectionHolder = $('tbody.collectionHolder');
-
+<script>    
     jQuery(document).ready(function() {
+        
         $('.add_button').on('click', function(e) {
-            e.preventDefault();            
+            e.preventDefault();
+            var collectionHolder = $(this).closest('table').find('.collectionHolder'); // Get the tbody containing the collection's lines
             addLineForm(collectionHolder);
         });
         
         // Add a link in the last column to delete the row
-        collectionHolder.find('tr').each(function() {
+        $('.collectionHolder').find('tr').each(function() {
             addTagFormDeleteLink($(this));
         });
         $('select').select2({width:'100%'});
@@ -35,7 +34,7 @@
 
         // Display a new line at the end of the table
         var $newFormTr = $('<tr></tr>').append(newForm);
-        $('.collectionHolder').append($newFormTr);
+        collectionHolder.append($newFormTr);
         addTagFormDeleteLink($newFormTr);
         $('select').select2({width:'100%'});
     }
