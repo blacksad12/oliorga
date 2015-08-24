@@ -24,10 +24,10 @@
         {% endblock %}
         
         {%- block stylesheets %}
-            {%- stylesheets 
+            {%- stylesheets filter='cssrewrite'
                 '../vendor/twbs/bootstrap/dist/css/bootstrap.min.css'                
                 '../vendor/fooplugins/footable/css/footable.core.css'
-                filter='cssrewrite' output='css/compiled/main.css'
+                output='css/compiled/main.css'
              %}
                 <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
                 <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" >

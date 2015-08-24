@@ -3,4 +3,11 @@ services:
         class: Nutri\RecipeBundle\Service\Helper\ShoplistHelper
         arguments: [ @doctrine, "@doctrine.orm.entity_manager" ]
         
+    nutrirecipe.personhelper:
+        class: Nutri\RecipeBundle\Service\Helper\PersonHelper
+        
+    nutrirecipe.recipehelper:
+        class: Nutri\RecipeBundle\Service\Helper\RecipeHelper
+        arguments: [ "@doctrine.orm.entity_manager", @nutrirecipe.personhelper ]
+        
     

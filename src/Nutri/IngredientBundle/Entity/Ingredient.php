@@ -13,9 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Ingredient
 {
-    const UNIT_UNIT  = 'u';
     const UNIT_GRAM  = 'g';
-    const UNIT_LITER = 'l';
+    const UNIT_CENTILITER = 'cl';
     
     /**
      * @var integer

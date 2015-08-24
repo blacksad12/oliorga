@@ -39,7 +39,7 @@ Home - Recipe - {{ parent() }}
             <td>
                 <ul>
                 {% for ingredientForRecipe in recipe.ingredientsForRecipe %}
-                    <li>{{ingredientForRecipe.quantity}}{{ingredientForRecipe.unit == 'g' ? 'g de'}}{{ingredientForRecipe.unit == 'l' ? 'L de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForRecipe.ingredient.id }) }}">{{ingredientForRecipe.ingredient}}</a> {{ingredientForRecipe.comment is not empty ? '('~ingredientForRecipe.comment~')'}} </li>
+                    <li>{{ingredientForRecipe.quantity}}{{ingredientForRecipe.unit == 'g' ? 'g de'}}{{ingredientForRecipe.unit == 'cl' ? 'cl de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForRecipe.ingredient.id }) }}">{{ingredientForRecipe.ingredient}}</a> {{ingredientForRecipe.comment is not empty ? '('~ingredientForRecipe.comment~')'}} </li>
                 {% endfor %}
                 </ul>
             </td>

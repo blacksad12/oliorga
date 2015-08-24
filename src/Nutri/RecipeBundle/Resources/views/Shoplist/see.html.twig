@@ -36,7 +36,7 @@
         <td>
             <ul>
             {% for ingredientForShoplist in shoplist.ingredientsForShoplist %}
-                <li>{{ingredientForShoplist.quantity}}{{ingredientForShoplist.unit == 'g' ? 'g de'}}{{ingredientForShoplist.unit == 'l' ? 'L de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForShoplist.ingredient.id }) }}">{{ingredientForShoplist.ingredient}}</a></li>
+                <li>{{ingredientForShoplist.quantity}}{{ingredientForShoplist.unit == 'g' ? 'g de'}}{{ingredientForShoplist.unit == 'cl' ? 'cl de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForShoplist.ingredient.id }) }}">{{ingredientForShoplist.ingredient}}</a></li>
             {% endfor %}
             </ul>
         </td>
@@ -64,7 +64,7 @@
     <tr>
         <td>{{ingredient.ingredient}}</td>
         <td>{{ingredient.quantity}}</td>
-        <td>{{ingredient.unit == 'g' ? 'grammes'}}{{ingredient.unit == 'l' ? 'Litres'}}</td>
+        <td>{{ingredient.unit == 'g' ? 'grammes'}}{{ingredient.unit == 'cl' ? 'centilitres'}}</td>
     </tr>
     {% endfor %}
 </table>       

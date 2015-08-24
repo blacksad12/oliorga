@@ -30,9 +30,8 @@ class IngredientForRecipeType extends AbstractType
                 'expanded'  => false,
                 'required'  => true,
                 'choices'   => array(
-                    'u' => 'Unité(s)',
-                    'g' => 'Grammes',
-                    'l' => 'Litres'
+                    'g'  => 'Grammes',
+                    'cl' => 'Centilitres'
                 ),
             ))
             ->add('comment', 'text', array(

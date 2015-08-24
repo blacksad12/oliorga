@@ -111,9 +111,8 @@ class IngredientForShoplist
      */
     public function setUnit($unit) {
         if (!in_array($unit, array(
-                \Nutri\IngredientBundle\Entity\Ingredient::UNIT_UNIT, 
                 \Nutri\IngredientBundle\Entity\Ingredient::UNIT_GRAM, 
-                \Nutri\IngredientBundle\Entity\Ingredient::UNIT_LITER))) {
+                \Nutri\IngredientBundle\Entity\Ingredient::UNIT_CENTILITER))) {
             throw new \InvalidArgumentException("Invalid 'unit' value");
         }
         

@@ -52,7 +52,7 @@
         <td>
             <ul>
             {% for ingredientForRecipe in recipe.ingredientsForRecipe %}
-                <li>{{ingredientForRecipe.quantity}}{{ingredientForRecipe.unit == 'g' ? 'g de'}}{{ingredientForRecipe.unit == 'l' ? 'L de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForRecipe.ingredient.id }) }}">{{ingredientForRecipe.ingredient}}</a> {{ingredientForRecipe.comment is not empty ? '('~ingredientForRecipe.comment~')'}} </li>
+                <li>{{ingredientForRecipe.quantity}}{{ingredientForRecipe.unit == 'g' ? 'g de'}}{{ingredientForRecipe.unit == 'cl' ? 'cl de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForRecipe.ingredient.id }) }}">{{ingredientForRecipe.ingredient}}</a> {{ingredientForRecipe.comment is not empty ? '('~ingredientForRecipe.comment~')'}} </li>
             {% endfor %}
             </ul>
         </td>
@@ -61,6 +61,35 @@
         <th>Detail</th>
         <td>{{recipe.detail|raw}}</td>
     </tr>
+</table>
+    
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Person</th>
+        <th>Energy</th>
+        <th>Fat</th>
+        <th>Saturated fat</th>
+        <th>Carbohydrate</th>
+        <th>Sugars</th>
+        <th>Fiber</th>
+        <th>Proteins</th>
+        <th>Salt</th>
+        <th>Sodium</th>
+    </tr>
+    {% for line in referenceDailyIntakePercentage %}
+    <tr>
+        <th>{{line.person.user}}</th>
+        <td>{{line.referenceDailyIntakePercentage.energyKcal|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.fat|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.saturatedFat|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.carbohydrate|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.sugars|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.fiber|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.proteins|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.salt|number_format(2)}} %</td>
+        <td>{{line.referenceDailyIntakePercentage.sodium|number_format(2)}} %</td>
+    </tr>
+    {% endfor %}
 </table>
 
 {% endblock %}

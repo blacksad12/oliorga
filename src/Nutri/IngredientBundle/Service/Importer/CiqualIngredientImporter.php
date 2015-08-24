@@ -54,8 +54,8 @@ class CiqualIngredientImporter
         $ingredient->setSugars($this->strToFloat($ciqualIngredient['32000 Sucres (g/100g)']));
         $ingredient->setFiber($this->strToFloat($ciqualIngredient['34100 Fibres (g/100g)']));
         $ingredient->setProteins($this->strToFloat($ciqualIngredient['25000 Protéines (g/100g)']));
-        $ingredient->setSalt($this->strToFloat($ciqualIngredient['10110 Sodium (mg/100g)'])*2.5);
-        $ingredient->setSodium($this->strToFloat($ciqualIngredient['10110 Sodium (mg/100g)'])); 
+        $ingredient->setSalt($this->strToFloat($ciqualIngredient['10110 Sodium (mg/100g)'])*2.5/1000);
+        $ingredient->setSodium($this->strToFloat($ciqualIngredient['10110 Sodium (mg/100g)'])/1000); 
     }
     
     protected function strToFloat($floatAsString) {
