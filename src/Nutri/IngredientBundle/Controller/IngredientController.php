@@ -22,10 +22,11 @@ class IngredientController extends Controller
      **************************************************************************/
     public function homeAction()        
     {
-        $ingredients = $this->getDoctrine()
-                ->getRepository('NutriIngredientBundle:Ingredient')
-                ->findAll();
+        $ingredients = null;//$this->getDoctrine()
+//                ->getRepository('NutriIngredientBundle:Ingredient')
+//                ->findAll();
         //$this->get('nutriingredient.ciqualingredientimporter')->import();
+//        $this->get('nutriingredient.openfoodfactingredientimporter')->import();
         return $this->render('NutriIngredientBundle:Ingredient:home.html.twig', array(
             'ingredients' => $ingredients
         ));

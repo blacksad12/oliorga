@@ -35,9 +35,9 @@ class Ingredient
     private $name;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="barcode", type="integer", nullable=true)
+     * @ORM\Column(name="barcode", type="string", length=255, nullable=true)
      */
     private $barcode;
 

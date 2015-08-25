@@ -31,14 +31,18 @@
         <th>Name</th>
         <td>{{ingredient.name}}</td>
     </tr>
+    {% if ingredient.barcode is not empty %}
     <tr>
         <th>Barcode</th>
-        <td>{{ingredient.barcode}}</td>
+        <td><a href="http://world-fr.openfoodfacts.org/produit/{{ingredient.barcode}}">{{ingredient.barcode}}</a></td>
     </tr>
+    {% endif %}
+    {% if ingredient.ciqualcode is not empty %}
     <tr>
         <th>Ciqualcode</th>
         <td>{{ingredient.ciqualcode}}</td>
     </tr>
+    {% endif %}
     <tr>
         <th>EnergyKcal</th>
         <td>{{ingredient.energyKcal}}</td>

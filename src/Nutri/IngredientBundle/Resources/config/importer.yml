@@ -3,4 +3,8 @@ services:
         class: Nutri\IngredientBundle\Service\Importer\CiqualIngredientImporter
         arguments: [ @doctrine, "@doctrine.orm.entity_manager" ]
         
+    nutriingredient.openfoodfactingredientimporter:
+        class: Nutri\IngredientBundle\Service\Importer\OpenfoodfactIngredientImporter
+        arguments: [ @doctrine, "@doctrine.orm.entity_manager" ]
+        
     
