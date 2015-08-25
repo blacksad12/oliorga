@@ -1,4 +1,4 @@
-{# /src/Nutri/RecipeBundle/Resources/views/Shoplist/home.html.twig #}
+{# /src/Nutri/RecipeBundle/Resources/views/Menu/home.html.twig #}
 
 {% extends "::base.html.twig" %}
 
@@ -7,9 +7,9 @@ Home - Recipe - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>Shoplists' list:</h1>
+<h1>Menus' list:</h1>
 <hr>
-<a class="btn btn-default" href="{{path('nutri_recipe_shoplist_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> Add</a>
+<a class="btn btn-default" href="{{path('nutri_recipe_menu_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> Add</a>
 
 <p>Quick search: <input type=text id="recherche"></p>
 
@@ -21,20 +21,22 @@ Home - Recipe - {{ parent() }}
         <tr>
             <th data-toggle="true"></th>
             <th data-type="numeric">Date</th>
-        </tr>
+            <th data-type="numeric">NbPeople</th>
+            <th>Recipes</th>        </tr>
     </thead>
     <tbody>
-    {%- for shoplist in shoplists %}
+    {%- for menu in menus %}
         <tr>
             <td></td>
-            <td><a href="{{ path("nutri_recipe_shoplist_see", { "shoplist_id": shoplist.id }) }}">
-                    {{shoplist.date|date('d/m/Y')}}</a></td>
+            <td><a href="{{ path("nutri_recipe_menu_see", { "menu_id": menu.id }) }}">{{menu.date}}</a></td>
+            <td>{{menu.nbPeople}}</td>
+            <td><a href="{{ path("nutri_recipe_recipe_see", { "recipes_id": menu.recipes.id }) }}">{{menu.recipes}}</a></td>
         </tr>
     {%- endfor %}
     </tbody>
     <tfoot class="hide-if-no-paging">
         <tr>
-            <td colspan="2">
+            <td colspan="4">
                 <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
             </td>
         </tr>

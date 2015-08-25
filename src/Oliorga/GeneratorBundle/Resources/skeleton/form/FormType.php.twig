@@ -59,7 +59,7 @@ class {{ form_class }} extends AbstractType
             
             ->add('{{ field.fieldName }}', 'entity', array(
                 'class'         => "{{targetEntity[0]}}{{targetEntity[1]}}:{{targetEntity[3]}}",
-                'required'      => {{ field.joinColumns[0].nullable ? 'false' : 'true' }},
+                'required'      => {% if field.joinColumns is defined %}{{ field.joinColumns[0].nullable ? 'false' : 'true' }}{%else%}false{% endif %},
                 'query_builder' => function(\{{field.targetEntity}}Repository $r) {
                         return $r->createQueryBuilder('{{field.fieldName|first}}')
                                 ;}

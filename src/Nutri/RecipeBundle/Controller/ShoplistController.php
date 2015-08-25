@@ -77,7 +77,7 @@ class ShoplistController extends Controller
     public function seeAction(Shoplist $shoplist)
     {
         $ingredientList = $this->get('nutrirecipe.shoplisthelper')->getIngredientListWithQuantities($shoplist);
-        dump($ingredientList);
+        
         return $this->render('NutriRecipeBundle:Shoplist:see.html.twig', array(
             'shoplist'      => $shoplist, 
             'ingredientList'    => $ingredientList,

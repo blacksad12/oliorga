@@ -1,0 +1,57 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Menu/form.html.twig #}
+
+{% extends "::form_layout.html.twig" %}
+
+{% block form %}
+
+{% set prototype_ingredientsForMenu = 
+ '<td>'~form_widget(form.ingredientsForMenu.vars.prototype.ingredient)~'</td>
+  <td style="width:100px">'~form_widget(form.ingredientsForMenu.vars.prototype.quantity)~'</td>
+  <td>'~form_widget(form.ingredientsForMenu.vars.prototype.unit)~'</td>'
+ %}
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------- "New Recipe" form ------------------------- #}
+<hr>
+{{ form_start(form) }}
+    {{ form_row(form.date) }}
+    {{ form_row(form.person) }}
+    {# -------------- ingredientForMenu -------------- #}
+    {{ form_label(form.ingredientsForMenu) }} 
+    <div class="col-lg-10 col-md-10 col-sm-10">
+        <table align="center" class="table">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Quantité</th>
+                    <th>Unité</th>                
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="collectionHolder" id="ingredientsForMenu" data-prototype="{{ prototype_ingredientsForMenu|e }}">
+                {% for ingredientForMenu in form.ingredientsForMenu %}
+                <tr>
+                    <td>{{ form_widget(ingredientForMenu.ingredient) }}</td>
+                    <td style="width:100px">{{ form_widget(ingredientForMenu.quantity) }}</td>
+                    <td>{{ form_widget(ingredientForMenu.unit) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    {% do form.ingredientsForMenu.setRendered %}
+    {{ form_row(form.recipes) }}
+      
+    <input type="submit" class="btn btn-primary" />
+{{ form_end(form) }}
+
+{% include "::collectionTableScript.html.twig" %}
+
+{% endblock %}

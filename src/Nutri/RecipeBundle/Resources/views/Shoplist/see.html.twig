@@ -58,13 +58,11 @@
     <tr>
         <th>Ingredients</th>
         <th>Quantity</th>
-        <th>Unit</th>
     </tr>
     {% for ingredient in ingredientList %}
     <tr>
-        <td>{{ingredient.ingredient}}</td>
-        <td>{{ingredient.quantity}}</td>
-        <td>{{ingredient.unit == 'g' ? 'grammes'}}{{ingredient.unit == 'cl' ? 'centilitres'}}</td>
+        <td><a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredient.ingredient.id }) }}">{{ingredient.ingredient}}</a></td>
+        <td>{{ingredient.quantity}} {{ingredient.unit}}</td>
     </tr>
     {% endfor %}
 </table>       

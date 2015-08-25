@@ -26,11 +26,19 @@ class Person
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     * @Assert\Length(max=50)
+     */
+    private $name;
+
+    /**
      * App User linked to this Person
      * @var Oliorga\AppBundle\Entity\User
      * 
      * @ORM\OneToOne(targetEntity="Oliorga\AppBundle\Entity\User", inversedBy="person")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      **/
     private $user;
     
@@ -62,6 +70,14 @@ class Person
      * @Assert\Length(max=10)
      */
     private $gender;
+    
+    /**
+     * Menus for this Person
+     * @var Nutri\RecipeBundle\Entity\Menu[]
+     * 
+     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\Menu", mappedBy="person", cascade={"persist"})
+     */
+    private $menus;
 
 
     /**************************************************************************/
@@ -69,7 +85,7 @@ class Person
     //                             To String
     ////////////////////////////////////////////////////////////////////////////
     public function __toString() {
-        return strval($this->getId());
+        return $this->getName();
     }
     
     /**************************************************************************/
@@ -196,5 +212,68 @@ class Person
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Person
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->menus = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add menus
+     *
+     * @param \Nutri\RecipeBundle\Entity\Menu $menus
+     * @return Person
+     */
+    public function addMenu(\Nutri\RecipeBundle\Entity\Menu $menus)
+    {
+        $this->menus[] = $menus;
+
+        return $this;
+    }
+
+    /**
+     * Remove menus
+     *
+     * @param \Nutri\RecipeBundle\Entity\Menu $menus
+     */
+    public function removeMenu(\Nutri\RecipeBundle\Entity\Menu $menus)
+    {
+        $this->menus->removeElement($menus);
+    }
+
+    /**
+     * Get menus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMenus()
+    {
+        return $this->menus;
     }
 }

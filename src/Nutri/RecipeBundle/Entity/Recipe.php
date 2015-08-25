@@ -73,6 +73,15 @@ class Recipe
      * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForRecipe", mappedBy="recipe", cascade={"persist"})
      */
     private $ingredientsForRecipe;
+    
+    /**
+     * Events which have/had an impact on this Element
+     * @var Nutri\RecipeBundle\Entity\Menu[]
+     * 
+     * Note : Inverse side
+     * @ORM\ManyToMany(targetEntity="Nutri\RecipeBundle\Entity\Menu", mappedBy="recipes", cascade={"persist"})
+     */
+    private $menus;
 
     /**************************************************************************/
     ////////////////////////////////////////////////////////////////////////////
@@ -252,5 +261,61 @@ class Recipe
     public function getIngredientsForRecipe()
     {
         return $this->ingredientsForRecipe;
+    }
+
+    /**
+     * Add ingredientsForRecipe
+     *
+     * @param \Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientsForRecipe
+     * @return Recipe
+     */
+    public function addIngredientsForRecipe(\Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientsForRecipe)
+    {
+        $this->ingredientsForRecipe[] = $ingredientsForRecipe;
+
+        return $this;
+    }
+
+    /**
+     * Remove ingredientsForRecipe
+     *
+     * @param \Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientsForRecipe
+     */
+    public function removeIngredientsForRecipe(\Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientsForRecipe)
+    {
+        $this->ingredientsForRecipe->removeElement($ingredientsForRecipe);
+    }
+
+    /**
+     * Add menus
+     *
+     * @param \Nutri\RecipeBundle\Entity\Menu $menus
+     * @return Recipe
+     */
+    public function addMenu(\Nutri\RecipeBundle\Entity\Menu $menus)
+    {
+        $this->menus[] = $menus;
+
+        return $this;
+    }
+
+    /**
+     * Remove menus
+     *
+     * @param \Nutri\RecipeBundle\Entity\Menu $menus
+     */
+    public function removeMenu(\Nutri\RecipeBundle\Entity\Menu $menus)
+    {
+        $this->menus->removeElement($menus);
+    }
+
+    /**
+     * Get menus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMenus()
+    {
+        return $this->menus;
     }
 }

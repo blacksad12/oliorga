@@ -1,0 +1,14 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Menu/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+New Menu - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>New Menu</h1>
+
+{% include 'NutriRecipeBundle:Menu:form.html.twig' %}
+
+{% endblock %}

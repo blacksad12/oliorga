@@ -1,0 +1,113 @@
+{# /src/Nutri/RecipeBundle/Resources/views/Menu/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{menu}} - Recipe - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>Menu {{menu}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'NutriRecipeBundle:BuilderMenu:seeMenu' , [], {'menu': menu}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'nutri_recipe_menu_',
+    entityId:       'menu_id',
+    entity:         menu
+} %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Menu info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Date</th>
+        <td>{{ menu.date is not empty ? menu.date|date("Y-m-d") }}</td>
+    </tr>
+    <tr>
+        <th>Person</th>
+        <td>{{menu.person}}</td>
+    </tr>
+    <tr>
+        <th>Ingredients</th>
+        <td>
+            <ul>
+            {% for ingredientForMenu in menu.ingredientsForMenu %}
+                <li>{{ingredientForMenu.quantity}}{{ingredientForMenu.unit == 'g' ? 'g de'}}{{ingredientForMenu.unit == 'cl' ? 'cl de'}} <a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": ingredientForMenu.ingredient.id }) }}">{{ingredientForMenu.ingredient}}</a></li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    <tr>
+        <th>Recipes</th>
+        <td>
+            <ul>
+            {% for recipe in menu.recipes %}
+                <li><a href="{{ path("nutri_recipe_recipe_see", { "recipe_id": recipe.id }) }}">{{recipe}}</a></li>
+            {% endfor %}
+            </ul>
+        </td>
+    </tr>
+</table>
+            
+<table class="table table-bordered table-hover table-condensed">
+    <tr>
+        <th>Ingredient</th>
+        <th>Energy (kcal)</th>
+        <th>Fat (g)</th>
+        <th>Saturated fat (g)</th>
+        <th>Carbohydrate (g)</th>
+        <th>Sugars (g)</th>
+        <th>Fiber (g)</th>
+        <th>Proteins (g)</th>
+        <th>Salt (g)</th>
+        <th>Sodium (g)</th>
+    </tr>
+    {% for line in ingredientsIntakeArray %}
+    <tr>
+        <td><a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": line.ingredient.id }) }}">{{line.ingredient}}</a></td>
+        <td class="text-right">{{line.energyKcal|number_format(0)}}</td>
+        <td class="text-right">{{line.fat|number_format(1)}}</td>
+        <td class="text-right">{{line.saturatedFat|number_format(1)}}</td>
+        <td class="text-right">{{line.carbohydrate|number_format(1)}}</td>
+        <td class="text-right">{{line.sugars|number_format(1)}}</td>
+        <td class="text-right">{{line.fiber|number_format(1)}}</td>
+        <td class="text-right">{{line.proteins|number_format(1)}}</td>
+        <td class="text-right">{{line.salt|number_format(1)}}</td>
+        <td class="text-right">{{line.sodium|number_format(1)}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <th>Total</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.energyKcal|number_format(0)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.fat|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.saturatedFat|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.carbohydrate|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.sugars|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.fiber|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.proteins|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.salt|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.sodium|number_format(1)}}</th>
+    </tr>
+    <tr>
+        <th>% AJR</th>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.energyKcal|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.fat|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.saturatedFat|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.carbohydrate|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.sugars|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.fiber|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.proteins|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.salt|number_format(1)}} %</td>
+        <td class="text-right">{{ totalIntakeArray.percentRdi.sodium|number_format(1)}} %</td>
+    </tr>
+</table>
+
+{% endblock %}

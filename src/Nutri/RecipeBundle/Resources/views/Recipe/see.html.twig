@@ -78,7 +78,7 @@
     </tr>
     {% for line in referenceDailyIntakePercentage %}
     <tr>
-        <th>{{line.person.user}}</th>
+        <th>{{line.person}}</th>
         <td>{{line.referenceDailyIntakePercentage.energyKcal|number_format(2)}} %</td>
         <td>{{line.referenceDailyIntakePercentage.fat|number_format(2)}} %</td>
         <td>{{line.referenceDailyIntakePercentage.saturatedFat|number_format(2)}} %</td>
