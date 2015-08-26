@@ -5,6 +5,8 @@ namespace Nutri\RecipeBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class RecipeType extends AbstractType
 {
@@ -39,14 +41,14 @@ class RecipeType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'prototype'     => true,
-                //'widget_add_btn' => false,
-//                'options'       => array( // options for collection fields
-//                    'label_render'      => false,
-//                ),                
             ))          
             ->add('detail', 'textarea', array(
                 'required'  => false,
             ))        ;
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $event->stopPropagation();
+        }, 900); // Always set a higher priority than ValidationListener
+
     }
     
     /** ************************************************************************

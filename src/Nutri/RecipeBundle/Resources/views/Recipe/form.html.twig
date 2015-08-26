@@ -5,7 +5,7 @@
 {% block form %}
 
 {% set prototype = 
- '<td style="width:30%">'~form_widget(form.ingredientsForRecipe.vars.prototype.ingredient)~'</td>
+ '<td style="width:30%">'~form_widget(form.ingredientsForRecipe.vars.prototype.ingredient, { 'attr' : { 'class' : 'select2-ajax' } })~'</td>
   <td style="width:100px">'~form_widget(form.ingredientsForRecipe.vars.prototype.quantity)~'</td>
   <td>'~form_widget(form.ingredientsForRecipe.vars.prototype.unit)~'</td>
   <td>'~form_widget(form.ingredientsForRecipe.vars.prototype.comment)~'</td>'
@@ -47,12 +47,13 @@
             </tr>
         </thead>
         <tbody class="collectionHolder"  data-prototype="{{ prototype|e }}">
-            {% for ingredientsForRecipe in form.ingredientsForRecipe %}
+            {% for ingredientForRecipe in form.ingredientsForRecipe %}
+                {#{{dump(ingredientForRecipe)}}#}
             <tr>
-                <td>{{ form_widget(ingredientsForRecipe.ingredient) }}</td>
-                <td>{{ form_widget(ingredientsForRecipe.quantity) }}</td>
-                <td>{{ form_widget(ingredientsForRecipe.unit) }}</td>
-                <td>{{ form_widget(ingredientsForRecipe.comment) }}</td>
+                <td style="width:30%">{{ form_widget(ingredientForRecipe.ingredient, { 'attr' : { 'class' : 'select2-ajax' } })  }}
+                <td>{{ form_widget(ingredientForRecipe.quantity) }}</td>
+                <td>{{ form_widget(ingredientForRecipe.unit) }}</td>
+                <td>{{ form_widget(ingredientForRecipe.comment) }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -71,5 +72,72 @@
 {{ form_end(form) }}
 
 {% include "::collectionTableScript.html.twig" %}
+<script>
+    function formatRepo (repo) {
+        if (repo.loading) return repo.text;
+
+        var markup = '<div class="clearfix">' +
+        '<div class="col-sm-1">' +
+        '<img src="' +  '" style="max-width: 100%" />' +
+        '</div>' +
+        '<div clas="col-sm-10">' +
+        '<div class="clearfix">' +
+        '<div class="col-sm-6">' + repo.name + '</div>' +
+        '<div class="col-sm-3"><i class="fa fa-code-fork"></i> '  + '</div>' +
+        '<div class="col-sm-2"><i class="fa fa-star"></i> ' +  '</div>' +
+        '</div>';
+
+        if (repo.description) {
+          markup += '<div>' + repo.description + '</div>';
+        }
+
+        markup += '</div></div>';
+
+        return markup;
+    }
+
+    function formatRepoSelection (repo) {
+        return repo.name || repo.text;
+    }
+    
+    function updateSelect2 ($select2) {
+        $(".select2-ajax").select2({
+            ajax: {
+              url: "{{path('nutri_ingredient_ingredient_findforselect2')}}",
+              dataType: 'json',
+              delay: 250,
+              data: function (params) {
+                return {
+                  q: params.term, // search term
+                  page: params.page
+                };
+              },
+              processResults: function (data, page) {
+                return {
+                  results: data.items
+                };
+              },
+              cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 3,
+            width: '100%',
+            templateResult: formatRepo, // omitted for brevity, see the source of this page
+            templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+        });
+    }
+    
+    jQuery(document).ready(function() {
+        updateSelect2($(".select2-ajax"));        
+        {% for key,ingredientsForRecipe in form.ingredientsForRecipe %}
+        {% set ingredient = ingredientsForRecipe.vars.value.ingredient %}
+        {% if ingredient is not empty %}
+        $('#nutri_recipebundle_recipe_ingredientsForRecipe_{{key}}_ingredient').prepend('<option value="{{ingredient.id}}" selected="selected">"{{ingredient.name}}"</option>'); // Add the Ingredient in the list
+        $("#nutri_recipebundle_recipe_ingredientsForRecipe_{{key}}_ingredient").select2("val", {{ingredient.id}});
+        {% endif %}
+        {% endfor %}
+    });
+</script>
+
 
 {% endblock %}

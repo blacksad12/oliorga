@@ -57,6 +57,9 @@ class RecipeController extends Controller
 
             return $this->redirect($this->generateUrl('nutri_recipe_recipe_see', array('recipe_id' => $recipe->getId())));
           }
+          else{
+              dump($form->getErrors(3));
+          }
         }
 
         return $this->render('NutriRecipeBundle:Recipe:add.html.twig', array(
@@ -116,6 +119,8 @@ class RecipeController extends Controller
             $em->flush();
 
             return $this->redirect($this->generateUrl('nutri_recipe_recipe_see', array('recipe_id' => $recipe->getId())));
+          }else{
+              dump($form->getErrors(3));
           }
         }
 

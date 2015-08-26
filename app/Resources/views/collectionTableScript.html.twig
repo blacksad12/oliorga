@@ -37,6 +37,9 @@
         collectionHolder.append($newFormTr);
         addTagFormDeleteLink($newFormTr);
         $('select').select2({width:'100%'});
+        if ( $.isFunction(updateSelect2) ) {
+            updateSelect2($newFormTr.find('.select2-ajax'));
+        }
     }
     
     function addTagFormDeleteLink($tagFormTr) {

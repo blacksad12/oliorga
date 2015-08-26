@@ -127,4 +127,33 @@ class IngredientController extends Controller
         }
     }
     
+    /** ************************************************************************
+     * Ajax function. 
+     * 
+     * @Route("/findforselect2")
+     * @Method({"POST","GET"})
+     **************************************************************************/
+    public function findForSelect2Action()
+    {        
+        $textSearched = $this->get('request')->query->get('q');
+        
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+        
+        $qb->select('i.id', 'i.name');
+        $qb->from("NutriIngredientBundle:Ingredient",'i');
+        $qb->where($qb->expr()->like('i.name', ':textSearched'));
+        $qb->setParameter('textSearched', '%'.$textSearched.'%');
+        $qb->setMaxResults('4');
+        
+        $ingredientArray = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        
+        $ingredientArray = array(
+            'items' => $ingredientArray
+        );
+        
+        return new \Symfony\Component\HttpFoundation\JsonResponse($ingredientArray);        
+    }
+    
+    
 }
