@@ -1,4 +1,4 @@
-{#{% include '::confirmDelete.html.twig' %}#}
+{% include '::confirmDelete.html.twig' %}
 {#{% set entityId = entityName~'_id' %}
 #}
 <div class="nav subnav">    
@@ -7,6 +7,7 @@
         <li><a href="{{ path(routePrefix~'home') }}"><span class="glyphicon glyphicon-list"></span> List</a></li>
         <li><a href="{{ path(routePrefix~'add') }}"><span class="glyphicon glyphicon-plus"></span> Add</a></li>
         <li><a href="{{ path(routePrefix~'modify', {(entityId) : entity.id}) }}"><span class="glyphicon glyphicon-edit"></span> Modify</a></li>
+        <li><a href="#" data-href="{{ path(routePrefix~'delete', {(entityId) : entity.id}) }}"data-toggle="modal" data-target="#confirm-delete"><span class="glyphicon glyphicon-trash"></span> Delete</a>
         {% endblock %}
     </ul>
 </div>

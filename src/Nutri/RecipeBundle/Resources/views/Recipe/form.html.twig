@@ -5,7 +5,7 @@
 {% block form %}
 
 {% set prototype = 
- '<td style="width:30%">'~form_widget(form.ingredientsForRecipe.vars.prototype.ingredient, { 'attr' : { 'class' : 'select2-ajax' } })~'</td>
+ '<td style="width:30%">'~form_widget(form.ingredientsForRecipe.vars.prototype.ingredient)~'</td>
   <td style="width:100px">'~form_widget(form.ingredientsForRecipe.vars.prototype.quantity)~'</td>
   <td>'~form_widget(form.ingredientsForRecipe.vars.prototype.unit)~'</td>
   <td>'~form_widget(form.ingredientsForRecipe.vars.prototype.comment)~'</td>'
@@ -16,13 +16,13 @@
 <hr>
 {{ form_start(form) }}
     <div class="row">
-        {#<div class="col-md-7 col-sm-7">#}
+        <div class="col-md-7 col-sm-7">
             {{ form_row(form.name) }} 
             {{ form_row(form.nbPeople) }} 
             {{ form_row(form.preparationTime) }} 
             {{ form_row(form.cookingTime) }} 
             {{ form_row(form.cookingTemperature) }} 
-        {#</div>
+        </div>
         <div class="col-md-5 col-sm-5">
             <div class="alert alert-info">
                 <ul>
@@ -31,7 +31,7 @@
                     <li>1 CàC rase = 0.5cl</li>
                 </ul>
             </div>
-        </div>#}
+        </div>
     </div>
     
     {{ form_label(form.ingredientsForRecipe) }} 
@@ -50,7 +50,7 @@
             {% for ingredientForRecipe in form.ingredientsForRecipe %}
                 {#{{dump(ingredientForRecipe)}}#}
             <tr>
-                <td style="width:30%">{{ form_widget(ingredientForRecipe.ingredient, { 'attr' : { 'class' : 'select2-ajax' } })  }}
+                <td style="width:30%">{{ form_widget(ingredientForRecipe.ingredient)  }}
                 <td>{{ form_widget(ingredientForRecipe.quantity) }}</td>
                 <td>{{ form_widget(ingredientForRecipe.unit) }}</td>
                 <td>{{ form_widget(ingredientForRecipe.comment) }}</td>
@@ -72,7 +72,7 @@
 {{ form_end(form) }}
 
 {% include "::collectionTableScript.html.twig" %}
-
+{#
 <script>
     $(document).ready(OnReady);
     function OnReady(){
@@ -167,6 +167,6 @@
         {% endfor %}
     });
 </script>
-
+#}
 
 {% endblock %}

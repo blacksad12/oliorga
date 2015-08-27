@@ -140,7 +140,7 @@ class MenuController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($menu);
             $em->flush();
-            return $this->redirect($this->generateUrl(/* Redirect to some page */));          
+            return $this->redirect($this->generateUrl('nutri_recipe_menu_home'));          
         }
         else{
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;

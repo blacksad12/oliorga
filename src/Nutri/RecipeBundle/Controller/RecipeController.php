@@ -144,7 +144,7 @@ class RecipeController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($recipe);
             $em->flush();
-            return $this->redirect($this->generateUrl(/* Redirect to some page */));          
+            return $this->redirect($this->generateUrl('nutri_recipe_recipe_home'));          
         }
         else{
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;

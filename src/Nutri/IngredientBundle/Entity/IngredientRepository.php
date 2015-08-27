@@ -12,6 +12,48 @@ use Doctrine\ORM\EntityRepository;
  */
 class IngredientRepository extends EntityRepository
 {
+    /** ************************************************************************
+     * Get the paginated list of published articles
+     *
+     * @param int $page
+     * @param int $maxperpage
+     * @param string $orderBy
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     **************************************************************************/
+    public function getList($page=1, $maxperpage=30, $orderBy='name') {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('i');
+        $qb->from('NutriIngredientBundle:Ingredient','i');
+        if($orderBy !== NULL) {
+            $qb->orderBy('i.'.$orderBy);
+        }
+
+        $qb->setFirstResult(($page-1) * $maxperpage);
+        $qb->setMaxResults($maxperpage);
+
+        return new \Doctrine\ORM\Tools\Pagination\Paginator($qb);
+    }
+    
+    /** ************************************************************************
+     * Count the total number of Ingredient
+     * @return int
+     **************************************************************************/
+    public function countTotal() {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('count(i.id)');
+        $qb->from('NutriIngredientBundle:Ingredient','i');
+
+        $count = $qb->getQuery()->getSingleScalarResult();
+        return $count;
+    }
+    
+    /**
+     * /!\ UNUSED ??
+     * @return type
+     */
     public function getNamesById() {
         $em = $this->getEntityManager();
         $qb = $em->createQueryBuilder();

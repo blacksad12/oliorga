@@ -3,7 +3,7 @@
 {{ '{% extends "::base.html.twig" %}' }}
 
 {{ '{% block title %}' }}
-{{ 'New '~entity~' - '~bundleShort~' - {{ parent() }}' }}
+{{ 'New '~entity~' - '~entity~' - '~bundleShort~' - '~projectName~' - {{ parent() }}' }}
 {{ '{% endblock %}' }}
 
 {{ '{% block body -%}' }}

@@ -42,7 +42,7 @@ class RecipeType extends AbstractType
             ))            
             ->add('ingredientsForRecipe', 'collection', array(
                 'type'          => new IngredientForRecipeType($this->entityManager),
-                'mapped'        => true,
+                'mapped'        => false,
                 'label'         => "Ingrédients",
                 'allow_add'     => true,
                 'allow_delete'  => true,

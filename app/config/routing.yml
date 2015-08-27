@@ -17,3 +17,5 @@ nutri_ingredient:
     prefix:   /nutri/ingredient/
 
 
+shtumi_useful:
+    resource: '@ShtumiUsefulBundle/Resources/config/routing.xml'

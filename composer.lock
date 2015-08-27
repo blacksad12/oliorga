@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "663fed6121022199a51034c1dc8def84",
+    "hash": "c8cb81bf95f6e92b95b4ad91ea88e214",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1149,7 +1149,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phiamo/MopaBootstrapBundle/zipball/c34671a55b2585e20a35ab5c6e1ad13a7e220b01",
+                "url": "https://api.github.com/repos/phiamo/MopaBootstrapBundle/zipball/df1027ba4c6c8c2203c0a17c3a1360fbc1494693",
                 "reference": "c34671a55b2585e20a35ab5c6e1ad13a7e220b01",
                 "shasum": ""
             },
@@ -1543,6 +1543,53 @@
             ],
             "description": "A security checker for your composer.lock",
             "time": "2015-08-11 12:11:25"
+        },
+        {
+            "name": "shtumi/useful-bundle",
+            "version": "dev-master",
+            "target-dir": "Shtumi/UsefulBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shtumi/ShtumiUsefulBundle.git",
+                "reference": "857508126f2456ffda4e2d2dc00d3f62e66269cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shtumi/ShtumiUsefulBundle/zipball/857508126f2456ffda4e2d2dc00d3f62e66269cc",
+                "reference": "857508126f2456ffda4e2d2dc00d3f62e66269cc",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "suggest": {
+                "sonata-project/admin-bundle": "master-dev",
+                "sonata-project/doctrine-orm-admin-bundle": "master-dev"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Shtumi\\UsefulBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mikhail Shtukin",
+                    "email": "shtumi@tut.by"
+                }
+            ],
+            "description": "Symfony ShtumiUsefulBundle",
+            "keywords": [
+                "Ajax Autocomplete form type",
+                "Dependent filtered form type",
+                "daterange",
+                "shtumi"
+            ],
+            "time": "2014-11-19 21:34:07"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2109,7 +2156,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
-        "mopa/bootstrap-bundle": 20
+        "mopa/bootstrap-bundle": 20,
+        "shtumi/useful-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

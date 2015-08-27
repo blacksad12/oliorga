@@ -16,13 +16,9 @@ class IngredientForMenuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('ingredient', 'entity', array(
-                'class'         => "NutriIngredientBundle:Ingredient",
-                'required'      => true,
-                'query_builder' => function(\Nutri\IngredientBundle\Entity\IngredientRepository $r) {
-                        return $r->createQueryBuilder('i')
-                                ;}
-            ))                    
+            ->add('ingredient', 'shtumi_ajax_autocomplete', array(
+                'entity_alias'  => 'ingredients'
+            ))            
             ->add('quantity', 'number', array(
                 'required'  => true,
                 'grouping'  => true,

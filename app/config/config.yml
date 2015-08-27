@@ -36,7 +36,9 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
-        resources:    ['bootstrap_3_horizontal_layout.html.twig']
+        resources:    
+            - 'bootstrap_3_horizontal_layout.html.twig'
+            - 'ShtumiUsefulBundle::fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -92,17 +94,25 @@ knp_menu:
     templating: false # if true, enables the helper for PHP templates
     default_renderer: twig # The renderer to use, list is also available by default
     
-mopa_bootstrap:
-    form: 
-      horizontal_label_class:  col-lg-3 col-md-3 col-sm-3 control-label                 #Unused. See app/Resources/views/form_theme.html.twig
-      horizontal_label_offset_class:  col-lg-offset-3 col-md-offset-3 col-sm-offset-3   #Unused. See app/Resources/views/form_theme.html.twig
-      horizontal_input_wrapper_class:  col-lg-9 col-md-9 col-sm-9                       #Unused. See app/Resources/views/form_theme.html.twig
-      show_legend: false # default is true
-      collection:
-            widget_remove_btn:
-                icon: trash
-                label: Remove
-            widget_add_btn:
-                icon: plus-sign
-    menu: 
-      template: "OliorgaAppBundle:Menu:knp_menu.html.twig"
+#mopa_bootstrap:
+#    form: 
+#      horizontal_label_class:  col-lg-3 col-md-3 col-sm-3 control-label                 #Unused. See app/Resources/views/form_theme.html.twig
+#      horizontal_label_offset_class:  col-lg-offset-3 col-md-offset-3 col-sm-offset-3   #Unused. See app/Resources/views/form_theme.html.twig
+#      horizontal_input_wrapper_class:  col-lg-9 col-md-9 col-sm-9                       #Unused. See app/Resources/views/form_theme.html.twig
+#      show_legend: false # default is true
+#      collection:
+#            widget_remove_btn:
+#                icon: trash
+#                label: Remove
+#            widget_add_btn:
+#                icon: plus-sign
+#    menu: 
+#      template: "OliorgaAppBundle:Menu:knp_menu.html.twig"
+      
+shtumi_useful:
+    autocomplete_entities:
+        ingredients:
+            class: NutriIngredientBundle:Ingredient
+            role: IS_AUTHENTICATED_ANONYMOUSLY
+            property: name
+            search: contains

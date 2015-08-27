@@ -155,7 +155,7 @@ class ShoplistController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($shoplist);
             $em->flush();
-            return $this->redirect($this->generateUrl(/* Redirect to some page */));          
+            return $this->redirect($this->generateUrl('nutri_recipe_shoplist_home'));          
         }
         else{
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;

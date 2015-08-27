@@ -18,17 +18,28 @@ class IngredientController extends Controller
 {
     /** ************************************************************************
      * Display the Ingredient's homepage.
-     * @Route("/")
+     * @Route("/{currentPageNumber}", requirements={"currentPageNumber" = "\d+"}, defaults={"currentPageNumber" = 1})
      **************************************************************************/
-    public function homeAction()        
+    public function homeAction($currentPageNumber)        
     {
-        $ingredients = null;//$this->getDoctrine()
-//                ->getRepository('NutriIngredientBundle:Ingredient')
-//                ->findAll();
-        //$this->get('nutriingredient.ciqualingredientimporter')->import();
-//        $this->get('nutriingredient.openfoodfactingredientimporter')->import();
+        $maxIngredients = 20;
+        $ingredientsCount = $this->getDoctrine()
+                ->getRepository('NutriIngredientBundle:Ingredient')
+                ->countTotal();
+        
+        $pagination = array(
+            'page' => $currentPageNumber,
+            'route' => 'nutri_ingredient_ingredient_home',
+            'pages_count' => ceil($ingredientsCount / $maxIngredients),
+            'route_params' => array()
+        );
+ 
+         $ingredients = $this->getDoctrine()->getRepository('NutriIngredientBundle:Ingredient')
+                ->getList($currentPageNumber, $maxIngredients);
+ 
         return $this->render('NutriIngredientBundle:Ingredient:home.html.twig', array(
-            'ingredients' => $ingredients
+            'ingredients' => $ingredients,
+            'pagination' => $pagination
         ));
     }
 

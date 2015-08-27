@@ -34,7 +34,7 @@ class Shoplist
      * Ingredients in this Shoplist
      * @var Nutri\RecipeBundle\Entity\IngredientForShoplist[]
      * 
-     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForShoplist", mappedBy="shoplist", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForShoplist", mappedBy="shoplist", cascade={"persist","remove"})
      */
     private $ingredientsForShoplist;
     
@@ -42,7 +42,7 @@ class Shoplist
      * Recipes in this Shoplist
      * @var Nutri\RecipeBundle\Entity\RecipeForShoplist[]
      * 
-     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\RecipeForShoplist", mappedBy="shoplist", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\RecipeForShoplist", mappedBy="shoplist", cascade={"persist","remove"})
      */
     private $recipesForShoplist;
 

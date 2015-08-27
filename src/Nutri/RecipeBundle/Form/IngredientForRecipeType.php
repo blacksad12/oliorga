@@ -27,11 +27,8 @@ class IngredientForRecipeType extends AbstractType
     {
         $repository = $this->entityManager->getRepository('NutriIngredientBundle:Ingredient');
         $builder
-            ->add('ingredient', 'ingredient_selector', array(
-                'multiple'  => false,
-                'required'  => true, 
-                'repository' => $repository,
-                'choices'    => $repository->getNamesById(),
+            ->add('ingredient', 'shtumi_ajax_autocomplete', array(
+                'entity_alias'  => 'ingredients'
             ))            
             ->add('quantity', 'number', array(
                 'required'  => true,
@@ -50,7 +47,7 @@ class IngredientForRecipeType extends AbstractType
             ))            
             ;        
             
-            $this->setFormModifierForIngredient($builder);
+            //$this->setFormModifierForIngredient($builder);
     }
     
     /** ************************************************************************

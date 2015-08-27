@@ -43,7 +43,7 @@ class Menu
      * Ingredients in this Menu
      * @var Nutri\RecipeBundle\Entity\IngredientForMenu[]
      * 
-     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForMenu", mappedBy="menu", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForMenu", mappedBy="menu", cascade={"persist","remove"})
      */
     private $ingredientsForMenu;
     

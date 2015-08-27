@@ -70,7 +70,7 @@ class Recipe
      * Ingredients used in this Recipe
      * @var Nutri\RecipeBundle\Entity\IngredientForRecipe[]
      * 
-     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForRecipe", mappedBy="recipe", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Nutri\RecipeBundle\Entity\IngredientForRecipe", mappedBy="recipe", cascade={"persist","remove"})
      */
     private $ingredientsForRecipe;
     
@@ -79,7 +79,7 @@ class Recipe
      * @var Nutri\RecipeBundle\Entity\Menu[]
      * 
      * Note : Inverse side
-     * @ORM\ManyToMany(targetEntity="Nutri\RecipeBundle\Entity\Menu", mappedBy="recipes", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Nutri\RecipeBundle\Entity\Menu", mappedBy="recipes", cascade={"persist","remove"})
      */
     private $menus;
 

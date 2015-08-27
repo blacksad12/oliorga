@@ -1,0 +1,19 @@
+{# app/Ressource/views/pagination.html.twig #}
+<nav>
+  <ul class="pagination">
+    {% if pagination.page>1 %}
+        <li><a href="{{ path(pagination.route, pagination.route_params|merge({'currentPageNumber': 1})) }}"><<</a></li>
+        <li><a href="{{ path(pagination.route, pagination.route_params|merge({'currentPageNumber': pagination.page-1})) }}"><</a></li>
+    {% endif %}
+    {#display p numbers only from p-6 to p+6 but don't go <1 or >pages_count#}
+    {% for p in range(max(pagination.page-6, 1), min(pagination.page+6, pagination.pages_count)) %}
+        <li{% if p == pagination.page %} class="active"{% endif %}><a href="{{ path(pagination.route, pagination.route_params|merge({'currentPageNumber': p})) }}">{{ p }}</a></li>
+    {% endfor %}
+    {% if pagination.page<pagination.pages_count %}
+        <li><a href="{{ path(pagination.route, pagination.route_params|merge({'currentPageNumber': pagination.page+1})) }}">></a></li>
+        <li><a href="{{ path(pagination.route, pagination.route_params|merge({'currentPageNumber': pagination.pages_count})) }}">>></a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+    
