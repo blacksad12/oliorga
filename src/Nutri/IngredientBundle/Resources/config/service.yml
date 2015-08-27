@@ -1,0 +1,6 @@
+services:
+    nutriIngredient.ingredient_selector:
+        class: Nutri\IngredientBundle\Form\IngredientSelectorType
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: ingredient_selector }

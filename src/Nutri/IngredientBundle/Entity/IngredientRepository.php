@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class IngredientRepository extends EntityRepository
 {
+    public function getNamesById() {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        
+        $qb->select('i.id');
+        $qb->addSelect('i.name');     
+        
+        $qb->from('NutriIngredientBundle:Ingredient','i');        
+        $qb->setMaxResults(0);
+        
+        $result = $qb->getQuery()->getResult();
+        $resultArray = array();
+        foreach($result as $ingredient) {
+            $resultArray[$ingredient['id']] = $ingredient['name'];
+        }
+        
+            
+        return $resultArray;
+    }
 }

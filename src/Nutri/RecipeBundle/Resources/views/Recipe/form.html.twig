@@ -16,13 +16,13 @@
 <hr>
 {{ form_start(form) }}
     <div class="row">
-        <div class="col-md-7 col-sm-7">
+        {#<div class="col-md-7 col-sm-7">#}
             {{ form_row(form.name) }} 
             {{ form_row(form.nbPeople) }} 
             {{ form_row(form.preparationTime) }} 
             {{ form_row(form.cookingTime) }} 
             {{ form_row(form.cookingTemperature) }} 
-        </div>
+        {#</div>
         <div class="col-md-5 col-sm-5">
             <div class="alert alert-info">
                 <ul>
@@ -31,7 +31,7 @@
                     <li>1 CàC rase = 0.5cl</li>
                 </ul>
             </div>
-        </div>
+        </div>#}
     </div>
     
     {{ form_label(form.ingredientsForRecipe) }} 
@@ -72,6 +72,35 @@
 {{ form_end(form) }}
 
 {% include "::collectionTableScript.html.twig" %}
+
+<script>
+    $(document).ready(OnReady);
+    function OnReady(){
+        //var $ingredientFields  = $('.select2-search__field');
+        //$ingredientFields.change(function() {LoadIngredientsAjax($(this));});
+        //$ingredientFields.change(function() {alert('change');});
+        $('.select2-input').on("keydown",function() {alert('change');});
+    }
+    function LoadIngredientsAjax($select2Field, $optionSelected){        
+        $select2Field.select2("enable", false);
+        var $form = $select2Field.closest('form');
+        var data = {};
+        data[$optionSelected.attr('name')] = $optionSelected.val();        
+        $.ajax({
+          url : $form.attr('action'),
+          type: $form.attr('method'),
+          data : data,
+          success: UpdateEquipmentsImpacted
+        });
+    }
+    function UpdateEquipmentsImpacted(html){
+        alert('OK');
+        //$('#nutri_recipebundle_recipe_ingredientsForRecipe_0_ingredient').replaceWith($(html).find('#nutri_recipebundle_recipe_ingredientsForRecipe_0_ingredient'));
+        $('#nutri_recipebundle_recipe_ingredientsForRecipe_0_ingredient').select2("enable", true);
+    }
+
+</script>
+
 <script>
     function formatRepo (repo) {
         if (repo.loading) return repo.text;

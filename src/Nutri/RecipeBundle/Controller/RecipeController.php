@@ -39,7 +39,7 @@ class RecipeController extends Controller
     {
         $recipe = new Recipe();
         
-        $form = $this->createForm(new RecipeType(), $recipe);
+        $form = $this->createForm(new RecipeType($this->getDoctrine()->getManager()), $recipe);
 
         // ------------- Request Management ------------------------------------
         $request = $this->get('request');
@@ -92,7 +92,7 @@ class RecipeController extends Controller
      **************************************************************************/
     public function modifyAction(Recipe $recipe)
     {
-        $form = $this->createForm(new RecipeType($recipe), $recipe);
+        $form = $this->createForm(new RecipeType($this->getDoctrine()->getManager()), $recipe);
 
         $existingIngredientsForRecipe = $recipe->getIngredientsForRecipe()->toArray();
             

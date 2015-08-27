@@ -10,7 +10,13 @@ use Symfony\Component\Form\FormEvents;
 
 class RecipeType extends AbstractType
 {
-        
+    private $entityManager;
+
+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     /** ************************************************************************
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -35,8 +41,8 @@ class RecipeType extends AbstractType
                 'required'  => false,
             ))            
             ->add('ingredientsForRecipe', 'collection', array(
-                'type'          => new IngredientForRecipeType(),
-                'mapped'        => false,
+                'type'          => new IngredientForRecipeType($this->entityManager),
+                'mapped'        => true,
                 'label'         => "Ingrédients",
                 'allow_add'     => true,
                 'allow_delete'  => true,
@@ -45,10 +51,7 @@ class RecipeType extends AbstractType
             ->add('detail', 'textarea', array(
                 'required'  => false,
             ))        ;
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-            $event->stopPropagation();
-        }, 900); // Always set a higher priority than ValidationListener
-
+        
     }
     
     /** ************************************************************************

@@ -11,22 +11,27 @@ use Symfony\Component\Form\FormInterface;
 
 class IngredientForRecipeType extends AbstractType
 {
-        
+    private $entityManager;
+
+    public function __construct(\Doctrine\ORM\EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    
     /** ************************************************************************
      * @param FormBuilderInterface $builder
      * @param array $options
      **************************************************************************/
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $repository = $this->entityManager->getRepository('NutriIngredientBundle:Ingredient');
         $builder
-            ->add('ingredient', 'entity', array(
-                'class'     => 'NutriIngredientBundle:Ingredient',
+            ->add('ingredient', 'ingredient_selector', array(
                 'multiple'  => false,
-                'required'  => true,
-                'query_builder' => function(\Nutri\IngredientBundle\Entity\IngredientRepository $r) {
-                    return $r->createQueryBuilder('r')
-                           ->where('r.id is NULL')
-                            ;}
+                'required'  => true, 
+                'repository' => $repository,
+                'choices'    => $repository->getNamesById(),
             ))            
             ->add('quantity', 'number', array(
                 'required'  => true,
@@ -54,33 +59,43 @@ class IngredientForRecipeType extends AbstractType
      **************************************************************************/
     protected function setFormModifierForIngredient(FormBuilderInterface $builder)
     {
-        $formModifier = function (FormInterface $form, \Nutri\RecipeBundle\Entity\IngredientForRecipe $ingredientForRecipe = null) {
-            $form->add('ingredient', 'entity', array(
-                    'class'     => 'NutriIngredientBundle:Ingredient',
+        $formModifier = function (FormInterface $form, \Nutri\IngredientBundle\Entity\Ingredient $ingredient) {
+            $form->add('ingredient', 'ingredient_selector', array(
                     'multiple'  => false,
                     'required'  => true,
-                    'query_builder' => function(\Nutri\IngredientBundle\Entity\IngredientRepository $r) use ($ingredientForRecipe){
-                        if($ingredientForRecipe === NULL) {
-                            return $r->createQueryBuilder('r')->where('r.id is NULL');
-                        }
-                        else {
-                            return $r->find($ingredientForRecipe->getIngredient()->getId());
-                        }                        
-                        }
+                    'choices'   => array(
+                        $ingredient->getId() => $ingredient->getName(),
+                        '2' => 'test',
+                    ),
                     ));
+            //dump($form);exit();
         };
         
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $formEvent) use ($formModifier) {
-                $ingredientForRecipe = $formEvent->getData();
-                $formModifier($formEvent->getForm(), $ingredientForRecipe);
-            }
-        );
+//        $builder->addEventListener(
+//            FormEvents::PRE_SET_DATA,
+//            function (FormEvent $formEvent) use ($formModifier) {
+//                if (null != $formEvent->getData()) {
+//                    $ingredientForRecipe = $formEvent->getData();
+//                    dump($formEvent->getData());exit;
+//                    $formModifier($formEvent->getForm(), $ingredientForRecipe);
+//                }
+//            }
+//        );
                 
         $builder->get('ingredient')->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $formEvent) use ($formModifier) {
+                //if (null != $formEvent->getForm()->getParent()->getData()) {
+                    dump($formEvent);
+                    dump($formEvent);exit;
+//                }
+//                else{
+//                    dump('formevent is null');
+//                }
+                return;
+                $ingredient = $formEvent->getForm()->getData();
+                $formModifier($formEvent->getForm()->getParent(), $ingredient);
+                return;
                 $ingredientForRecipe = $formEvent->getForm()->getParent()->getData();                
                 $ingredientForRecipe->setIngredient($formEvent->getForm()->getData());
                 $formModifier($formEvent->getForm()->getParent(), $ingredientForRecipe);
