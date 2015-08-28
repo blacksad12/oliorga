@@ -8,10 +8,10 @@ services:
         
     nutrirecipe.recipehelper:
         class: Nutri\RecipeBundle\Service\Helper\RecipeHelper
-        arguments: [ "@doctrine.orm.entity_manager", @nutrirecipe.personhelper ]
+        arguments: [ "@doctrine.orm.entity_manager", @nutrirecipe.personhelper, @nutriingredient.ingredienthelper ]
         
     nutrirecipe.menuhelper:
         class: Nutri\RecipeBundle\Service\Helper\MenuHelper
-        arguments: [ "@doctrine.orm.entity_manager", @nutrirecipe.personhelper ]
+        arguments: [ "@doctrine.orm.entity_manager", @nutrirecipe.personhelper, @nutriingredient.ingredienthelper ]
         
     

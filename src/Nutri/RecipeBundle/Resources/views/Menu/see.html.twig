@@ -60,6 +60,7 @@
 <table class="table table-bordered table-hover table-condensed">
     <tr>
         <th>Ingredient</th>
+        <th>Quantity</th>
         <th>Energy (kcal)</th>
         <th>Fat (g)</th>
         <th>Saturated fat (g)</th>
@@ -73,6 +74,7 @@
     {% for line in ingredientsIntakeArray %}
     <tr>
         <td><a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": line.ingredient.id }) }}">{{line.ingredient}}</a></td>
+        <td class="text-right">{{line.quantity|number_format(1)}} {{line.unit}}</td>
         <td class="text-right">{{line.energyKcal|number_format(0)}}</td>
         <td class="text-right">{{line.fat|number_format(1)}}</td>
         <td class="text-right">{{line.saturatedFat|number_format(1)}}</td>
@@ -85,7 +87,7 @@
     </tr>
     {% endfor %}
     <tr>
-        <th>Total</th>
+        <th colspan="2">Total</th>
         <th class="text-right">{{ totalIntakeArray.absolute.energyKcal|number_format(0)}}</th>
         <th class="text-right">{{ totalIntakeArray.absolute.fat|number_format(1)}}</th>
         <th class="text-right">{{ totalIntakeArray.absolute.saturatedFat|number_format(1)}}</th>
@@ -97,7 +99,7 @@
         <th class="text-right">{{ totalIntakeArray.absolute.sodium|number_format(1)}}</th>
     </tr>
     <tr>
-        <th>% AJR</th>
+        <th colspan="2">% AJR</th>
         <td class="text-right">{{ totalIntakeArray.percentRdi.energyKcal|number_format(1)}} %</td>
         <td class="text-right">{{ totalIntakeArray.percentRdi.fat|number_format(1)}} %</td>
         <td class="text-right">{{ totalIntakeArray.percentRdi.saturatedFat|number_format(1)}} %</td>

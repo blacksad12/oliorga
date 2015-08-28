@@ -21,16 +21,15 @@ Home - Menu - Nutri - {{ parent() }}
         <tr>
             <th data-toggle="true"></th>
             <th data-type="numeric">Date</th>
-            <th data-type="numeric">NbPeople</th>
-            <th>Recipes</th>        </tr>
+            <th>Person</th>   
+        </tr>
     </thead>
     <tbody>
     {%- for menu in menus %}
         <tr>
             <td></td>
-            <td><a href="{{ path("nutri_recipe_menu_see", { "menu_id": menu.id }) }}">{{menu.date}}</a></td>
-            <td>{{menu.nbPeople}}</td>
-            <td><a href="{{ path("nutri_recipe_recipe_see", { "recipes_id": menu.recipes.id }) }}">{{menu.recipes}}</a></td>
+            <td><a href="{{ path("nutri_recipe_menu_see", { "menu_id": menu.id }) }}">{{menu.date|date('d/m/Y')}}</a></td>
+            <td>{{menu.person}}</td>
         </tr>
     {%- endfor %}
     </tbody>

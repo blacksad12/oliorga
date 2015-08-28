@@ -63,33 +63,60 @@
     </tr>
 </table>
     
-<table class="table table-hover table-condensed">
+    
+<table class="table table-bordered table-hover table-condensed">
     <tr>
-        <th>Person</th>
-        <th>Energy</th>
-        <th>Fat</th>
-        <th>Saturated fat</th>
-        <th>Carbohydrate</th>
-        <th>Sugars</th>
-        <th>Fiber</th>
-        <th>Proteins</th>
-        <th>Salt</th>
-        <th>Sodium</th>
+        <th>Ingredient</th>
+        <th>Energy (kcal)</th>
+        <th>Fat (g)</th>
+        <th>Saturated fat (g)</th>
+        <th>Carbohydrate (g)</th>
+        <th>Sugars (g)</th>
+        <th>Fiber (g)</th>
+        <th>Proteins (g)</th>
+        <th>Salt (g)</th>
+        <th>Sodium (g)</th>
     </tr>
-    {% for line in referenceDailyIntakePercentage %}
+    {% for line in ingredientsIntakeArray %}
     <tr>
-        <th>{{line.person}}</th>
-        <td>{{line.referenceDailyIntakePercentage.energyKcal|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.fat|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.saturatedFat|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.carbohydrate|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.sugars|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.fiber|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.proteins|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.salt|number_format(2)}} %</td>
-        <td>{{line.referenceDailyIntakePercentage.sodium|number_format(2)}} %</td>
+        <td><a href="{{ path("nutri_ingredient_ingredient_see", { "ingredient_id": line.ingredient.id }) }}">{{line.ingredient}}</a></td>
+        <td class="text-right">{{line.energyKcal|number_format(0)}}</td>
+        <td class="text-right">{{line.fat|number_format(1)}}</td>
+        <td class="text-right">{{line.saturatedFat|number_format(1)}}</td>
+        <td class="text-right">{{line.carbohydrate|number_format(1)}}</td>
+        <td class="text-right">{{line.sugars|number_format(1)}}</td>
+        <td class="text-right">{{line.fiber|number_format(1)}}</td>
+        <td class="text-right">{{line.proteins|number_format(1)}}</td>
+        <td class="text-right">{{line.salt|number_format(1)}}</td>
+        <td class="text-right">{{line.sodium|number_format(1)}}</td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <th>Total for {{recipe.nbPeople}} person{{recipe.nbPeople > 1 ? 's'}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.energyKcal|number_format(0)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.fat|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.saturatedFat|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.carbohydrate|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.sugars|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.fiber|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.proteins|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.salt|number_format(1)}}</th>
+        <th class="text-right">{{ totalIntakeArray.absolute.sodium|number_format(1)}}</th>
+    </tr>
+    {% for line in totalIntakeArray.percentRdi %}
+    <tr>
+        <th>% AJR for {{line.person}}</th>
+        <td class="text-right">{{ line.energyKcal|number_format(1)}} %</td>
+        <td class="text-right">{{ line.fat|number_format(1)}} %</td>
+        <td class="text-right">{{ line.saturatedFat|number_format(1)}} %</td>
+        <td class="text-right">{{ line.carbohydrate|number_format(1)}} %</td>
+        <td class="text-right">{{ line.sugars|number_format(1)}} %</td>
+        <td class="text-right">{{ line.fiber|number_format(1)}} %</td>
+        <td class="text-right">{{ line.proteins|number_format(1)}} %</td>
+        <td class="text-right">{{ line.salt|number_format(1)}} %</td>
+        <td class="text-right">{{ line.sodium|number_format(1)}} %</td>
     </tr>
     {% endfor %}
 </table>
-
+    
 {% endblock %}

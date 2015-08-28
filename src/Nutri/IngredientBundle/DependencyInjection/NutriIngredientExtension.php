@@ -24,6 +24,7 @@ class NutriIngredientExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('service.yml');
+        $loader->load('helper.yml');
         $loader->load('importer.yml');
     }
 }

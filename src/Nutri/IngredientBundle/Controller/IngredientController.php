@@ -137,14 +137,14 @@ class IngredientController extends Controller
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;
         }
     }
-    
+        
     /** ************************************************************************
      * Ajax function. 
      * 
-     * @Route("/findforselect2")
+     * @Route("/search")
      * @Method({"POST","GET"})
      **************************************************************************/
-    public function findForSelect2Action()
+    public function searchAction()
     {        
         $textSearched = $this->get('request')->query->get('q');
         

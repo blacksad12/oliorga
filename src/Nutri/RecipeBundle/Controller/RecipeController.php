@@ -75,10 +75,15 @@ class RecipeController extends Controller
      **************************************************************************/
     public function seeAction(Recipe $recipe)
     {
-        $referenceDailyIntakePercentage = $this->get('nutrirecipe.recipehelper')->getReferenceDailyIntakePercentage($recipe);
+        $ingredientListWithQuantities = $this->get('nutrirecipe.recipehelper')->getIngredientListWithQuantities($recipe);
+        $ingredientsIntakeArray = $this->get('nutriingredient.ingredienthelper')->getIntakeQuantityForIngredients($ingredientListWithQuantities);
+        $totalIntakeArray = $this->get('nutrirecipe.recipehelper')->getTotalIntakeQuantityAndPercentage($recipe);
         
+        $referenceDailyIntakePercentage = $this->get('nutrirecipe.recipehelper')->getReferenceDailyIntakePercentage($recipe);
         return $this->render('NutriRecipeBundle:Recipe:see.html.twig', array(
-            'recipe'      => $recipe,
+            'recipe'                    => $recipe,
+            'ingredientsIntakeArray'    => $ingredientsIntakeArray,
+            'totalIntakeArray'          => $totalIntakeArray,
             'referenceDailyIntakePercentage' => $referenceDailyIntakePercentage,
           ));
     }

@@ -72,8 +72,9 @@ class MenuController extends Controller
      **************************************************************************/
     public function seeAction(Menu $menu)
     {
+        $ingredientListWithQuantities = $this->get('nutrirecipe.menuhelper')->getIngredientListWithQuantities($menu);
+        $ingredientsIntakeArray = $this->get('nutriingredient.ingredienthelper')->getIntakeQuantityForIngredients($ingredientListWithQuantities);
         $totalIntakeArray = $this->get('nutrirecipe.menuhelper')->getTotalIntakeQuantityAndPercentage($menu);
-        $ingredientsIntakeArray = $this->get('nutrirecipe.menuhelper')->getIntakeQuantityForIngredients($menu);
         return $this->render('NutriRecipeBundle:Menu:see.html.twig', array(
             'menu'                      => $menu,
             'ingredientsIntakeArray'    => $ingredientsIntakeArray,

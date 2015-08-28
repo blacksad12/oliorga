@@ -97,7 +97,7 @@ class OpenfoodfactIngredientImporter
     protected function setOpenfoodfactValues(Ingredient $ingredient, array $openfoodfactIngredient) {
         $ingredient->setName($openfoodfactIngredient['product_name'].' ('.$openfoodfactIngredient['brands'].')');
         $ingredient->setBarcode($openfoodfactIngredient['code']);
-        $ingredient->setEnergyKcal(intval($openfoodfactIngredient['energy_100g']));
+        $ingredient->setEnergyKcal(intval($openfoodfactIngredient['energy_100g'])/4.184); // 'energy_100g' is in kj
         $ingredient->setFat($this->strToFloat($openfoodfactIngredient['fat_100g']));
         $ingredient->setSaturatedFat($this->strToFloat($openfoodfactIngredient['saturated-fat_100g']));
         $ingredient->setCarbohydrate($this->strToFloat($openfoodfactIngredient['carbohydrates_100g']));

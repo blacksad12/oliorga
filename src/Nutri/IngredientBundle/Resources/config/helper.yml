@@ -1,0 +1,5 @@
+services:
+    nutriingredient.ingredienthelper:
+        class: Nutri\IngredientBundle\Service\Helper\IngredientHelper
+        
+    
