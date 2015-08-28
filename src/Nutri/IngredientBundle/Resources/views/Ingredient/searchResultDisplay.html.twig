@@ -1,0 +1,50 @@
+{# /src/Nutri/IngredientBundle/Resources/views/Ingredient/searchResultDisplay.html.twig #}
+
+<table id="ingredientTable" class="footable table table-hover table-bordered table-condensed"
+        data-page-navigation="#pagination_ingredientSearch" 
+        data-page-size="15">  
+    <thead>
+        <tr>
+            {{ingredients|length>5 ?'<th data-toggle="true"></th>'}}
+            <th>Name</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Energy (kcal/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Fat (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">SaturatedFat (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Carbohydrate (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Sugars (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Fiber (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Proteins (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Salt (g/100g)</th>
+            <th {{ingredients|length>5 ? 'data-hide="all"' }} data-type="numeric">Sodium (g/100g)</th> 
+        </tr>
+    </thead>
+    <tbody>
+    {%- for ingredient in ingredients %}
+        <tr>
+            {{ingredients|length>5 ? '<td></td>' }}
+            <td>{% if ingredient.barcode is not null %}                
+                <a href="http://world-fr.openfoodfacts.org/produit/{{ingredient.barcode}}" target="_blank">{{ingredient.name}}</a>
+                {% else %}
+                {{ingredient.name}}
+                {% endif %}
+            </td>
+            <td>{{ingredient.energyKcal|number_format(0)}}</td>
+            <td>{{ingredient.fat|number_format(1)}}</td>
+            <td>{{ingredient.saturatedFat|number_format(1)}}</td>
+            <td>{{ingredient.carbohydrate|number_format(1)}}</td>
+            <td>{{ingredient.sugars|number_format(1)}}</td>
+            <td>{{ingredient.fiber|number_format(1)}}</td>
+            <td>{{ingredient.proteins|number_format(1)}}</td>
+            <td>{{ingredient.salt|number_format(1)}}</td>
+            <td>{{ingredient.sodium|number_format(1)}}</td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="10">
+                <div class="text-center"><ul id="pagination_ingredientSearch" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

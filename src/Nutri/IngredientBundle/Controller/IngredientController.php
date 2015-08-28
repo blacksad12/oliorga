@@ -146,24 +146,32 @@ class IngredientController extends Controller
      **************************************************************************/
     public function searchAction()
     {        
-        $textSearched = $this->get('request')->query->get('q');
+        $name = $this->get('request')->request->get('name');
+        $nameStringArray = explode(' ',$name);
+        $searchInCiqual = ($this->get('request')->request->get('ciqual') === 'true');
+        $searchInOpenFoodFact = ($this->get('request')->request->get('openfoodfact') === 'true');
         
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         
-        $qb->select('i.id', 'i.name');
+        $qb->select('i');
         $qb->from("NutriIngredientBundle:Ingredient",'i');
-        $qb->where($qb->expr()->like('i.name', ':textSearched'));
-        $qb->setParameter('textSearched', '%'.$textSearched.'%');
-        $qb->setMaxResults('4');
+        foreach($nameStringArray as $key=>$nameString) {
+            $qb->andWhere($qb->expr()->like('i.name', ':nameSearched_'.$key));
+            $qb->setParameter(':nameSearched_'.$key, '%'.$nameString.'%');
+        }
+        if(!$searchInCiqual) {
+            $qb->andWhere($qb->expr()->isNull('i.ciqualcode'));
+        }
+        if(!$searchInOpenFoodFact) {
+            $qb->andWhere($qb->expr()->isNull('i.barcode'));
+        }
+        $qb->orderBy('i.name');
         
         $ingredientArray = $qb->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        
-        $ingredientArray = array(
-            'items' => $ingredientArray
-        );
-        
-        return new \Symfony\Component\HttpFoundation\JsonResponse($ingredientArray);        
+        return $this->render('NutriIngredientBundle:Ingredient:searchResultDisplay.html.twig', array(
+            'ingredients' => $ingredientArray,
+        )); 
     }
     
     
