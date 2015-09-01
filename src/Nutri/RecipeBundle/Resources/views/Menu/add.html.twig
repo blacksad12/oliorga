@@ -3,11 +3,11 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-New Menu - Menu - Nutri - {{ parent() }}
+{%trans%}New Menu{%endtrans%} - {%trans%}Menu{%endtrans%} - Nutri - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>New Menu</h1>
+<h1>{%trans%}New Menu{%endtrans%}</h1>
 
 {% include 'NutriRecipeBundle:Menu:form.html.twig' %}
 

@@ -3,11 +3,11 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-Modify Menu - Menu - Nutri - {{ parent() }}
+{%trans%}Modify Menu{%endtrans%} - Menu - Nutri - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>Modify Menu <a href="{{ path("nutri_recipe_menu_see", { "menu_id": menu.id }) }}">{{menu}}</a></h1>
+<h1>{%trans%}Modify Menu{%endtrans%} <a href="{{ path("nutri_recipe_menu_see", { "menu_id": menu.id }) }}">{{menu}}</a></h1>
 
 {% include 'NutriRecipeBundle:Menu:form.html.twig' %}
 

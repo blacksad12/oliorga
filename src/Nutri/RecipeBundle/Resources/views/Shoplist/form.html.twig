@@ -28,10 +28,10 @@
         <table align="center" class="table">
             <thead>
                 <tr>
-                    <th>Ingredient</th>
-                    <th>Quantité</th>
-                    <th>Unité</th>                
-                    <th>Delete</th>
+                    <th>{%trans%}Ingredient{%endtrans%}</th>
+                    <th>{%trans%}Quantity{%endtrans%}</th>
+                    <th>{%trans%}Unit{%endtrans%}</th>                
+                    <th>{%trans%}Delete{%endtrans%}</th>
                 </tr>
             </thead>
             <tbody class="collectionHolder" id="ingredientsForShoplist" data-prototype="{{ prototype_ingredientsForShoplist|e }}">
@@ -46,7 +46,7 @@
             <tfoot>
                 <tr>
                     <td colspan="5">
-                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add 1 more{%endtrans%}</a>
                     </td>
                 </tr>
             </tfoot>
@@ -60,9 +60,9 @@
         <table align="center" class="table">
             <thead>
                 <tr>
-                    <th>Recipe</th>
-                    <th>Pour X pers.</th>
-                    <th>Delete</th>
+                    <th>{%trans%}Recipe{%endtrans%}</th>
+                    <th>{%trans%}For X pers.{%endtrans%}</th>
+                    <th>{%trans%}Delete{%endtrans%}</th>
                 </tr>
             </thead>
             <tbody class="collectionHolder" id="recipesForShoplist" data-prototype="{{ prototype_recipesForShoplist|e }}">
@@ -76,7 +76,7 @@
             <tfoot>
                 <tr>
                     <td colspan="5">
-                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                        <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add 1 more{%endtrans%}</a>
                     </td>
                 </tr>
             </tfoot>

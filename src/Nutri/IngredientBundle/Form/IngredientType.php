@@ -25,15 +25,18 @@ class IngredientType extends AbstractType
             ))            
             ->add('ciqualcode', 'number', array(
                 'required'  => false,
+                'label'     => 'Ciqual code',
             ))            
             ->add('energyKcal', 'number', array(
                 'required'  => false,
+                'label'     => 'Energy',
             ))            
             ->add('fat', 'number', array(
                 'required'  => false,
             ))            
             ->add('saturatedFat', 'number', array(
                 'required'  => false,
+                'label'     => 'Saturated fat',
             ))            
             ->add('carbohydrate', 'number', array(
                 'required'  => false,

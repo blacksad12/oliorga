@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="8cf04a9734132302f96da8e113e80ce5" resname="Home">
+        <source>Home</source>
+        <target>Accueil</target>
+      </trans-unit>
+      <trans-unit id="ec211f7c20af43e742bf2570c3cb84f9" resname="Add">
+        <source>Add</source>
+        <target>Ajouter</target>
+      </trans-unit>
+      <trans-unit id="7f090bbab1cc7f9c08bf4e54d932d3c0" resname="Modify">
+        <source>Modify</source>
+        <target>Modifier</target>
+      </trans-unit>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18" resname="Delete">
+        <source>Delete</source>
+        <target>Supprimer</target>
+      </trans-unit>
+      <trans-unit id="4ee29ca12c7d126654bd0e5275de6135" resname="List">
+        <source>List</source>
+        <target>Liste</target>
+      </trans-unit>
+      <trans-unit id="59198347aa8a409ad9e4f0ccd56950eb" resname="Ingredient">
+        <source>Ingredient</source>
+        <target>Ingrédient</target>
+      </trans-unit>
+      <trans-unit id="aef6ec2224f7ef3c74b4942b0e7f2969" resname="Recipe">
+        <source>Recipe</source>
+        <target>Recette</target>
+      </trans-unit>
+      <trans-unit id="b61541208db7fa7dba42c85224405911" resname="Menu">
+        <source>Menu</source>
+        <target>Menu</target>
+      </trans-unit>
+      <trans-unit id="4b50dd9570bf3fa576e5958cc31135a6" resname="Shop list">
+        <source>Shop list</source>
+        <target>Liste de course</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

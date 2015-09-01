@@ -3,11 +3,11 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-{{recipe}} - Recipe - Nutri - {{ parent() }}
+{{recipe}} - {%trans%}Recipe{%endtrans%} - Nutri - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>Recipe {{recipe}}</h1>
+<h1>{%trans%}Recipe{%endtrans%} {{recipe}}</h1>
 
 {# -------------------------------------------------------------------------- #}
 {# ------------------------------- Sub nav ---------------------------------- #}
@@ -28,27 +28,27 @@
 {# ------------------------------ Recipe info -------------------------------- #}
 <table class="table table-hover table-condensed">
     <tr>
-        <th>Name</th>
+        <th>{%trans%}Name{%endtrans%}</th>
         <td>{{recipe.name}}</td>
     </tr>
     <tr>
-        <th>NbPeople</th>
+        <th>{%trans%}Nb People{%endtrans%}</th>
         <td>{{recipe.nbPeople}}</td>
     </tr>
     <tr>
-        <th>PreparationTime</th>
+        <th>{%trans%}Preparation Time{%endtrans%}</th>
         <td>{{recipe.preparationTime}}</td>
     </tr>
     <tr>
-        <th>CookingTime</th>
+        <th>{%trans%}Cooking Time{%endtrans%}</th>
         <td>{{recipe.cookingTime}}</td>
     </tr>
     <tr>
-        <th>CookingTemperature</th>
+        <th>{%trans%}Cooking Temperature{%endtrans%}</th>
         <td>{{recipe.cookingTemperature}}</td>
     </tr>
     <tr>
-        <th>Ingredients</th>
+        <th>{%trans%}Ingredients{%endtrans%}</th>
         <td>
             <ul>
             {% for ingredientForRecipe in recipe.ingredientsForRecipe %}
@@ -58,7 +58,7 @@
         </td>
     </tr>
     <tr>
-        <th>Detail</th>
+        <th>{%trans%}Detail{%endtrans%}</th>
         <td>{{recipe.detail|raw}}</td>
     </tr>
 </table>
@@ -66,16 +66,16 @@
     
 <table class="table table-bordered table-hover table-condensed">
     <tr>
-        <th>Ingredient</th>
-        <th>Energy (kcal)</th>
-        <th>Fat (g)</th>
-        <th>Saturated fat (g)</th>
-        <th>Carbohydrate (g)</th>
-        <th>Sugars (g)</th>
-        <th>Fiber (g)</th>
-        <th>Proteins (g)</th>
-        <th>Salt (g)</th>
-        <th>Sodium (g)</th>
+        <th>{%trans%}Ingredient{%endtrans%}</th>
+        <th>{%trans%}Energy{%endtrans%} (kcal)</th>
+        <th>{%trans%}Fat{%endtrans%} (g)</th>
+        <th>{%trans%}Saturated fat{%endtrans%} (g)</th>
+        <th>{%trans%}Carbohydrate{%endtrans%} (g)</th>
+        <th>{%trans%}Sugars{%endtrans%} (g)</th>
+        <th>{%trans%}Fiber{%endtrans%} (g)</th>
+        <th>{%trans%}Proteins{%endtrans%} (g)</th>
+        <th>{%trans%}Salt{%endtrans%} (g)</th>
+        <th>{%trans%}Sodium{%endtrans%} (g)</th>
     </tr>
     {% for line in ingredientsIntakeArray %}
     <tr>
@@ -105,7 +105,7 @@
     </tr>
     {% for line in totalIntakeArray.percentRdi %}
     <tr>
-        <th>% AJR for {{line.person}}</th>
+        <th>{%trans%}% AJR for{%endtrans%} {{line.person}}</th>
         <td class="text-right">{{ line.energyKcal|number_format(1)}} %</td>
         <td class="text-right">{{ line.fat|number_format(1)}} %</td>
         <td class="text-right">{{ line.saturatedFat|number_format(1)}} %</td>

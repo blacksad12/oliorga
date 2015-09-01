@@ -1,11 +1,191 @@
-<?xml version="1.0"?>
-<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-    <file source-language="en" datatype="plaintext" original="file.ext">
-        <body>
-            <trans-unit id="1">
-                <source>Symfony2 is great</source>
-                <target>J'aime Symfony2</target>
-            </trans-unit>
-        </body>
-    </file>
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="fr" target-language="fr" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="5cc28f31113ec7cd7e546b836ccae2b9" resname="Energy">
+        <source>Energy</source>
+        <target>Energie</target>
+      </trans-unit>
+      <trans-unit id="1541ed34f48aa810e9871cfcd9848615" resname="New Menu">
+        <source>New Menu</source>
+        <target>Nouveau Menu</target>
+      </trans-unit>
+      <trans-unit id="b61541208db7fa7dba42c85224405911" resname="Menu">
+        <source>Menu</source>
+        <target>Menu</target>
+      </trans-unit>
+      <trans-unit id="59198347aa8a409ad9e4f0ccd56950eb" resname="Ingredient">
+        <source>Ingredient</source>
+        <target>Ingrédient</target>
+      </trans-unit>
+      <trans-unit id="694e8d1f2ee056f98ee488bdc4982d73" resname="Quantity">
+        <source>Quantity</source>
+        <target>Quantité</target>
+      </trans-unit>
+      <trans-unit id="19c562a36aeb455d09534f93b4f5236f" resname="Unit">
+        <source>Unit</source>
+        <target>Unité</target>
+      </trans-unit>
+      <trans-unit id="f2a6c498fb90ee345d997f888fce3b18" resname="Delete">
+        <source>Delete</source>
+        <target>Supprimer</target>
+      </trans-unit>
+      <trans-unit id="8cf04a9734132302f96da8e113e80ce5" resname="Home">
+        <source>Home</source>
+        <target>Accueil</target>
+      </trans-unit>
+      <trans-unit id="c8d7a4b54036ebfd3036d72ddace47fc" resname="Menus' list">
+        <source>Menus' list</source>
+        <target>Liste des menus</target>
+      </trans-unit>
+      <trans-unit id="ec211f7c20af43e742bf2570c3cb84f9" resname="Add">
+        <source>Add</source>
+        <target>Ajouter</target>
+      </trans-unit>
+      <trans-unit id="4a713ee500cd56f9f35abe5db6317b34" resname="Quick search:">
+        <source>Quick search:</source>
+        <target>Recherche rapide :</target>
+      </trans-unit>
+      <trans-unit id="40bed7cf9b3d4bb3a3d7a7e3eb18c5eb" resname="Person">
+        <source>Person</source>
+        <target>Personne</target>
+      </trans-unit>
+      <trans-unit id="cfe820a9252b03bae4f297f46b00e95b" resname="Modify Menu">
+        <source>Modify Menu</source>
+        <target>Modifier le Menu</target>
+      </trans-unit>
+      <trans-unit id="44749712dbec183e983dcd78a7736c41" resname="Date">
+        <source>Date</source>
+        <target>Date</target>
+      </trans-unit>
+      <trans-unit id="0153a1e369e543364edb1e75ceff1173" resname="Recipes">
+        <source>Recipes</source>
+        <target>Recette</target>
+      </trans-unit>
+      <trans-unit id="4d09cd73aa61ce61d0219ffa9b9ebbad" resname="Fat">
+        <source>Fat</source>
+        <target>Lipides</target>
+      </trans-unit>
+      <trans-unit id="8e1b9fb7be9e8b62727edb7ae6395411" resname="Saturated fat">
+        <source>Saturated fat</source>
+        <target>Acides gras saturés</target>
+      </trans-unit>
+      <trans-unit id="bc7dcafe5412f374c7e0ff7b786515d0" resname="Carbohydrate">
+        <source>Carbohydrate</source>
+        <target>Glucides</target>
+      </trans-unit>
+      <trans-unit id="c42ee4dbb1518df966fe6fed6bdcad0a" resname="Sugars">
+        <source>Sugars</source>
+        <target>Sucres</target>
+      </trans-unit>
+      <trans-unit id="1dd29ce1382c8fe37c55f643fd65daf9" resname="Fiber">
+        <source>Fiber</source>
+        <target>Fibres</target>
+      </trans-unit>
+      <trans-unit id="728b880f022a876ccbd4b9666a405f8f" resname="Proteins">
+        <source>Proteins</source>
+        <target>Protéines</target>
+      </trans-unit>
+      <trans-unit id="af334c7b6ef89b42a94f7932a1ee9ffe" resname="Salt">
+        <source>Salt</source>
+        <target>Sel</target>
+      </trans-unit>
+      <trans-unit id="e30669ba169edfe306c5f3b628919649" resname="Sodium">
+        <source>Sodium</source>
+        <target>Sodium</target>
+      </trans-unit>
+      <trans-unit id="96b0141273eabab320119c467cdcaf17" resname="Total">
+        <source>Total</source>
+        <target>Total</target>
+      </trans-unit>
+      <trans-unit id="6aa09766827f37506630dce0db552187" resname="AJR">
+        <source>AJR</source>
+        <target>AJR</target>
+      </trans-unit>
+      <trans-unit id="8b3a0c086714b85a0865ef55272ca95d" resname="New Recipe">
+        <source>New Recipe</source>
+        <target>Nouvelle recette</target>
+      </trans-unit>
+      <trans-unit id="aef6ec2224f7ef3c74b4942b0e7f2969" resname="Recipe">
+        <source>Recipe</source>
+        <target>Recette</target>
+      </trans-unit>
+      <trans-unit id="0be8406951cdfda82f00f79328cf4efc" resname="Comment">
+        <source>Comment</source>
+        <target>Commentaire</target>
+      </trans-unit>
+      <trans-unit id="ae902275754f6aa58b097cbb18a88aff" resname="Add 1 more">
+        <source>Add 1 more</source>
+        <target>Ajouter 1 de plus</target>
+      </trans-unit>
+      <trans-unit id="579958e6a744c42ee697519aa7094c71" resname="Recipes' list:">
+        <source>Recipes' list:</source>
+        <target>Liste des recettes:</target>
+      </trans-unit>
+      <trans-unit id="49ee3087348e8d44e1feda1917443987" resname="Name">
+        <source>Name</source>
+        <target>Nom</target>
+      </trans-unit>
+      <trans-unit id="7923d81e60310db2b7c741defc0b0bcb" resname="Nb People">
+        <source>Nb People</source>
+        <target>Nombre de personnes</target>
+      </trans-unit>
+      <trans-unit id="28643b861cca1903fc8a8b3cc08445e7" resname="Preparation Time">
+        <source>Preparation Time</source>
+        <target>Temps de préparation</target>
+      </trans-unit>
+      <trans-unit id="019cb8286cd591f634978ff6bbe40fee" resname="Cooking Time">
+        <source>Cooking Time</source>
+        <target>Temps de cuisson</target>
+      </trans-unit>
+      <trans-unit id="e72cd7ea4b1d01c92885c54bf2176f20" resname="Cooking Temperature">
+        <source>Cooking Temperature</source>
+        <target>Température de cuisson</target>
+      </trans-unit>
+      <trans-unit id="210c9e13155de6cf4edb59f1fbbaf4e8" resname="Ingredients">
+        <source>Ingredients</source>
+        <target>Ingrédients</target>
+      </trans-unit>
+      <trans-unit id="a254c25adc7d10d7e9c4889484f875a5" resname="Detail">
+        <source>Detail</source>
+        <target>Détails</target>
+      </trans-unit>
+      <trans-unit id="455a74271279189bf94016542bc9c05a" resname="Modify Recipe">
+        <source>Modify Recipe</source>
+        <target>Modifier la recette</target>
+      </trans-unit>
+      <trans-unit id="c1bad1e64cbe41b04440636526189f87" resname="% AJR for">
+        <source>% AJR for</source>
+        <target>% AJR pour</target>
+      </trans-unit>
+      <trans-unit id="5488601ad2491c5c124a164eb1b8cfe6" resname="New Shoplist">
+        <source>New Shoplist</source>
+        <target>Nouvelle liste de courses</target>
+      </trans-unit>
+      <trans-unit id="25789bea0d9eff377390ffd345377097" resname="Shoplist">
+        <source>Shoplist</source>
+        <target>Liste de course</target>
+      </trans-unit>
+      <trans-unit id="4c54a3df0dd8f431b57ede3fb4859c3e" resname="For X pers.">
+        <source>For X pers.</source>
+        <target>Pour X pers.</target>
+      </trans-unit>
+      <trans-unit id="f2459e6e6e3bbe5fe9e16f404d313e85" resname="Shoplists' list:">
+        <source>Shoplists' list:</source>
+        <target>Liste de listes de courses</target>
+      </trans-unit>
+      <trans-unit id="533779754f80b4c3fbfffee725f0f92e" resname="Modify Shoplist">
+        <source>Modify Shoplist</source>
+        <target>Modifier la liste de course</target>
+      </trans-unit>
+      <trans-unit id="4caf671d8ef2e55a288778c3bd726717" resname="Totaux">
+        <source>Totaux</source>
+        <target>Totaux</target>
+      </trans-unit>
+      <trans-unit id="13a6eaf22232b418241d26516cc85e20" resname="for %nbPeople% persons">
+        <source>for %nbPeople% persons</source>
+        <target>pour %nbPeople% personnes</target>
+      </trans-unit>
+    </body>
+  </file>
 </xliff>

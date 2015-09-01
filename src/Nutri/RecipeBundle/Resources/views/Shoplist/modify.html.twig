@@ -3,11 +3,11 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-Modify Shoplist - Shoplist - Nutri - {{ parent() }}
+{%trans%}Modify Shoplist{%endtrans%} - {%trans%}Shoplist{%endtrans%} - Nutri - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>Modify Shoplist <a href="{{ path("nutri_recipe_shoplist_see", { "shoplist_id": shoplist.id }) }}">{{shoplist}}</a></h1>
+<h1>{%trans%}Modify Shoplist{%endtrans%} <a href="{{ path("nutri_recipe_shoplist_see", { "shoplist_id": shoplist.id }) }}">{{shoplist}}</a></h1>
 
 {% include 'NutriRecipeBundle:Shoplist:form.html.twig' %}
 

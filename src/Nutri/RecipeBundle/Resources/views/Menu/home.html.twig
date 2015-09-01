@@ -3,15 +3,15 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-Home - Menu - Nutri - {{ parent() }}
+{%trans%}Home{%endtrans%} - Menu - Nutri - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>Menus' list:</h1>
+<h1>{%trans%}Menus' list{%endtrans%}:</h1>
 <hr>
-<a class="btn btn-default" href="{{path('nutri_recipe_menu_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> Add</a>
+<a class="btn btn-default" href="{{path('nutri_recipe_menu_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a>
 
-<p>Quick search: <input type=text id="recherche"></p>
+<p>{%trans%}Quick search:{%endtrans%} <input type=text id="recherche"></p>
 
 <table class="footable table table-hover table-bordered table-condensed" 
        data-filter=#recherche 
@@ -21,7 +21,7 @@ Home - Menu - Nutri - {{ parent() }}
         <tr>
             <th data-toggle="true"></th>
             <th data-type="numeric">Date</th>
-            <th>Person</th>   
+            <th>{%trans%}Person{%endtrans%}</th>   
         </tr>
     </thead>
     <tbody>

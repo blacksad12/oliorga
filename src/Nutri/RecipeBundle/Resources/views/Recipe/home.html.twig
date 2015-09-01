@@ -3,14 +3,14 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-Home - Recipe - Nutri - {{ parent() }}
+{%trans%}Home{%endtrans%} - {%trans%}Recipe{%endtrans%} - Nutri - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
-<h1>Recipes' list:</h1>
+<h1>{%trans%}Recipes' list:{%endtrans%}</h1>
 <hr>
-<a class="btn btn-default" href="{{path('nutri_recipe_recipe_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> Add</a>
-<p>Quick search: <input type=text id="recherche"></p>
+<a class="btn btn-default" href="{{path('nutri_recipe_recipe_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a>
+<p>{%trans%}Quick search:{%endtrans%} <input type=text id="recherche"></p>
 
 <table class="footable table table-hover table-bordered table-condensed" 
        data-filter=#recherche 
@@ -19,13 +19,14 @@ Home - Recipe - Nutri - {{ parent() }}
     <thead>
         <tr>
             <th data-toggle="true"></th>
-            <th>Name</th>
-            <th data-type="numeric">NbPeople</th>
-            <th data-type="numeric">PreparationTime</th>
-            <th data-type="numeric">CookingTime</th>
-            <th data-type="numeric">CookingTemperature</th>
-            <th>Ingredients</th>
-            <th data-hide="all">Detail</th>        </tr>
+            <th>{%trans%}Name{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}Nb People{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}Preparation Time{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}Cooking Time{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}Cooking Temperature{%endtrans%}</th>
+            <th>{%trans%}Ingredients{%endtrans%}</th>
+            <th data-hide="all">{%trans%}Detail{%endtrans%}</th>
+        </tr>
     </thead>
     <tbody>
     {%- for recipe in recipes %}

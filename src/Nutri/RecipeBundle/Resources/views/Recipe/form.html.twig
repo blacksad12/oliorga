@@ -39,11 +39,11 @@
     <table align="center" class="table">
         <thead>
             <tr>
-                <th>Ingredient</th>
-                <th>Quantité</th>
-                <th>Unité</th>
-                <th>Commentaire</th>
-                <th>Delete</th>
+                <th>{%trans%}Ingredient{%endtrans%}</th>
+                <th>{%trans%}Quantity{%endtrans%}</th>
+                <th>{%trans%}Unit{%endtrans%}</th>
+                <th>{%trans%}Comment{%endtrans%}</th>
+                <th>{%trans%}Delete{%endtrans%}</th>
             </tr>
         </thead>
         <tbody class="collectionHolder"  data-prototype="{{ prototype|e }}">
@@ -60,7 +60,7 @@
         <tfoot>
             <tr>
                 <td colspan="5">
-                    <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> Ajouter 1 de plus</a>
+                    <a href="#" style="width:100%" role="button" class="btn btn-sm btn-default add_button"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add 1 more{%endtrans%}</a>
                 </td>
             </tr>
         </tfoot>

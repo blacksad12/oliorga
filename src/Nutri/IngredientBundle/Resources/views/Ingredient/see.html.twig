@@ -28,56 +28,56 @@
 {# ------------------------------ Ingredient info -------------------------------- #}
 <table class="table table-hover table-condensed">
     <tr>
-        <th>Name</th>
+        <th>{% trans %}Name{% endtrans %}</th>
         <td>{{ingredient.name}}</td>
     </tr>
     {% if ingredient.barcode is not empty %}
     <tr>
-        <th>Barcode</th>
+        <th>{% trans %}Barcode{% endtrans %}</th>
         <td><a href="http://world-fr.openfoodfacts.org/produit/{{ingredient.barcode}}">{{ingredient.barcode}}</a></td>
     </tr>
     {% endif %}
     {% if ingredient.ciqualcode is not empty %}
     <tr>
-        <th>Ciqualcode</th>
+        <th>{% trans %}Ciqual Code{% endtrans %}</th>
         <td>{{ingredient.ciqualcode}}</td>
     </tr>
     {% endif %}
     <tr>
-        <th>EnergyKcal</th>
-        <td>{{ingredient.energyKcal}}</td>
+        <th>{% trans %}Energy{% endtrans %} (Kcal)</th>
+        <td>{{ingredient.energyKcal|number_format(0)}}</td>
     </tr>
     <tr>
-        <th>Fat</th>
-        <td>{{ingredient.fat}}</td>
+        <th>{% trans %}Fat{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.fat|number_format(1)}}</td>
     </tr>
     <tr>
-        <th>SaturatedFat</th>
-        <td>{{ingredient.saturatedFat}}</td>
+        <th>{% trans %}Saturated Fat{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.saturatedFat|number_format(1)}}</td>
     </tr>
     <tr>
-        <th>Carbohydrate</th>
-        <td>{{ingredient.carbohydrate}}</td>
+        <th>{% trans %}Carbohydrate{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.carbohydrate|number_format(1)}}</td>
     </tr>
     <tr>
-        <th>Sugars</th>
-        <td>{{ingredient.sugars}}</td>
+        <th>{% trans %}Sugars{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.sugars|number_format(1)}}</td>
     </tr>
     <tr>
-        <th>Fiber</th>
-        <td>{{ingredient.fiber}}</td>
+        <th>{% trans %}Fiber{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.fiber|number_format(1)}}</td>
     </tr>
     <tr>
-        <th>Proteins</th>
-        <td>{{ingredient.proteins}}</td>
+        <th>{% trans %}Proteins{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.proteins|number_format(1)}}</td>
     </tr>
     <tr>
-        <th>Salt</th>
-        <td>{{ingredient.salt}}</td>
+        <th>{% trans %}Salt{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.salt|number_format(2)}}</td>
     </tr>
     <tr>
-        <th>Sodium</th>
-        <td>{{ingredient.sodium}}</td>
+        <th>{% trans %}Sodium{% endtrans %} (g/100g)</th>
+        <td>{{ingredient.sodium|number_format(2)}}</td>
     </tr>
 </table>
 
