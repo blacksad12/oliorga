@@ -1,0 +1,70 @@
+{# /src/Finance/OperationBundle/Resources/views/TransferBetweenAccount/seeEmbed.html.twig #}
+
+{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of TransferBetweenAccounts.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which TransferBetweenAccount's info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if transferbetweenaccounts is not defined%}        {% set transferbetweenaccounts        = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = 'TransferBetweenAccounts' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if transferbetweenaccountPerPage is not defined%}  {% set transferbetweenaccountPerPage  = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}
+{% if displaySourceAccount is not defined%}{% set displaySourceAccount = true %}{%endif%}
+{% if displayDestinationAccount is not defined%}{% set displayDestinationAccount = true %}{%endif%}
+
+
+{% if not (transferbetweenaccounts is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if transferbetweenaccounts is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='transferbetweenaccount_search'></div>
+{% endif %}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#transferbetweenaccount_search 
+       data-page-navigation="#transferbetweenaccount_pagination" 
+       data-page-size="transferbetweenaccountPerPage">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            {% if displaySourceAccount %}<th>{%trans%}SourceAccount{%trans%}</th>{% endif %}
+            {% if displayDestinationAccount %}<th>{%trans%}DestinationAccount{%trans%}</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {%- for transferbetweenaccount in transferbetweenaccounts %}
+        <tr>
+            <td></td>
+            {% if displaySourceAccount %}<td><a href="{{ path("finance_account_account_see", { "sourceaccount_id": transferbetweenaccount.sourceAccount.id }) }}">{{transferbetweenaccount.sourceAccount}}</a></td>{% endif %}
+            {% if displayDestinationAccount %}<td><a href="{{ path("finance_account_account_see", { "destinationaccount_id": transferbetweenaccount.destinationAccount.id }) }}">{{transferbetweenaccount.destinationAccount}}</a></td>{% endif %}
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="transferbetweenaccount_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{%else %}
+<p>There is no TransferBetweenAccounts for this {{entityCalling}}.</p>
+{%endif%}
+
+{% endif %}

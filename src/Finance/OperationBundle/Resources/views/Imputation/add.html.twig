@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/Imputation/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New Imputation{%endtrans%} - {%trans%}Imputation{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New Imputation{%endtrans%}</h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{# /src/Finance/OperationBundle/Resources/views/TransferBetweenAccount/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Home{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}TransferBetweenAccounts' list:{%endtrans%}</h1>
+<hr>
+
+<p>{%trans%}Quick search: {%endtrans%}<input type=text id="search"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#search 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>{%trans%}SourceAccount{%endtrans%}</th>
+            <th>{%trans%}DestinationAccount{%endtrans%}</th>        </tr>
+    </thead>
+    <tbody>
+    {%- for transferbetweenaccount in transferbetweenaccounts %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_account_account_see", { "sourceAccount_id": transferbetweenaccount.sourceAccount.id }) }}">{{transferbetweenaccount.sourceAccount}}</a></td>
+            <td><a href="{{ path("finance_account_account_see", { "destinationAccount_id": transferbetweenaccount.destinationAccount.id }) }}">{{transferbetweenaccount.destinationAccount}}</a></td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="3">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

@@ -1,0 +1,40 @@
+{# /src/Finance/OperationBundle/Resources/views/Stakeholder/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{stakeholder}} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Stakeholder{%endtrans%} {{stakeholder}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'FinanceOperationBundle:BuilderStakeholder:seeMenu' , [], {'stakeholder': stakeholder}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'finance_operation_stakeholder_',
+    entityId:       'stakeholder_id',
+    entity:         stakeholder
+} %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Stakeholder info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>{%trans%}Name{%endtrans%}</th>
+        <td>{{stakeholder.name}}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Parent{%endtrans%}</th>
+        <td><a href="{{ path("finance_operation_stakeholder_see", { "parent_id": stakeholder.parent.id }) }}">{{stakeholder.parent}}</a></td>
+    </tr>
+</table>
+
+{% endblock %}

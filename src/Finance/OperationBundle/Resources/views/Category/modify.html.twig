@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/Category/modify.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Modify Category{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Modify Category{%endtrans%} <a href="{{ path("finance_operation_category_see", { "category_id": category.id }) }}">{{category}}</a></h1>
+
+{% include "::form_default.html.twig" %}
+
+{% endblock %}

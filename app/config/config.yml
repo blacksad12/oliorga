@@ -89,11 +89,11 @@ fos_user:
     user_class: Oliorga\AppBundle\Entity\User
 
 knp_menu:
-    twig:  
-        template: "OliorgaAppBundle:Menu:knp_menu.html.twig"
-    templating: false # if true, enables the helper for PHP templates
-    default_renderer: twig # The renderer to use, list is also available by default
-    
+   twig:
+       template: knp_menu.html.twig
+   templating: false
+   default_renderer: twig
+   
 #mopa_bootstrap:
 #    form: 
 #      horizontal_label_class:  col-lg-3 col-md-3 col-sm-3 control-label                 #Unused. See app/Resources/views/form_theme.html.twig

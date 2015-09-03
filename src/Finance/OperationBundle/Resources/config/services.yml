@@ -1,0 +1,14 @@
+services:
+    financeoperation.abstractoperationhelper:
+        class: Finance\OperationBundle\Service\Helper\AbstractOperationHelper
+
+    financeoperation.operationhelper:
+        class: Finance\OperationBundle\Service\Helper\OperationHelper
+        arguments: [ "@doctrine.orm.entity_manager", @doctrine ]
+    
+    financeoperation.categoryhelper:
+        class: Finance\OperationBundle\Service\Helper\CategoryHelper
+        arguments: [ "@doctrine.orm.entity_manager", @doctrine, @financeoperation.operationhelper ]
+    
+    
+    

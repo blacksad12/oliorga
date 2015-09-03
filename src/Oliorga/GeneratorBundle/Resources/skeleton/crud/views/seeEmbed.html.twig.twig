@@ -33,30 +33,30 @@
 {% if "~entity|lower~"s is not empty %}
 
 {% if displayQuicksearch %}
-<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='"~entity|lower~"_search'></div>
+<div style='float: left; margin-right: 10px'>{%trans%}Quick search:{%endtrans%} <input type=text id='"~entity|lower~"_search'></div>
 {% endif %}" }}
 <table class="footable table table-hover table-bordered table-condensed" 
        data-filter=#{{entity|lower}}_search 
        data-page-navigation="#{{entity|lower}}_pagination" 
-       data-page-size="{{entity|lower}}PerPage">
+       data-page-size="{{ "{{" }}{{entity|lower}}PerPage{{ "}}" }}">
     <thead>
         <tr>
             <th data-toggle="true"></th>            
         {%- for field, metadata in fields.simple %}
             {%- if metadata.type in ['date', 'datetime', 'integer'] %}
 
-            <th data-type="numeric">{{ field[:1]|capitalize~field[1:] }}</th>
+            <th data-type="numeric">{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>
 
             {%- else %}
 
-            <th>{{ field[:1]|capitalize~field[1:] }}</th>
+            <th>{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>
 
             {%- endif %}
         {%- endfor %}
 
         {%- for field, metadata in fields.association %}
 
-            {{ "{% if display"~field[:1]|capitalize~field[1:]~" %}" }}<th>{{ field[:1]|capitalize~field[1:] }}</th>{{ "{% endif %}" }}
+            {{ "{% if display"~field[:1]|capitalize~field[1:]~" %}" }}<th>{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>{{ "{% endif %}" }}
 
         {%- endfor %}
 
@@ -92,7 +92,7 @@
     </tbody>
     <tfoot class="hide-if-no-paging">
         <tr>
-            <td colspan="6">
+            <td colspan="{{fields.association|length + fields.simple|length + 1}}">
                 <div class="text-center"><ul id="{{entity|lower}}_pagination" class="pagination pagination-centered"></ul></div>
             </td>
         </tr>

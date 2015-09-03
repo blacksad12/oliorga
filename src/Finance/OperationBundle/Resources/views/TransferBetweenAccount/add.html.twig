@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/TransferBetweenAccount/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New TransferBetweenAccount{%endtrans%} - {%trans%}TransferBetweenAccount{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New TransferBetweenAccount{%endtrans%}</h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

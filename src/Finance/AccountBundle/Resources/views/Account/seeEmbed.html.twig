@@ -1,0 +1,78 @@
+{# /src/Finance/AccountBundle/Resources/views/Account/seeEmbed.html.twig #}
+
+{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of Accounts.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which Account's info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if accounts is not defined%}        {% set accounts        = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = 'Accounts' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if accountPerPage is not defined%}  {% set accountPerPage  = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}
+{% if displayCategory is not defined%}{% set displayCategory = true %}{%endif%}
+{% if displayInstitution is not defined%}{% set displayInstitution = true %}{%endif%}
+
+
+{% if not (accounts is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if accounts is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='account_search'></div>
+{% endif %}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#account_search 
+       data-page-navigation="#account_pagination" 
+       data-page-size="accountPerPage">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>{%trans%}Number{%endtrans%}</th>
+            <th>{%trans%}Iban{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}OpenDate{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}CloseDate{%endtrans%}</th>
+            {% if displayCategory %}<th>{%trans%}Category{%trans%}</th>{% endif %}
+            {% if displayInstitution %}<th>{%trans%}Institution{%trans%}</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {%- for account in accounts %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_account_account_see", { "account_id": account.id }) }}">{{account.number}}</a></td>
+            <td>{{account.iban}}</td>
+            <td data-value="{{ account.openDate|date("U") }}">{{ account.openDate is not empty ? account.openDate|date("Y-m-d") }}</td>
+            <td data-value="{{ account.closeDate|date("U") }}">{{ account.closeDate is not empty ? account.closeDate|date("Y-m-d") }}</td>
+            {% if displayCategory %}<td><a href="{{ path("finance_account_category_see", { "category_id": account.category.id }) }}">{{account.category}}</a></td>{% endif %}
+            {% if displayInstitution %}<td><a href="{{ path("finance_institution_institution_see", { "institution_id": account.institution.id }) }}">{{account.institution}}</a></td>{% endif %}
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="account_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{%else %}
+<p>There is no Accounts for this {{entityCalling}}.</p>
+{%endif%}
+
+{% endif %}

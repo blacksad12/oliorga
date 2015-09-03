@@ -1,0 +1,151 @@
+{# /src/Finance/AccountBundle/Resources/views/Account/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{account}} - {%trans%}Account{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Account{%endtrans%} {{account}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'FinanceAccountBundle:BuilderAccount:seeMenu' , [], {'account': account}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'finance_account_account_',
+    entityId:       'account_id',
+    entity:         account
+} %}
+    {% block menuItems %}
+        {{parent()}}
+        <li><a href="{{ path('finance_operation_operation_add') }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add operation{%endtrans%}</a></li>
+    {% endblock %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Account info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>{%trans%}Number{%endtrans%}</th>
+        <td>{{account.number}}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Iban{%endtrans%}</th>
+        <td>{{account.iban}}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}OpenDate{%endtrans%}</th>
+        <td>{{ account.openDate is not empty ? account.openDate|date("Y-m-d") }}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}CloseDate{%endtrans%}</th>
+        <td>{{ account.closeDate is not empty ? account.closeDate|date("Y-m-d") }}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Category{%endtrans%}</th>
+        <td>{#<a href="{{ path("finance_account_category_see", { "category_id": account.category.id }) }}">#}{{account.category}}{#</a>#}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Institution{%endtrans%}</th>
+        <td>{#<a href="{{ path("finance_institution_institution_see", { "institution_id": account.institution.id }) }}">#}{{account.institution}}{#</a>#}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Balance{%endtrans%}</th>
+        <td>{{balance|number_format(2, ',', ' ')~'€' }}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Marked balance{%endtrans%}</th>
+        <td>{{markedBalance|number_format(2, ',', ' ')~'€' }}</td>
+    </tr>
+</table>
+    
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Operations info -------------------------------- #}
+<table class="table footable table-striped table-bordered table-condensed"
+           data-page-navigation="#pagination" 
+           data-page-size="50">
+        <thead>
+            <tr>
+                <th data-sort-initial="descending">{%trans%}Date{%endtrans%}</th>
+                <th>{%trans%}Debit{%endtrans%}</th>
+                <th>{%trans%}Credit{%endtrans%}</th>
+                <th>{%trans%}Category{%endtrans%}</th>
+                <th>{%trans%}Stakeholder{%endtrans%}</th>
+                <th>{%trans%}Comment{%endtrans%}</th>
+                <th>{%trans%}Marked{%endtrans%}</th>                
+                <th>{%trans%}Actions{%endtrans%}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for operation in operations %}
+            <tr>
+                <td data-value="{{operation.date|date('U')}}" >{% if operation.date %}{{ operation.date|date('d/m/Y') }}{% endif %}</td>
+                <td align='right'>{{ operation.amount < 0 ? operation.amount|number_format(2, ',', ' ')~'€'}}</td>
+                <td align='right'>{{ operation.amount > 0 ? operation.amount|number_format(2, ',', ' ')~'€' }}</td>
+                <td>{% if operation.category is not empty %}
+                    <a href="{{ path('finance_operation_category_see', { 'category_id': operation.category.id }) }}">{{ operation.category}}</a>
+                    {% endif %}
+                </td>
+                <td>{{ operation.stakeholder }}</td>
+                <td>{{ operation.comment }}</td>
+                <td>{{ operation.isMarked ? 'P'}}</td>
+                <td>
+                    <a href="{{ path('finance_operation_operation_see', { 'operation_id': operation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <a href="{{ path('finance_operation_operation_modify', { 'operation_id': operation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                    {#<a href="{{ path('finance_operation_operation_duplicate', { 'oldoperation_id': operation.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                    <a href="{{ path('abstractoperation_pointe', { 'id': operation.id }) }}" title="Pointer"><span class="glyphicon glyphicon-ok"></span></a>  #}                  
+                </td>
+            </tr>
+        {% endfor %}
+        {% for incomeTransfer in incomeTransfers %}
+            <tr>
+                <td data-value="{{incomeTransfer.date|date('U')}}">{% if incomeTransfer.date %}{{ incomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
+                <td align='right'></td>
+                <td align='right'>{{ incomeTransfer.amount|number_format(2, ',', ' ')~'€' }}</td>
+                <td>Intercompte</td>
+                <td></td>
+                <td>Depuis <a href="{{ path('finance_account_account_see', { 'account_id': incomeTransfer.sourceAccount.id }) }}">{{ incomeTransfer.sourceAccount }}</a></td>
+                <td>{{ incomeTransfer.isMarked ? 'P'}}</td>
+                <td>
+                    <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferbetweenaccount_id': incomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferbetweenaccount_id': incomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                    {#<a href="{{ path('finance_operation_intercompte_duplicate', { 'oldIntercompte_id': incomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                    <a href="{{ path('abstractoperation_pointe', { 'id': incomeTransfer.id }) }}" title="Pointer"><span class="glyphicon glyphicon-ok"></span></a>        #}            
+                </td>                
+            </tr>
+        {% endfor %}
+        {% for outcomeTransfer in outcomeTransfers %}
+            <tr>
+                <td data-value="{{outcomeTransfer.date|date('U')}}">{% if outcomeTransfer.date %}{{ outcomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
+                <td align='right'>-{{ outcomeTransfer.amount|number_format(2, ',', ' ')~'€' }}</td>
+                <td align='right'></td>
+                <td>Intercompte</td>
+                <td></td>
+                <td>Vers <a href="{{ path('finance_account_account_see', { 'account_id': outcomeTransfer.destinationAccount.id }) }}">{{ outcomeTransfer.destinationAccount }}</a></td>
+                <td>{{ outcomeTransfer.isMarked ? 'P'}}</td>
+                <td>
+                    <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferbetweenaccount_id': outcomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferbetweenaccount_id': outcomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                    {#<a href="{{ path('finance_operation_intercompte_duplicate', { 'oldIntercompte_id': outcomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                    <a href="{{ path('abstractoperation_pointe', { 'id': outcomeTransfer.id }) }}" title="Pointer"><span class="glyphicon glyphicon-ok"></span></a>      #}              
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        {# Pagination #}
+        <tfoot class="hide-if-no-paging">
+            <tr>
+                <td colspan="10">
+                    <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+{% endblock %}

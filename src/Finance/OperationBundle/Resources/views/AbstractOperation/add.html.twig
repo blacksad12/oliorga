@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/AbstractOperation/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New AbstractOperation{%endtrans%} - {%trans%}AbstractOperation{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New AbstractOperation{%endtrans%}</h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

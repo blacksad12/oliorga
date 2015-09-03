@@ -1,7 +1,27 @@
+finance_institution:
+    resource: "@FinanceInstitutionBundle/Controller/"
+    type:     annotation
+    prefix:   /finance/institution/
+
+finance_account:
+    resource: "@FinanceAccountBundle/Controller/"
+    type:     annotation
+    prefix:   /finance/account/
+
+finance_operation:
+    resource: "@FinanceOperationBundle/Controller/"
+    type:     annotation
+    prefix:   /finance/operation/
+
 nutri_recipe:
     resource: "@NutriRecipeBundle/Controller/"
     type:     annotation
     prefix:   /nutri/recipe/
+
+nutri_ingredient:
+    resource: "@NutriIngredientBundle/Controller/"
+    type:     annotation
+    prefix:   /nutri/ingredient/
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
@@ -10,11 +30,6 @@ oliorga_app:
     resource: "@OliorgaAppBundle/Controller/"
     type:     annotation
     prefix:   /
-
-nutri_ingredient:
-    resource: "@NutriIngredientBundle/Controller/"
-    type:     annotation
-    prefix:   /nutri/ingredient/
 
 
 shtumi_useful:

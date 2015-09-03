@@ -1,0 +1,42 @@
+{# /src/Finance/OperationBundle/Resources/views/Category/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{category}} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Category{%endtrans%} {{category}} 
+    {% if category.parent is not empty %}
+        <small>({%trans%}Parent:{%endtrans%} <a href="{{ path("finance_operation_category_see", { "category_id": category.parent.id }) }}">{{category.parent}}</a>)</small>
+    {% endif %}
+</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'FinanceOperationBundle:BuilderCategory:seeMenu' , [], {'category': category}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'finance_operation_category_',
+    entityId:       'category_id',
+    entity:         category
+} %}
+{% endembed %}
+
+{% include 'FinanceOperationBundle:Operation:monthlyMeans.html.twig' with {
+    entity      : category,
+    children    : category.childrenCategories,
+    routePrefix : 'finance_operation_category_',
+    entityName  : 'category'
+}%}
+
+{% include 'FinanceOperationBundle:Operation:seeEmbed.html.twig' with {
+    hideAccount         : true,
+    hidePaymentMethod   : true,
+}
+%}
+{% endblock %}

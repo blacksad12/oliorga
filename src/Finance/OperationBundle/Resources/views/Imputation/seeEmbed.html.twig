@@ -1,0 +1,73 @@
+{# /src/Finance/OperationBundle/Resources/views/Imputation/seeEmbed.html.twig #}
+
+{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of Imputations.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which Imputation's info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if imputations is not defined%}        {% set imputations        = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = 'Imputations' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if imputationPerPage is not defined%}  {% set imputationPerPage  = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}
+{% if displayParent is not defined%}{% set displayParent = true %}{%endif%}
+
+
+{% if not (imputations is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if imputations is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='imputation_search'></div>
+{% endif %}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#imputation_search 
+       data-page-navigation="#imputation_pagination" 
+       data-page-size="imputationPerPage">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>{%trans%}Name{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}StartDate{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}EndDate{%endtrans%}</th>
+            {% if displayParent %}<th>{%trans%}Parent{%trans%}</th>{% endif %}
+        </tr>
+    </thead>
+    <tbody>
+    {%- for imputation in imputations %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_operation_imputation_see", { "imputation_id": imputation.id }) }}">{{imputation.name}}</a></td>
+            <td data-value="{{ imputation.startDate|date("U") }}">{{ imputation.startDate is not empty ? imputation.startDate|date("Y-m-d") }}</td>
+            <td data-value="{{ imputation.endDate|date("U") }}">{{ imputation.endDate is not empty ? imputation.endDate|date("Y-m-d") }}</td>
+            {% if displayParent %}<td><a href="{{ path("finance_operation_imputation_see", { "parent_id": imputation.parent.id }) }}">{{imputation.parent}}</a></td>{% endif %}
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="imputation_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{%else %}
+<p>There is no Imputations for this {{entityCalling}}.</p>
+{%endif%}
+
+{% endif %}

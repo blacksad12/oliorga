@@ -3,17 +3,17 @@
 {{ '{% extends "::base.html.twig" %}' }}
 
 {{ '{% block title %}' }}
-{{ 'Home - '~bundleShort~' - {{ parent() }}' }}
+{{ '{%trans%}Home{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
 {{ '{% endblock %}' }}
 
 {{ '{% block body -%}' }}
-<h1>{{ entity }}s' list:</h1>
+<h1>{{ '{%trans%}' }}{{ entity }}s' list:{{ '{%endtrans%}' }}</h1>
 <hr>
 
-<p>Quick search: <input type=text id="recherche"></p>
+<p>{{ '{%trans%}' }}Quick search: {{ '{%endtrans%}' }}<input type=text id="search"></p>
 
 <table class="footable table table-hover table-bordered table-condensed" 
-       data-filter=#recherche 
+       data-filter=#search 
        data-page-navigation="#pagination" 
        data-page-size="15">
     <thead>
@@ -22,18 +22,18 @@
         {%- for field, metadata in fields.simple %}
             {%- if metadata.type in ['date', 'datetime', 'integer', 'float'] %}
 
-            <th data-type="numeric">{{ field[:1]|capitalize~field[1:] }}</th>
+            <th data-type="numeric">{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>
 
             {%- else %}
 
-            <th>{{ field[:1]|capitalize~field[1:] }}</th>
+            <th>{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>
 
             {%- endif %}
         {%- endfor %}
 
         {%- for field, metadata in fields.association %}
 
-            <th>{{ field[:1]|capitalize~field[1:] }}</th>
+            <th>{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>
 
         {%- endfor %}
         </tr>

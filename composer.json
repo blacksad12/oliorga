@@ -15,18 +15,19 @@
         "doctrine/dbal": "<2.5",
         "doctrine/doctrine-bundle": "~1.4",
         "twig/twig": "~1.18",
+        "twig/extensions": "1.0.*",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "~3.0,>=3.0.2",
-        "knplabs/knp-menu-bundle":"~2",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "incenteev/composer-parameter-handler": "~2.0",
         "twbs/bootstrap": "^3.3",
         "select2/select2": "^4.0",
         "tinymce/tinymce": ">= 4",
-        "shtumi/useful-bundle": "@dev"
+        "shtumi/useful-bundle": "@dev",
+        "knplabs/knp-menu-bundle": "~2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

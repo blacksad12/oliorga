@@ -1,0 +1,70 @@
+{# /src/Finance/OperationBundle/Resources/views/AbstractOperation/seeEmbed.html.twig #}
+
+{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of AbstractOperations.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which AbstractOperation's info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if abstractoperations is not defined%}        {% set abstractoperations        = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = 'AbstractOperations' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if abstractoperationPerPage is not defined%}  {% set abstractoperationPerPage  = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}
+
+
+{% if not (abstractoperations is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if abstractoperations is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>Quick search: <input type=text id='abstractoperation_search'></div>
+{% endif %}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#abstractoperation_search 
+       data-page-navigation="#abstractoperation_pagination" 
+       data-page-size="abstractoperationPerPage">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th data-type="numeric">{%trans%}Date{%endtrans%}</th>
+            <th>{%trans%}Amount{%endtrans%}</th>
+            <th>{%trans%}IsMarked{%endtrans%}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {%- for abstractoperation in abstractoperations %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_operation_abstractoperation_see", { "abstractoperation_id": abstractoperation.id }) }}">{{abstractoperation.date}}</a></td>
+            <td>{{abstractoperation.amount}}</td>
+            <td>{{abstractoperation.isMarked}}</td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="6">
+                <div class="text-center"><ul id="abstractoperation_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{%else %}
+<p>There is no AbstractOperations for this {{entityCalling}}.</p>
+{%endif%}
+
+{% endif %}

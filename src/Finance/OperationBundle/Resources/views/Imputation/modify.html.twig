@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/Imputation/modify.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Modify Imputation{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Modify Imputation{%endtrans%} <a href="{{ path("finance_operation_imputation_see", { "imputation_id": imputation.id }) }}">{{imputation}}</a></h1>
+
+{% include "::form_default.html.twig" %}
+
+{% endblock %}

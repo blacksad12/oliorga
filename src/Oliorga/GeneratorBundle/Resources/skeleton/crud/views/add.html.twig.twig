@@ -3,11 +3,11 @@
 {{ '{% extends "::base.html.twig" %}' }}
 
 {{ '{% block title %}' }}
-{{ 'New '~entity~' - '~entity~' - '~bundleShort~' - '~projectName~' - {{ parent() }}' }}
+{{ '{%trans%}New '~entity~'{%endtrans%} - {%trans%}'~entity~'{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - '~projectName~' - {{ parent() }}' }}
 {{ '{% endblock %}' }}
 
 {{ '{% block body -%}' }}
-<h1>New {{ entity }}</h1>
+<h1>{{ '{%trans%}' }}New {{ entity }}{{ '{%endtrans%}' }}</h1>
 
 {{ "{% include '::form_default.html.twig' %}" }}
 

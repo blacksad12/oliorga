@@ -1,0 +1,99 @@
+{# /src/Finance/OperationBundle/Resources/views/Operation/seeEmbed.html.twig #}
+
+{# -----------------------------------------------------------------------------
+ # This template provides a convenient view of Operations.
+ # It can easily be embded in another Entity's see view. 
+ # The template has parameters to customize which Operation's info should be displayed
+ ---------------------------------------------------------------------------- #}
+
+{# -----------------------------------------------------------------------------
+## Set default values.
+## These are also all the possible variable of this template.
+----------------------------------------------------------------------------- #}
+{% if operations is not defined%}               {% set operations               = NULL %}{%endif%}
+{% if displayHeader is not defined%}            {% set displayHeader            = true %}{%endif%}
+{% if header is not defined%}                   {% set header                   = 'Operations' %}{%endif%}
+{% if headerSize is not defined%}               {% set headerSize               = 'h2' %}{%endif%}
+{% if displayQuicksearch is not defined%}       {% set displayQuicksearch       = true %}{%endif%}
+{% if entityCalling is not defined%}            {% set entityCalling            = 'Object' %}{%endif%}
+{% if operationPerPage is not defined%}         {% set operationPerPage         = 15 %}{%endif%}
+{% if hideIfEmpty is not defined%}              {% set hideIfEmpty              = false %}{%endif%}
+{% if displayAccount is not defined%}           {% set displayAccount           = true %}{%endif%}
+{% if displayCategory is not defined%}          {% set displayCategory          = true %}{%endif%}
+{% if displayImputation is not defined%}        {% set displayImputation        = true %}{%endif%}
+{% if displayStakeholder is not defined%}       {% set displayStakeholder       = true %}{%endif%}
+{% if displayPaymentMethod is not defined%}     {% set displayPaymentMethod     = true %}{%endif%}
+{% if hideAccount is not defined%}              {% set hideAccount              = false %}{%endif%}
+{% if hideCategory is not defined%}             {% set hideCategory             = false %}{%endif%}
+{% if hideImputation is not defined%}           {% set hideImputation           = false %}{%endif%}
+{% if hideStakeholder is not defined%}          {% set hideStakeholder          = false %}{%endif%}
+{% if hidePaymentMethod is not defined%}        {% set hidePaymentMethod        = false %}{%endif%}
+{% set somethingHidden = hideAccount or hideCategory or hideImputation or hideStakeholder or hidePaymentMethod %}
+
+{% if not (operations is empty and hideIfEmpty) %}
+{# -----------------------------------------------------------------------------
+## Code to be embded
+----------------------------------------------------------------------------- #}
+{% if displayHeader %}
+<{{headerSize}}>{{header|raw}}</{{headerSize}}>
+{% endif %}
+{% if operations is not empty %}
+
+{% if displayQuicksearch %}
+<div style='float: left; margin-right: 10px'>{%trans%}Quick search:{%endtrans%} <input type=text id='operation_search'></div>
+{% endif %}
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#operation_search 
+       data-page-navigation="#operation_pagination" 
+       data-page-size="{{operationPerPage}}">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th data-sort-initial="descending">{%trans%}Date{%endtrans%}</th>
+            <th>{%trans%}Debit{%endtrans%}</th>
+            <th>{%trans%}Credit{%endtrans%}</th>
+            {% if displayAccount %}<th{{hideAccount ? ' data-hide="all"'}}>{%trans%}Account{%endtrans%}</th>{% endif %}
+            {% if displayCategory %}<th{{hideCategory ? ' data-hide="all"'}}>{%trans%}Category{%endtrans%}</th>{% endif %}
+            {% if displayImputation %}<th{{hideImputation ? ' data-hide="all"'}}>{%trans%}Imputation{%endtrans%}</th>{% endif %}
+            {% if displayStakeholder %}<th{{hideStakeholder ? ' data-hide="all"'}}>{%trans%}Stakeholder{%endtrans%}</th>{% endif %}
+            <th>{%trans%}Comment{%endtrans%}</th>
+            <th>{%trans%}Marked{%endtrans%}</th>                
+            {% if displayPaymentMethod %}<th{{hidePaymentMethod ? ' data-hide="all"'}}>{%trans%}PaymentMethod{%endtrans%}</th>{% endif %}
+            <th>{%trans%}Actions{%endtrans%}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {%- for operation in operations %}
+        <tr>
+            <td></td>
+            <td data-value="{{operation.date|date('U')}}"><a href="{{ path("finance_operation_operation_see", { "operation_id": operation.id }) }}">{{operation.date|date('d/m/Y')}}</a></td>
+            <td align='right'>{{ operation.amount < 0 ? operation.amount|number_format(2, ',', ' ')~'€'}}</td>
+            <td align='right'>{{ operation.amount > 0 ? operation.amount|number_format(2, ',', ' ')~'€' }}</td>
+            {% if displayAccount %}<td><a href="{{ path("finance_account_account_see", { "account_id": operation.account.id }) }}">{{operation.account}}</a></td>{% endif %}
+            {% if displayCategory %}<td><a href="{{ path("finance_operation_category_see", { "category_id": operation.category.id }) }}">{{operation.category}}</a></td>{% endif %}
+            {% if displayImputation %}<td>{% if operation.imputation is not empty %}<a href="{{ path("finance_operation_imputation_see", { "imputation_id": operation.imputation.id }) }}">{{operation.imputation}}</a>{% endif %}</td>{% endif %}
+            {% if displayStakeholder %}<td>{% if operation.stakeholder is not empty %}<a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": operation.stakeholder.id }) }}">{{operation.stakeholder}}</a>{% endif %}</td>{% endif %}
+            <td>{{operation.comment}}</td>
+            <td>{{operation.isMarked ? 'P'}}</td>
+            {% if displayPaymentMethod %}<td>{{operation.paymentMethod}}</td>{% endif %}
+            <td>
+                <a href="{{ path('finance_operation_operation_see', { 'operation_id': operation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                <a href="{{ path('finance_operation_operation_modify', { 'operation_id': operation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+            </td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="13">
+                <div class="text-center"><ul id="operation_pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{%else %}
+<p>There is no Operations for this {{entityCalling}}.</p>
+{%endif%}
+
+{% endif %}

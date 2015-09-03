@@ -1,0 +1,14 @@
+{# /src/Finance/AccountBundle/Resources/views/Account/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New Account{%endtrans%} - {%trans%}Account{%endtrans%} - {%trans%}Account{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New Account{%endtrans%}</h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

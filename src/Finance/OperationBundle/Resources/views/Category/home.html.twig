@@ -1,0 +1,46 @@
+{# /src/Finance/OperationBundle/Resources/views/Category/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Home{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Categorys' list:{%endtrans%}</h1>
+<hr>
+
+<p>{%trans%}Quick search: {%endtrans%}<input type=text id="search"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#search 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>{%trans%}Name{%endtrans%}</th>
+            <th>{%trans%}IsObselete{%endtrans%}</th>
+            <th>{%trans%}Parent{%endtrans%}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {%- for category in categorys %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_operation_category_see", { "category_id": category.id }) }}">{{category.name}}</a></td>
+            <td>{{category.isObselete}}</td>
+            <td>{% if category.parent is not empty %}<a href="{{ path("finance_operation_category_see", { "category_id": category.parent.id }) }}">{{category.parent}}</a>{% endif %}</td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="4">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

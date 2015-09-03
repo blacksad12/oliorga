@@ -1,0 +1,48 @@
+{# /src/Finance/AccountBundle/Resources/views/Account/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Home{%endtrans%} - {%trans%}Account{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Accounts' list:{%endtrans%}</h1>
+<hr>
+
+<p>{%trans%}Quick search: {%endtrans%}<input type=text id="search"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#search 
+       data-page-navigation="#pagination" 
+       data-page-size="20">
+    <thead>
+        <tr>
+            <th>{%trans%}Account{%endtrans%}</th>
+            <th>{%trans%}Number{%endtrans%}</th>
+            <th>{%trans%}Iban{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}OpenDate{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}CloseDate{%endtrans%}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {%- for account in accounts %}
+        <tr>
+            <td><a href="{{ path("finance_account_account_see", { "account_id": account.id }) }}">{{account}}</a></td>
+            <td>{{account.number}}</td>
+            <td>{{account.iban}}</td>
+            <td data-value="{{ account.openDate|date("U") }}">{{ account.openDate is not empty ? account.openDate|date("Y-m-d") }}</td>
+            <td data-value="{{ account.closeDate|date("U") }}">{{ account.closeDate is not empty ? account.closeDate|date("Y-m-d") }}</td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="7">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

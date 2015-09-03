@@ -1,0 +1,51 @@
+{# /src/Finance/OperationBundle/Resources/views/Operation/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Home{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Operations' list:{%endtrans%}</h1>
+<hr>
+
+<p>{%trans%}Quick search: {%endtrans%}<input type=text id="search"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#search 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>{%trans%}Comment{%endtrans%}</th>
+            <th>{%trans%}Account{%endtrans%}</th>
+            <th>{%trans%}Category{%endtrans%}</th>
+            <th>{%trans%}Imputation{%endtrans%}</th>
+            <th>{%trans%}Stakeholder{%endtrans%}</th>
+            <th>{%trans%}PaymentMethod{%endtrans%}</th>        </tr>
+    </thead>
+    <tbody>
+    {%- for operation in operations %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_operation_operation_see", { "operation_id": operation.id }) }}">{{operation.comment}}</a></td>
+            <td><a href="{{ path("finance_account_account_see", { "account_id": operation.account.id }) }}">{{operation.account}}</a></td>
+            <td><a href="{{ path("finance_operation_category_see", { "category_id": operation.category.id }) }}">{{operation.category}}</a></td>
+            <td><a href="{{ path("finance_operation_imputation_see", { "imputation_id": operation.imputation.id }) }}">{{operation.imputation}}</a></td>
+            <td><a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": operation.stakeholder.id }) }}">{{operation.stakeholder}}</a></td>
+            <td><a href="{{ path("finance_operation_paymentmethod_see", { "paymentMethod_id": operation.paymentMethod.id }) }}">{{operation.paymentMethod}}</a></td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="7">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}

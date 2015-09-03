@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/Category/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New Category{%endtrans%} - {%trans%}Category{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New Category{%endtrans%}</h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

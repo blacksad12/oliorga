@@ -22,6 +22,9 @@ class AppKernel extends Kernel
             new Nutri\IngredientBundle\NutriIngredientBundle(),
             new Nutri\RecipeBundle\NutriRecipeBundle(),
             new Shtumi\UsefulBundle\ShtumiUsefulBundle(),
+            new Finance\OperationBundle\FinanceOperationBundle(),
+            new Finance\AccountBundle\FinanceAccountBundle(),
+            new Finance\InstitutionBundle\FinanceInstitutionBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

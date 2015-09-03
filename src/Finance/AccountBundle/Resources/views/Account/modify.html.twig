@@ -1,0 +1,14 @@
+{# /src/Finance/AccountBundle/Resources/views/Account/modify.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Modify Account{%endtrans%} - {%trans%}Account{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Modify Account{%endtrans%} <a href="{{ path("finance_account_account_see", { "account_id": account.id }) }}">{{account}}</a></h1>
+
+{% include "::form_default.html.twig" %}
+
+{% endblock %}

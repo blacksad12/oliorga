@@ -1,0 +1,40 @@
+{# /src/Finance/OperationBundle/Resources/views/TransferBetweenAccount/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{transferbetweenaccount}} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}TransferBetweenAccount{%endtrans%} {{transferbetweenaccount}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'FinanceOperationBundle:BuilderTransferBetweenAccount:seeMenu' , [], {'transferbetweenaccount': transferbetweenaccount}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'finance_operation_transferbetweenaccount_',
+    entityId:       'transferbetweenaccount_id',
+    entity:         transferbetweenaccount
+} %}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ TransferBetweenAccount info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>{%trans%}SourceAccount{%endtrans%}</th>
+        <td><a href="{{ path("finance_account_account_see", { "sourceAccount_id": transferbetweenaccount.sourceAccount.id }) }}">{{transferbetweenaccount.sourceAccount}}</a></td>
+    </tr>
+    <tr>
+        <th>{%trans%}DestinationAccount{%endtrans%}</th>
+        <td><a href="{{ path("finance_account_account_see", { "destinationAccount_id": transferbetweenaccount.destinationAccount.id }) }}">{{transferbetweenaccount.destinationAccount}}</a></td>
+    </tr>
+</table>
+
+{% endblock %}

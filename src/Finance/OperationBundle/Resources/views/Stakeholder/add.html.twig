@@ -1,0 +1,14 @@
+{# /src/Finance/OperationBundle/Resources/views/Stakeholder/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New Stakeholder{%endtrans%} - {%trans%}Stakeholder{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New Stakeholder{%endtrans%}</h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

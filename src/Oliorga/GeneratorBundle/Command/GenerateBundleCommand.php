@@ -51,7 +51,7 @@ If you want to disable any user interaction, use <comment>--no-interaction</comm
 Note that the bundle namespace must end with "Bundle".
 EOT
             )
-            ->setName('generate:bundle')
+            ->setName('oliorga:generate:bundle')
         ;
     }
 

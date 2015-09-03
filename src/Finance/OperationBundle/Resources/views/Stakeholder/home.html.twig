@@ -1,0 +1,43 @@
+{# /src/Finance/OperationBundle/Resources/views/Stakeholder/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Home{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Stakeholders' list:{%endtrans%}</h1>
+<hr>
+
+<p>{%trans%}Quick search: {%endtrans%}<input type=text id="search"></p>
+
+<table class="footable table table-hover table-bordered table-condensed" 
+       data-filter=#search 
+       data-page-navigation="#pagination" 
+       data-page-size="15">
+    <thead>
+        <tr>
+            <th data-toggle="true"></th>
+            <th>{%trans%}Name{%endtrans%}</th>
+            <th>{%trans%}Parent{%endtrans%}</th>        </tr>
+    </thead>
+    <tbody>
+    {%- for stakeholder in stakeholders %}
+        <tr>
+            <td></td>
+            <td><a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": stakeholder.id }) }}">{{stakeholder.name}}</a></td>
+            <td><a href="{{ path("finance_operation_stakeholder_see", { "parent_id": stakeholder.parent.id }) }}">{{stakeholder.parent}}</a></td>
+        </tr>
+    {%- endfor %}
+    </tbody>
+    <tfoot class="hide-if-no-paging">
+        <tr>
+            <td colspan="3">
+                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+    
+{% endblock %}
