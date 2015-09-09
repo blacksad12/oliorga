@@ -1,1 +1,1 @@
-{{ amount|number_format(2, ',', ' ')~' €'}}
+{{ amount|number_format(2, ',', "\xc2\xa0"|raw)~"\xc2\xa0"|raw~'€'}}

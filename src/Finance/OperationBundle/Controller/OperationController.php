@@ -33,11 +33,13 @@ class OperationController extends Controller
 
     /** ************************************************************************
      * Create a new Operation according to the information given in the form.
-     * @Route("/add")
+     * @param \Finance\AccountBundle\Entity\Account $account
+     * @ParamConverter("account", options={"mapping": {"account_id": "id"}})
+     * @Route("/add/{account_id}", requirements={"account_id" = "\d+"})
      **************************************************************************/
-    public function addAction()        
+    public function addAction(\Finance\AccountBundle\Entity\Account $account)        
     {
-        $operation = new Operation();
+        $operation = new Operation($account);
         
         $form = $this->createForm(new OperationType(), $operation);
 
@@ -56,7 +58,8 @@ class OperationController extends Controller
         }
 
         return $this->render('FinanceOperationBundle:Operation:add.html.twig', array(
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
+            'account'   => $account,
         ));
     }
     
@@ -106,6 +109,41 @@ class OperationController extends Controller
     }
     
     /** ************************************************************************
+     * Duplicate the Operation $operation.
+     * 
+     * @param Operation $oldOperation
+     * @ParamConverter("oldOperation", options={"mapping": {"oldOperation_id": "id"}})
+     * @Route("/duplicate/{oldOperation_id}", requirements={"oldOperation_id" = "\d+"})
+     **************************************************************************/
+    public function duplicateAction(Operation $oldOperation)
+    {
+        $newOperation = new Operation($oldOperation->getAccount());
+        $this->get('financeoperation.operationhelper')->duplicate($oldOperation, $newOperation);
+        
+        $form = $this->createForm(new OperationType($newOperation), $newOperation);
+
+        // ------------- Request Management ------------------------------------
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+          $form->bind($request); // Link Request and Form
+
+          if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newOperation);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('finance_operation_operation_see', array('operation_id' => $newOperation->getId())));
+          }
+        }
+
+        return $this->render('FinanceOperationBundle:Operation:add.html.twig', array(
+            'account'       => $oldOperation->getAccount(),
+            'oldOperation'  => $oldOperation,
+            'form'          => $form->createView(),           
+        ));
+    }
+    
+    /** ************************************************************************
      * Delete a Operation.
      * 
      * @param Operation $operation
@@ -119,7 +157,7 @@ class OperationController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($operation);
             $em->flush();
-            return $this->redirect($this->generateUrl(/* Redirect to some page */));          
+            return $this->redirect($this->generateUrl('finance_operation_operation_see', array('operation_id' => $operation->getId())));          
         }
         else{
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;

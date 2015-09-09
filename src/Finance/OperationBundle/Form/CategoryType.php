@@ -20,23 +20,18 @@ class CategoryType extends AbstractType
             ->add('name', 'text', array(
                 'required'  => true,
             ))            
-            ->add('isObselete', 'choice', array(
-                'required'  => false,
-                'choices'   => array(
-                    false   => 'No',
-                    true    => 'Yes',
-                ),
-                'multiple'  => false,
-                'expanded'  => true,
-                'widget_type'  => 'inline',
-            ))                    
             ->add('parent', 'entity', array(
                 'class'         => "FinanceOperationBundle:Category",
                 'required'      => false,
                 'query_builder' => function(\Finance\OperationBundle\Entity\CategoryRepository $r) {
                         return $r->createQueryBuilder('p')
+                                ->orderBy('p.name')
                                 ;}
-            ))        ;
+            ))
+            ->add('hexColor', 'text', array(
+                'required'  => false,
+            ))
+            ;
     }
     
     /** ************************************************************************

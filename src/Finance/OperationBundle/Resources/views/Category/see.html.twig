@@ -27,9 +27,10 @@
 } %}
 {% endembed %}
 
+    
+<div id="chart-container"></div>
+    
 {% include 'FinanceOperationBundle:Operation:monthlyMeans.html.twig' with {
-    entity      : category,
-    children    : category.childrenCategories,
     routePrefix : 'finance_operation_category_',
     entityName  : 'category'
 }%}
@@ -39,4 +40,11 @@
     hidePaymentMethod   : true,
 }
 %}
+
+<script>
+    $(document).ready(OnReady);
+    function OnReady(){
+        $('#chart-container').highcharts({{chart|raw}});
+    }
+</script>
 {% endblock %}

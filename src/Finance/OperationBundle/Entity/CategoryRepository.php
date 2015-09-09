@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class CategoryRepository extends EntityRepository
 {
+    /** ************************************************************************
+     * Get all the Category which have no parent
+     * @return Category[]
+     **************************************************************************/
+    public function findTopParents() {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        
+        $qb->select('c');
+        $qb->from('FinanceOperationBundle:Category','c');        
+        $qb->where($qb->expr()->isNull('c.parent'));
+        $qb->orderBy('c.name');
+               
+        return $qb->getQuery()->getResult();
+    }
 }

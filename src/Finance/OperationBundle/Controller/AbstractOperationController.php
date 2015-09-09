@@ -32,35 +32,6 @@ class AbstractOperationController extends Controller
     }
 
     /** ************************************************************************
-     * Create a new AbstractOperation according to the information given in the form.
-     * @Route("/add")
-     **************************************************************************/
-    public function addAction()        
-    {
-        $abstractoperation = new AbstractOperation();
-        
-        $form = $this->createForm(new AbstractOperationType(), $abstractoperation);
-
-        // ------------- Request Management ------------------------------------
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-          $form->bind($request);// Link Request and Form
-
-          if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($abstractoperation);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('finance_operation_abstractoperation_see', array('abstractoperation_id' => $abstractoperation->getId())));
-          }
-        }
-
-        return $this->render('FinanceOperationBundle:AbstractOperation:add.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-    
-    /** ************************************************************************
      * Display a AbstractOperation
      * @param AbstractOperation $abstractoperation
      * @ParamConverter("abstractoperation", options={"mapping": {"abstractoperation_id": "id"}})
@@ -75,34 +46,29 @@ class AbstractOperationController extends Controller
     }
     
     /** ************************************************************************
-     * Modify a AbstractOperation according to the information given in the form.
-     * 
-     * @param AbstractOperation $abstractoperation
-     * @ParamConverter("abstractoperation", options={"mapping": {"abstractoperation_id": "id"}})
-     * @Route("/modify/{abstractoperation_id}", requirements={"abstractoperation_id" = "\d+"})
+     * Toggle mark of an AbstractOperation
+     * @Route("/togglemark/")
+     * @Method({"POST"})
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      **************************************************************************/
-    public function modifyAction(AbstractOperation $abstractoperation)
+    public function toggleMarkAction()
     {
-        $form = $this->createForm(new AbstractOperationType($abstractoperation), $abstractoperation);
-
-        // ------------- Request Management ------------------------------------
-        $request = $this->get('request');
-        if ($request->getMethod() == 'POST') {
-          $form->bind($request); // Link Request and Form
-
-          if ($form->isValid()) {
+        $abstractOperation = $this->getDoctrine()
+                       ->getRepository('FinanceOperationBundle:AbstractOperation')
+                       ->findOneById($this->get('request')->request->get('abstractOperationId'));
+        
+        if($abstractOperation == NULL) {
+            throw new \Exception('AbstractOperation not found!');
+        } else {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($abstractoperation);
+            $abstractOperation->setIsMarked(!$abstractOperation->getIsMarked());
+            $em->persist($abstractOperation);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('finance_operation_abstractoperation_see', array('abstractoperation_id' => $abstractoperation->getId())));
-          }
+            return new \Symfony\Component\HttpFoundation\JsonResponse(array(
+                'abstractOperationId'   => $abstractOperation->getId(),
+                'isMarked'              => $abstractOperation->getIsMarked()
+                ));
         }
-
-        return $this->render('FinanceOperationBundle:AbstractOperation:modify.html.twig', array(
-            'abstractoperation' => $abstractoperation,
-            'form' => $form->createView(),           
-        ));
     }
     
     /** ************************************************************************

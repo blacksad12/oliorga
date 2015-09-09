@@ -67,8 +67,8 @@
         <tr>
             <td></td>
             <td data-value="{{operation.date|date('U')}}"><a href="{{ path("finance_operation_operation_see", { "operation_id": operation.id }) }}">{{operation.date|date('d/m/Y')}}</a></td>
-            <td align='right'>{{ operation.amount < 0 ? operation.amount|number_format(2, ',', ' ')~'€'}}</td>
-            <td align='right'>{{ operation.amount > 0 ? operation.amount|number_format(2, ',', ' ')~'€' }}</td>
+            <td align='right'>{% if operation.amount < 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
+            <td align='right'>{% if operation.amount > 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
             {% if displayAccount %}<td><a href="{{ path("finance_account_account_see", { "account_id": operation.account.id }) }}">{{operation.account}}</a></td>{% endif %}
             {% if displayCategory %}<td><a href="{{ path("finance_operation_category_see", { "category_id": operation.category.id }) }}">{{operation.category}}</a></td>{% endif %}
             {% if displayImputation %}<td>{% if operation.imputation is not empty %}<a href="{{ path("finance_operation_imputation_see", { "imputation_id": operation.imputation.id }) }}">{{operation.imputation}}</a>{% endif %}</td>{% endif %}

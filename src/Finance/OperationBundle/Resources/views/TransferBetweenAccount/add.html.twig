@@ -9,6 +9,10 @@
 {% block body -%}
 <h1>{%trans%}New TransferBetweenAccount{%endtrans%}</h1>
 
+{% if oldTransferBetweenAccount is defined %}
+<div class="alert alert-info" role="alert">This is a duplicate of the TransferBetweenAccount <a href="{{ path("finance_operation_transferbetweenaccount_see", { "transferBetweenAccount_id": oldTransferBetweenAccount.id }) }}">{{oldTransferBetweenAccount}}</a></div>
+{% endif %}
+
 {% include '::form_default.html.twig' %}
 
 {% endblock %}

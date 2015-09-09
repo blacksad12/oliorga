@@ -25,6 +25,19 @@
           </ul>
         </li>
       </ul>      
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Finance <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{path('finance_account_dashboard_home')}}">{%trans%}Dashboard{%endtrans%}</a></li>
+            <li><a href="{{path('finance_account_account_home')}}">{%trans%}Account{%endtrans%}</a></li>
+            <li><a href="{{path('finance_operation_category_home')}}">{%trans%}Category{%endtrans%}</a></li>
+            <li><a href="{{path('finance_operation_imputation_home')}}">{%trans%}Imputation{%endtrans%}</a></li>
+            <li><a href="{{path('finance_operation_stakeholder_home')}}">{%trans%}Stakeholder{%endtrans%}</a></li>
+                        
+          </ul>
+        </li>
+      </ul>      
       {#<ul class="nav navbar-nav navbar-right">
         <li><a href="#">Link</a></li>
         <li class="dropdown">

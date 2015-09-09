@@ -22,24 +22,28 @@ class TransferBetweenAccountController extends Controller
      **************************************************************************/
     public function homeAction()        
     {
-        $transferbetweenaccounts = $this->getDoctrine()
+        $transferBetweenAccounts = $this->getDoctrine()
                 ->getRepository('FinanceOperationBundle:TransferBetweenAccount')
                 ->findAll();
         
         return $this->render('FinanceOperationBundle:TransferBetweenAccount:home.html.twig', array(
-            'transferbetweenaccounts' => $transferbetweenaccounts
+            'transferBetweenAccounts' => $transferBetweenAccounts
         ));
     }
 
     /** ************************************************************************
      * Create a new TransferBetweenAccount according to the information given in the form.
-     * @Route("/add")
+     * @param \Finance\AccountBundle\Entity\Account $account
+     * @ParamConverter("account", options={"mapping": {"account_id": "id"}})
+     * @Route("/add/{account_id}", requirements={"account_id" = "\d+"})
      **************************************************************************/
-    public function addAction()        
+    public function addAction(\Finance\AccountBundle\Entity\Account $account)        
     {
-        $transferbetweenaccount = new TransferBetweenAccount();
+        $transferBetweenAccount = new TransferBetweenAccount();
+        $transferBetweenAccount->setSourceAccount($account);
+        $transferBetweenAccount->setDestinationAccount($account);
         
-        $form = $this->createForm(new TransferBetweenAccountType(), $transferbetweenaccount);
+        $form = $this->createForm(new TransferBetweenAccountType(), $transferBetweenAccount);
 
         // ------------- Request Management ------------------------------------
         $request = $this->get('request');
@@ -48,42 +52,43 @@ class TransferBetweenAccountController extends Controller
 
           if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($transferbetweenaccount);
+            $em->persist($transferBetweenAccount);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('finance_operation_transferbetweenaccount_see', array('transferbetweenaccount_id' => $transferbetweenaccount->getId())));
+            return $this->redirect($this->generateUrl('finance_operation_transferbetweenaccount_see', array('transferBetweenAccount_id' => $transferBetweenAccount->getId())));
           }
         }
 
         return $this->render('FinanceOperationBundle:TransferBetweenAccount:add.html.twig', array(
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
+            'account'   => $account,
         ));
     }
     
     /** ************************************************************************
      * Display a TransferBetweenAccount
-     * @param TransferBetweenAccount $transferbetweenaccount
-     * @ParamConverter("transferbetweenaccount", options={"mapping": {"transferbetweenaccount_id": "id"}})
-     * @Route("/see/{transferbetweenaccount_id}", requirements={"transferbetweenaccount_id" = "\d+"})
+     * @param TransferBetweenAccount $transferBetweenAccount
+     * @ParamConverter("transferBetweenAccount", options={"mapping": {"transferBetweenAccount_id": "id"}})
+     * @Route("/see/{transferBetweenAccount_id}", requirements={"transferBetweenAccount_id" = "\d+"})
      **************************************************************************/
-    public function seeAction(TransferBetweenAccount $transferbetweenaccount)
+    public function seeAction(TransferBetweenAccount $transferBetweenAccount)
     {
         
         return $this->render('FinanceOperationBundle:TransferBetweenAccount:see.html.twig', array(
-            'transferbetweenaccount'      => $transferbetweenaccount,            
+            'transferBetweenAccount'      => $transferBetweenAccount,            
           ));
     }
     
     /** ************************************************************************
      * Modify a TransferBetweenAccount according to the information given in the form.
      * 
-     * @param TransferBetweenAccount $transferbetweenaccount
-     * @ParamConverter("transferbetweenaccount", options={"mapping": {"transferbetweenaccount_id": "id"}})
-     * @Route("/modify/{transferbetweenaccount_id}", requirements={"transferbetweenaccount_id" = "\d+"})
+     * @param TransferBetweenAccount $transferBetweenAccount
+     * @ParamConverter("transferBetweenAccount", options={"mapping": {"transferBetweenAccount_id": "id"}})
+     * @Route("/modify/{transferBetweenAccount_id}", requirements={"transferBetweenAccount_id" = "\d+"})
      **************************************************************************/
-    public function modifyAction(TransferBetweenAccount $transferbetweenaccount)
+    public function modifyAction(TransferBetweenAccount $transferBetweenAccount)
     {
-        $form = $this->createForm(new TransferBetweenAccountType($transferbetweenaccount), $transferbetweenaccount);
+        $form = $this->createForm(new TransferBetweenAccountType($transferBetweenAccount), $transferBetweenAccount);
 
         // ------------- Request Management ------------------------------------
         $request = $this->get('request');
@@ -92,15 +97,48 @@ class TransferBetweenAccountController extends Controller
 
           if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($transferbetweenaccount);
+            $em->persist($transferBetweenAccount);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('finance_operation_transferbetweenaccount_see', array('transferbetweenaccount_id' => $transferbetweenaccount->getId())));
+            return $this->redirect($this->generateUrl('finance_operation_transferbetweenaccount_see', array('transferBetweenAccount_id' => $transferBetweenAccount->getId())));
           }
         }
 
         return $this->render('FinanceOperationBundle:TransferBetweenAccount:modify.html.twig', array(
-            'transferbetweenaccount' => $transferbetweenaccount,
+            'transferBetweenAccount' => $transferBetweenAccount,
+            'form' => $form->createView(),           
+        ));
+    }
+    
+    /** ************************************************************************
+     * Duplicate a TransferBetweenAccount.
+     * 
+     * @param TransferBetweenAccount $oldTransferBetweenAccount
+     * @ParamConverter("oldTransferBetweenAccount", options={"mapping": {"oldTransferBetweenAccount_id": "id"}})
+     * @Route("/duplicate/{oldTransferBetweenAccount_id}", requirements={"oldTransferBetweenAccount_id" = "\d+"})
+     **************************************************************************/
+    public function duplicateAction(TransferBetweenAccount $oldTransferBetweenAccount)
+    {
+        $newTransferBetweenAccount = new TransferBetweenAccount();
+        $this->get('financeoperation.transferbetweenaccounthelper')->duplicate($oldTransferBetweenAccount, $newTransferBetweenAccount);
+        $form = $this->createForm(new TransferBetweenAccountType($newTransferBetweenAccount), $newTransferBetweenAccount);
+
+        // ------------- Request Management ------------------------------------
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+          $form->bind($request); // Link Request and Form
+
+          if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newTransferBetweenAccount);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('finance_operation_transferbetweenaccount_see', array('transferBetweenAccount_id' => $newTransferBetweenAccount->getId())));
+          }
+        }
+
+        return $this->render('FinanceOperationBundle:TransferBetweenAccount:add.html.twig', array(
+            'oldTransferBetweenAccount' => $oldTransferBetweenAccount,
             'form' => $form->createView(),           
         ));
     }
@@ -108,16 +146,16 @@ class TransferBetweenAccountController extends Controller
     /** ************************************************************************
      * Delete a TransferBetweenAccount.
      * 
-     * @param TransferBetweenAccount $transferbetweenaccount
-     * @ParamConverter("transferbetweenaccount", options={"mapping": {"transferbetweenaccount_id": "id"}})
-     * @Route("/delete/{transferbetweenaccount_id}", requirements={"transferbetweenaccount_id" = "\d+"})
+     * @param TransferBetweenAccount $transferBetweenAccount
+     * @ParamConverter("transferBetweenAccount", options={"mapping": {"transferBetweenAccount_id": "id"}})
+     * @Route("/delete/{transferBetweenAccount_id}", requirements={"transferBetweenAccount_id" = "\d+"})
      **************************************************************************/
-    public function deleteAction(TransferBetweenAccount $transferbetweenaccount)
+    public function deleteAction(TransferBetweenAccount $transferBetweenAccount)
     {
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($transferbetweenaccount);
+            $em->remove($transferBetweenAccount);
             $em->flush();
             return $this->redirect($this->generateUrl(/* Redirect to some page */));          
         }

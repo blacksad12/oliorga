@@ -1,0 +1,42 @@
+{# /src/Finance/AccountBundle/Resources/views/Dashboard/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Savings{%endtrans%} - {%trans%}Dashboard{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Savings{%endtrans%}</h1>
+<hr>
+
+<div id="chart-container"></div>
+    
+<h2>{%trans%}Monthly means{%endtrans%}</h2>
+<table class="table">
+    <tr>
+        <th></th>
+        <th class="text-right">{%trans%}Last month{%endtrans%}</th>
+        <th class="text-right">{%trans%}Last 3 months{%endtrans%}</th>
+        <th class="text-right">{%trans%}Last 6 months{%endtrans%}</th>
+        <th class="text-right">{{ "now"|date("Y") }}</th>
+        <th class="text-right">{{ "first day of last year"|date("Y") }}</th>        
+    </tr>    
+    <tr>
+        <th>Monthly Saving Means</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlySavingsMeans.one} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlySavingsMeans.three} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlySavingsMeans.six} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlySavingsMeans.thisYear} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlySavingsMeans.lastYear} %}</th>
+    </tr>
+</table>
+
+<script>
+    $(document).ready(OnReady);
+    function OnReady(){
+        $('#chart-container').highcharts({{chart|raw}});
+    }
+</script>
+    
+{% endblock %}

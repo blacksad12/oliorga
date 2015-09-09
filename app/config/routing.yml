@@ -3,6 +3,10 @@ finance_institution:
     type:     annotation
     prefix:   /finance/institution/
 
+#my_blog:
+#    resource: "@FinanceAccountBundle/Controller/DashboardController.php"
+#    type:     annotation
+    
 finance_account:
     resource: "@FinanceAccountBundle/Controller/"
     type:     annotation

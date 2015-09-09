@@ -1,0 +1,73 @@
+{# /src/Finance/OperationBundle/Resources/views/Category/distribution.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Distribution{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Categories' distribution:{%endtrans%}</h1>
+<hr>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div id="chart-container-one-credit"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chart-container-one-debit"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div id="chart-container-three-credit"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chart-container-three-debit"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div id="chart-container-six-credit"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chart-container-six-debit"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div id="chart-container-thisYear-credit"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chart-container-thisYear-debit"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div id="chart-container-lastYear-credit"></div>
+    </div>
+    <div class="col-md-6">
+        <div id="chart-container-lastYear-debit"></div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(OnReady);
+    function OnReady(){
+        $('#chart-container-one-credit').highcharts({{charts.one.credit|raw}});
+        $('#chart-container-one-debit').highcharts({{charts.one.debit|raw}});
+        $('#chart-container-three-credit').highcharts({{charts.three.credit|raw}});
+        $('#chart-container-three-debit').highcharts({{charts.three.debit|raw}});
+        $('#chart-container-six-credit').highcharts({{charts.six.credit|raw}});
+        $('#chart-container-six-debit').highcharts({{charts.six.debit|raw}});
+        $('#chart-container-thisYear-credit').highcharts({{charts.thisYear.credit|raw}});
+        $('#chart-container-thisYear-debit').highcharts({{charts.thisYear.debit|raw}});
+        $('#chart-container-lastYear-credit').highcharts({{charts.lastYear.credit|raw}});
+        $('#chart-container-lastYear-debit').highcharts({{charts.lastYear.debit|raw}});
+        
+    }
+</script>
+   
+{% endblock %}

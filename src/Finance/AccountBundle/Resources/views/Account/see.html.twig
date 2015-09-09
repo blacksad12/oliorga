@@ -23,7 +23,8 @@
 } %}
     {% block menuItems %}
         {{parent()}}
-        <li><a href="{{ path('finance_operation_operation_add') }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add operation{%endtrans%}</a></li>
+        <li><a href="{{ path('finance_operation_operation_add', { 'account_id': account.id }) }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add operation{%endtrans%}</a></li>
+        <li><a href="{{ path('finance_operation_transferbetweenaccount_add', { 'account_id': account.id }) }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add transfer{%endtrans%}</a></li>      
     {% endblock %}
 {% endembed %}
 
@@ -57,95 +58,133 @@
     </tr>
     <tr>
         <th>{%trans%}Balance{%endtrans%}</th>
-        <td>{{balance|number_format(2, ',', ' ')~'€' }}</td>
+        <td>{% include '::amountFormatting.html.twig' with {amount : balance} %}</td>
     </tr>
     <tr>
         <th>{%trans%}Marked balance{%endtrans%}</th>
-        <td>{{markedBalance|number_format(2, ',', ' ')~'€' }}</td>
+        <td>{% include '::amountFormatting.html.twig' with {amount : markedBalance} %}</td>
     </tr>
 </table>
     
 {# -------------------------------------------------------------------------- #}
 {# ------------------------------ Operations info -------------------------------- #}
 <table class="table footable table-striped table-bordered table-condensed"
-           data-page-navigation="#pagination" 
-           data-page-size="50">
-        <thead>
-            <tr>
-                <th data-sort-initial="descending">{%trans%}Date{%endtrans%}</th>
-                <th>{%trans%}Debit{%endtrans%}</th>
-                <th>{%trans%}Credit{%endtrans%}</th>
-                <th>{%trans%}Category{%endtrans%}</th>
-                <th>{%trans%}Stakeholder{%endtrans%}</th>
-                <th>{%trans%}Comment{%endtrans%}</th>
-                <th>{%trans%}Marked{%endtrans%}</th>                
-                <th>{%trans%}Actions{%endtrans%}</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for operation in operations %}
-            <tr>
-                <td data-value="{{operation.date|date('U')}}" >{% if operation.date %}{{ operation.date|date('d/m/Y') }}{% endif %}</td>
-                <td align='right'>{{ operation.amount < 0 ? operation.amount|number_format(2, ',', ' ')~'€'}}</td>
-                <td align='right'>{{ operation.amount > 0 ? operation.amount|number_format(2, ',', ' ')~'€' }}</td>
-                <td>{% if operation.category is not empty %}
-                    <a href="{{ path('finance_operation_category_see', { 'category_id': operation.category.id }) }}">{{ operation.category}}</a>
-                    {% endif %}
-                </td>
-                <td>{{ operation.stakeholder }}</td>
-                <td>{{ operation.comment }}</td>
-                <td>{{ operation.isMarked ? 'P'}}</td>
-                <td>
-                    <a href="{{ path('finance_operation_operation_see', { 'operation_id': operation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-                    <a href="{{ path('finance_operation_operation_modify', { 'operation_id': operation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
-                    {#<a href="{{ path('finance_operation_operation_duplicate', { 'oldoperation_id': operation.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
-                    <a href="{{ path('abstractoperation_pointe', { 'id': operation.id }) }}" title="Pointer"><span class="glyphicon glyphicon-ok"></span></a>  #}                  
-                </td>
-            </tr>
-        {% endfor %}
-        {% for incomeTransfer in incomeTransfers %}
-            <tr>
-                <td data-value="{{incomeTransfer.date|date('U')}}">{% if incomeTransfer.date %}{{ incomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
-                <td align='right'></td>
-                <td align='right'>{{ incomeTransfer.amount|number_format(2, ',', ' ')~'€' }}</td>
-                <td>Intercompte</td>
-                <td></td>
-                <td>Depuis <a href="{{ path('finance_account_account_see', { 'account_id': incomeTransfer.sourceAccount.id }) }}">{{ incomeTransfer.sourceAccount }}</a></td>
-                <td>{{ incomeTransfer.isMarked ? 'P'}}</td>
-                <td>
-                    <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferbetweenaccount_id': incomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-                    <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferbetweenaccount_id': incomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
-                    {#<a href="{{ path('finance_operation_intercompte_duplicate', { 'oldIntercompte_id': incomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
-                    <a href="{{ path('abstractoperation_pointe', { 'id': incomeTransfer.id }) }}" title="Pointer"><span class="glyphicon glyphicon-ok"></span></a>        #}            
-                </td>                
-            </tr>
-        {% endfor %}
-        {% for outcomeTransfer in outcomeTransfers %}
-            <tr>
-                <td data-value="{{outcomeTransfer.date|date('U')}}">{% if outcomeTransfer.date %}{{ outcomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
-                <td align='right'>-{{ outcomeTransfer.amount|number_format(2, ',', ' ')~'€' }}</td>
-                <td align='right'></td>
-                <td>Intercompte</td>
-                <td></td>
-                <td>Vers <a href="{{ path('finance_account_account_see', { 'account_id': outcomeTransfer.destinationAccount.id }) }}">{{ outcomeTransfer.destinationAccount }}</a></td>
-                <td>{{ outcomeTransfer.isMarked ? 'P'}}</td>
-                <td>
-                    <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferbetweenaccount_id': outcomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-                    <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferbetweenaccount_id': outcomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
-                    {#<a href="{{ path('finance_operation_intercompte_duplicate', { 'oldIntercompte_id': outcomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
-                    <a href="{{ path('abstractoperation_pointe', { 'id': outcomeTransfer.id }) }}" title="Pointer"><span class="glyphicon glyphicon-ok"></span></a>      #}              
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-        {# Pagination #}
-        <tfoot class="hide-if-no-paging">
-            <tr>
-                <td colspan="10">
-                    <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+        data-page-navigation="#pagination" 
+        data-page-size="50">
+     <thead>
+         <tr>
+             <th data-sort-initial="descending">{%trans%}Date{%endtrans%}</th>
+             <th>{%trans%}Debit{%endtrans%}</th>
+             <th>{%trans%}Credit{%endtrans%}</th>
+             <th>{%trans%}Category{%endtrans%}</th>
+             <th>{%trans%}Imputation{%endtrans%}</th>
+             <th>{%trans%}Stakeholder{%endtrans%}</th>
+             <th>{%trans%}Comment{%endtrans%}</th>
+             <th>{%trans%}Marked{%endtrans%}</th>                
+             <th>{%trans%}Actions{%endtrans%}</th>
+         </tr>
+     </thead>
+     <tbody>
+     {% for operation in operations %}
+         <tr id="{{ operation.id}}">
+             <td data-value="{{operation.date|date('U')}}" >{% if operation.date %}{{ operation.date|date('d/m/Y') }}{% endif %}</td>
+             <td align='right'>{% if operation.amount < 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
+             <td align='right'>{% if operation.amount > 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
+             <td>{% if operation.category is not empty %}
+                 <a href="{{ path('finance_operation_category_see', { 'category_id': operation.category.id }) }}">{{ operation.category}}</a>
+                 {% endif %}
+             </td>
+             <td>{% if operation.imputation is not empty %}
+                 <a href="{{ path('finance_operation_imputation_see', { 'imputation_id': operation.imputation.id }) }}">{{ operation.imputation}}</a>
+                 {% endif %}
+             </td>
+             <td>{% if operation.stakeholder is not empty %}
+                 <a href="{{ path('finance_operation_stakeholder_see', { 'stakeholder_id': operation.stakeholder.id }) }}">{{ operation.stakeholder}}</a>
+                 {% endif %}
+             </td>
+             <td>{{ operation.comment }}</td>
+             <td class="td-mark">{{ operation.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_operation_see', { 'operation_id': operation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_operation_modify', { 'operation_id': operation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a href="{{ path('finance_operation_operation_duplicate', { 'oldOperation_id': operation.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
+             </td>
+         </tr>
+     {% endfor %}
+     {% for incomeTransfer in incomeTransfers %}
+         <tr id="{{ incomeTransfer.id}}">
+             <td data-value="{{incomeTransfer.date|date('U')}}">{% if incomeTransfer.date %}{{ incomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
+             <td align='right'></td>
+             <td align='right'>{% include '::amountFormatting.html.twig' with { amount: incomeTransfer.amount} %}</td>
+             <td>{%trans%}TransferBetweenAccount{%endtrans%}</td>
+             <td></td>
+             <td></td>
+             <td>Depuis <a href="{{ path('finance_account_account_see', { 'account_id': incomeTransfer.sourceAccount.id }) }}">{{ incomeTransfer.sourceAccount }}</a></td>
+             <td>{{ incomeTransfer.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferBetweenAccount_id': incomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferBetweenAccount_id': incomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_duplicate', { 'oldTransferBetweenAccount_id': incomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>        
+             </td>                
+         </tr>
+     {% endfor %}
+     {% for outcomeTransfer in outcomeTransfers %}
+         <tr id="{{ outcomeTransfer.id}}">
+             <td data-value="{{outcomeTransfer.date|date('U')}}">{% if outcomeTransfer.date %}{{ outcomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
+             <td align='right'>-{% include '::amountFormatting.html.twig' with { amount: outcomeTransfer.amount} %}</td>
+             <td align='right'></td>
+             <td>{%trans%}TransferBetweenAccount{%endtrans%}</td>
+             <td></td>
+             <td></td>
+             <td>Vers <a href="{{ path('finance_account_account_see', { 'account_id': outcomeTransfer.destinationAccount.id }) }}">{{ outcomeTransfer.destinationAccount }}</a></td>
+             <td>{{ outcomeTransfer.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferBetweenAccount_id': outcomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferBetweenAccount_id': outcomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_duplicate', { 'oldTransferBetweenAccount_id': outcomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
+             </td>
+         </tr>
+     {% endfor %}
+     </tbody>
+     {# Pagination #}
+     <tfoot class="hide-if-no-paging">
+         <tr>
+             <td colspan="10">
+                 <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+             </td>
+         </tr>
+     </tfoot>
+ </table>
+        
+<script>
+    $(document).ready(Mark_OnReady);
+    function Mark_OnReady(){
+        $( ".toggle-mark-link" ).click(function( event ) {
+            event.stopImmediatePropagation();
+            Mark_OnClick($(this).closest('tr').attr('id'));
+        });
+    }
+    function Mark_OnClick(abstractOperationId){
+        var data = 'abstractOperationId=' + abstractOperationId;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('finance_operation_abstractoperation_togglemark')}}",
+            data: data,
+            cache: false,
+            success: Mark_OnSuccess,
+            error: function(){alert('Error. Mark not changed');}
+        }); 
+        return false;
+    }        
+    function Mark_OnSuccess(data){
+        var content = data.isMarked === true ? 'P' : '';
+        $("tr#"+data.abstractOperationId).find('.td-mark').html(content);       
+    }
+</script>
+            
+            
 
 {% endblock %}

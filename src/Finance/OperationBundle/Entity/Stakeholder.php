@@ -68,7 +68,12 @@ class Stakeholder
     //                             To String
     ////////////////////////////////////////////////////////////////////////////
     public function __toString() {
-        return $this->getName();
+        $string = '';
+        if($this->getParent() !== NULL) {
+            $string .= $this->getParent(). ' / ';
+        }
+        $string .= $this->getName();
+        return $string;
     }
     
     /**************************************************************************/

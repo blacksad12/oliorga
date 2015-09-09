@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block body -%}
-<h1>{%trans%}New Operation{%endtrans%}</h1>
+<h1>{%trans%}New Operation{%endtrans%} 
+    <small>({%trans%}for account{%endtrans%} <a href="{{ path('finance_account_account_see', { 'account_id': account.id }) }}">{{account}}</a>)</small></h1>
+
+{% if oldOperation is defined %}
+<div class="alert alert-info" role="alert">This is a duplicate of the Operation <a href="{{ path("finance_operation_operation_see", { "operation_id": oldOperation.id }) }}">{{oldOperation}}</a></div>
+{% endif %}
 
 {% include '::form_default.html.twig' %}
 

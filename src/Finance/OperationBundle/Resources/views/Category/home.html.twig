@@ -7,31 +7,34 @@
 {% endblock %}
 
 {% block body -%}
-<h1>{%trans%}Categorys' list:{%endtrans%}</h1>
+<h1>{%trans%}Categories' list:{%endtrans%}</h1>
 <hr>
+<a class="btn btn-default" href="{{path('finance_operation_category_add')}}" role="button"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a>
 
 <p>{%trans%}Quick search: {%endtrans%}<input type=text id="search"></p>
 
 <table class="footable table table-hover table-bordered table-condensed" 
        data-filter=#search 
        data-page-navigation="#pagination" 
-       data-page-size="15">
+       data-page-size="100">
     <thead>
         <tr>
-            <th data-toggle="true"></th>
             <th>{%trans%}Name{%endtrans%}</th>
-            <th>{%trans%}IsObselete{%endtrans%}</th>
-            <th>{%trans%}Parent{%endtrans%}</th>
+            <th>{%trans%}Children{%endtrans%}</th>
         </tr>
     </thead>
     <tbody>
-    {%- for category in categorys %}
+    {%- for category in categories %}
         <tr>
-            <td></td>
             <td><a href="{{ path("finance_operation_category_see", { "category_id": category.id }) }}">{{category.name}}</a></td>
-            <td>{{category.isObselete}}</td>
-            <td>{% if category.parent is not empty %}<a href="{{ path("finance_operation_category_see", { "category_id": category.parent.id }) }}">{{category.parent}}</a>{% endif %}</td>
+            <td><ul>
+                {% for child in category.childrenCategories %}
+                <li><a href="{{ path("finance_operation_category_see", { "category_id": child.id }) }}">{{child.name}}</a></li>
+                {% endfor %}
+                </ul>
+            </td>
         </tr>
+        
     {%- endfor %}
     </tbody>
     <tfoot class="hide-if-no-paging">

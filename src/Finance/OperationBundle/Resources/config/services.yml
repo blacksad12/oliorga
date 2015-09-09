@@ -8,7 +8,10 @@ services:
     
     financeoperation.categoryhelper:
         class: Finance\OperationBundle\Service\Helper\CategoryHelper
-        arguments: [ "@doctrine.orm.entity_manager", @doctrine, @financeoperation.operationhelper ]
+        arguments: [ "@doctrine.orm.entity_manager", @doctrine, @financeoperation.operationhelper, @router ]
+    
+    financeoperation.transferbetweenaccounthelper:
+        class: Finance\OperationBundle\Service\Helper\TransferBetweenAccountHelper
     
     
     

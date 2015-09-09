@@ -25,9 +25,18 @@ class AccountController extends Controller
         $accounts = $this->getDoctrine()
                 ->getRepository('FinanceAccountBundle:Account')
                 ->findAll();
+        $accountArray = array();
+        $total = 0;
+        foreach($accounts as $key=>$account) {
+            $accountArray[$key]['account'] = $account;
+            $balance = $this->getDoctrine()->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array('account' => $account));
+            $accountArray[$key]['balance'] = $balance;
+            $total += $balance;
+        }
         
         return $this->render('FinanceAccountBundle:Account:home.html.twig', array(
-            'accounts' => $accounts
+            'accountArray'  => $accountArray,
+            'total'         => $total,
         ));
     }
 

@@ -61,6 +61,14 @@ class Category
      */
     private $isObselete;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hexColor", type="string", length=100, nullable=true)
+     * @Assert\Length(max=100)
+     */
+    private $hexColor;
+    
     /**************************************************************************/
     ////////////////////////////////////////////////////////////////////////////
     //                             Constructor
@@ -68,6 +76,7 @@ class Category
     public function __construct() {
         $this->childrenCategories   = new \Doctrine\Common\Collections\ArrayCollection();
         $this->operations           = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->isObselete           = true;
     }
 
     /**************************************************************************/
@@ -116,6 +125,9 @@ class Category
      * @return string 
      */
     public function getName() {
+        if(!$this->isObselete){
+            return '--'.$this->name;
+        }
         return $this->name;
     }
     
@@ -229,5 +241,28 @@ class Category
     public function getIsObselete()
     {
         return $this->isObselete;
+    }
+
+    /**
+     * Set hexColor
+     *
+     * @param string $hexColor
+     * @return Category
+     */
+    public function setHexColor($hexColor)
+    {
+        $this->hexColor = $hexColor;
+
+        return $this;
+    }
+
+    /**
+     * Get hexColor
+     *
+     * @return string 
+     */
+    public function getHexColor()
+    {
+        return $this->hexColor;
     }
 }

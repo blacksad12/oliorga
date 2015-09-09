@@ -22,12 +22,42 @@ class CategoryController extends Controller
      **************************************************************************/
     public function homeAction()        
     {
-        $categorys = $this->getDoctrine()
+        $categories = $this->getDoctrine()
                 ->getRepository('FinanceOperationBundle:Category')
-                ->findAll();
-        
+                ->findTopParents();        
+           
         return $this->render('FinanceOperationBundle:Category:home.html.twig', array(
-            'categorys' => $categorys
+            'categories' => $categories,
+        ));
+    }
+
+    /** ************************************************************************
+     * Display the Category's distribution.
+     * @Route("/distribution")
+     **************************************************************************/
+    public function distributionAction()        
+    {
+        $categories = $this->getDoctrine()
+                ->getRepository('FinanceOperationBundle:Category')
+                ->findTopParents();        
+        $monthlyMeansForCategories = array();
+        foreach($categories as $key=>$category) {
+            $monthlyMeansForCategories[$key] = $this->get('financeoperation.categoryhelper')->getMonthlyMeans(array('category' => $category));
+        }
+        $charts = array();
+        $charts['one']['credit']        = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'one', 'credit')->renderOptions();
+        $charts['one']['debit']         = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'one', 'debit')->renderOptions();
+        $charts['three']['credit']      = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'three', 'credit')->renderOptions();
+        $charts['three']['debit']       = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'three', 'debit')->renderOptions();
+        $charts['six']['credit']        = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'six', 'credit')->renderOptions();
+        $charts['six']['debit']         = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'six', 'debit')->renderOptions();
+        $charts['thisYear']['credit']   = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'thisYear', 'credit')->renderOptions();
+        $charts['thisYear']['debit']    = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'thisYear', 'debit')->renderOptions();
+        $charts['lastYear']['credit']   = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'lastYear', 'credit')->renderOptions();
+        $charts['lastYear']['debit']    = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'lastYear', 'debit')->renderOptions();
+                
+        return $this->render('FinanceOperationBundle:Category:distribution.html.twig', array(
+            'charts' => $charts,
         ));
     }
 
@@ -68,14 +98,15 @@ class CategoryController extends Controller
      **************************************************************************/
     public function seeAction(Category $category)
     {
-        $operations = $this->getDoctrine()->getRepository('FinanceOperationBundle:Operation')->getOperations(array('category' => $category));
-        $balanceHistoryPerMonth = $this->get('financeoperation.categoryhelper')->getBalanceHistoryPerMonth(array('category' => $category));
-        $monthlyMeans = $this->get('financeoperation.categoryhelper')->getMonthlyMeans(array('category' => $category));
-        dump($monthlyMeans);
+        $operations     = $this->getDoctrine()->getRepository('FinanceOperationBundle:Operation')->getOperations(array('category' => $category));
+        $monthlyMeans   = $this->get('financeoperation.categoryhelper')->getMonthlyMeans(array('category' => $category));
+        $chart          = $this->get('financeoperation.categoryhelper')->getMonthlyBalanceHistoryChart(array('category' => $category));
+        
         return $this->render('FinanceOperationBundle:Category:see.html.twig', array(
             'category'      => $category,
             'operations'    => $operations,
             'monthlyMeans'  => $monthlyMeans,
+            'chart'         => $chart->renderOptions(),
           ));
     }
     

@@ -4,10 +4,10 @@
 <div class="nav subnav">    
     <ul class="nav nav-pills">
         {% block menuItems %}
-        <li><a href="{{ path(routePrefix~'home') }}"><span class="glyphicon glyphicon-list"></span> {%trans%}List{%endtrans%}</a></li>
-        <li><a href="{{ path(routePrefix~'add') }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a></li>
-        <li><a href="{{ path(routePrefix~'modify', {(entityId) : entity.id}) }}"><span class="glyphicon glyphicon-edit"></span> {%trans%}Modify{%endtrans%}</a></li>
-        <li><a href="#" data-href="{{ path(routePrefix~'delete', {(entityId) : entity.id}) }}"data-toggle="modal" data-target="#confirm-delete"><span class="glyphicon glyphicon-trash"></span> {%trans%}Delete{%endtrans%}</a>
+        {% block menuItemHome %}<li><a href="{{ path(routePrefix~'home') }}"><span class="glyphicon glyphicon-list"></span> {%trans%}List{%endtrans%}</a></li>{% endblock %}
+        {% block menuItemAdd %}<li><a href="{{ path(routePrefix~'add') }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a></li>{% endblock %}
+        {% block menuItemModify %}<li><a href="{{ path(routePrefix~'modify', {(entityId) : entity.id}) }}"><span class="glyphicon glyphicon-edit"></span> {%trans%}Modify{%endtrans%}</a></li>{% endblock %}
+        {% block menuItemDelete %}<li><a href="#" data-href="{{ path(routePrefix~'delete', {(entityId) : entity.id}) }}"data-toggle="modal" data-target="#confirm-delete"><span class="glyphicon glyphicon-trash"></span> {%trans%}Delete{%endtrans%}</a>{% endblock %}
         {% endblock %}
     </ul>
 </div>

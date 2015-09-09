@@ -26,7 +26,7 @@ class TransferBetweenAccount extends AbstractOperation
      * @var Finance\AccountBundle\Entity\Account
      * 
      * Note : Proprietary side
-     * @ORM\ManyToOne(targetEntity="Finance\AccountBundle\Entity\Account", inversedBy="incomeTranfers", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Finance\AccountBundle\Entity\Account", inversedBy="incomeTransfers", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $destinationAccount;

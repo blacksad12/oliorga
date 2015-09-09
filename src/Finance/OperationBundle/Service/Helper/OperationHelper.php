@@ -38,31 +38,38 @@ class OperationHelper extends AbstractOperationHelper
     }
     
     /** ************************************************************************
-     * 
+     * Get an array with the balance for each month of the Operations matching 
+     * criteria defined in $parameters
+     * 0 => [
+     *      ['balance'] => float,
+     *      ['date']    => /DateTime,
+     * ],
+     * 1 => etc.
      * @param array $parameters
      * @return array
      **************************************************************************/
-    public function getBalanceHistoryPerMonth(array $parameters) {
+    public function getMonthlyBalanceHistory(array $parameters) {
         $startDate  = new \DateTime("2008-09-30");
         $endDate    = new \DateTime();
         $endOfMonth = $startDate;
         $i = 0;
         
-        $soldeHistoryPerMonth = array();
+        $monthlyBalanceHistory = array();
         
         while($endOfMonth < $endDate){
             $startOfMonth = clone $endOfMonth;
             $startOfMonth->modify('first day of this month'); 
             
-            $parameters['startDate']            = $startOfMonth;
-            $parameters['endDate']              = $endOfMonth;
-            $soldeHistoryPerMonth[$i]['solde']  = $this->em->getRepository('FinanceOperationBundle:Operation')->getBalance($parameters);
-            $soldeHistoryPerMonth[$i]['date']   = $endOfMonth->format("d/m/Y");
-                        
+            $parameters['startDate']                = $startOfMonth;
+            $parameters['endDate']                  = $endOfMonth;
+            $balance                                = $this->em->getRepository('FinanceOperationBundle:Operation')->getBalance($parameters);
+            $monthlyBalanceHistory[$i]['balance']   = $balance === NULL ? 0 : floatval($balance);
+            $monthlyBalanceHistory[$i]['date']      = clone $endOfMonth;
+            
             $endOfMonth->modify('last day of next month');
             $i++;
         }
-        return $soldeHistoryPerMonth;
+        return $monthlyBalanceHistory;
     }
     
     /** ************************************************************************

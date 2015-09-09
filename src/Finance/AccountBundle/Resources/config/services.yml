@@ -1,1 +1,4 @@
 services:
+    financeaccount.savingshelper:
+        class: Finance\AccountBundle\Service\Helper\SavingsHelper
+        arguments: [ "@doctrine.orm.entity_manager"]

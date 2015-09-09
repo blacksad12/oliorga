@@ -1,0 +1,18 @@
+{# /src/Finance/AccountBundle/Resources/views/Dashboard/home.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Home{%endtrans%} - {%trans%}Dashboard{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Dashboard{%endtrans%}</h1>
+<hr>
+
+<p>
+  <a href="{{path('finance_operation_category_distribution')}}" role="button" class="btn btn-primary btn-lg">Categories' distribution</a>
+  <a href="{{path('finance_account_dashboard_seesavings')}}" role="button" class="btn btn-primary btn-lg">Savings evolution</a>
+</p>
+    
+{% endblock %}

@@ -21,12 +21,25 @@
     entityId:       'operation_id',
     entity:         operation
 } %}
+    {% block menuItemAdd %}<li><a href="{{ path('finance_operation_operation_add', { "account_id": operation.account.id }) }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a></li>{%endblock%}
 {% endembed %}
 
 
 {# -------------------------------------------------------------------------- #}
 {# ------------------------------ Operation info -------------------------------- #}
 <table class="table table-hover table-condensed">
+    <tr>
+        <th>{%trans%}Date{%endtrans%}</th>
+        <td>{{ operation.date|date("d/m/Y") }}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Amount{%endtrans%}</th>
+        <td>{% include '::amountFormatting.html.twig' with {amount : operation.amount} %}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Marked{%endtrans%}</th>
+        <td>{{operation.isMarked ? 'Yes' : 'No'}}</td>
+    </tr>
     <tr>
         <th>{%trans%}Comment{%endtrans%}</th>
         <td>{{operation.comment}}</td>
@@ -49,7 +62,7 @@
     </tr>
     <tr>
         <th>{%trans%}PaymentMethod{%endtrans%}</th>
-        <td><a href="{{ path("finance_operation_paymentmethod_see", { "paymentMethod_id": operation.paymentMethod.id }) }}">{{operation.paymentMethod}}</a></td>
+        <td>{{operation.paymentMethod}}</td>
     </tr>
 </table>
 

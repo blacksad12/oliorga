@@ -7,23 +7,25 @@
         <th class="text-right">{%trans%}Last 6 months{%endtrans%}</th>
         <th class="text-right">{{ "now"|date("Y") }}</th>
         <th class="text-right">{{ "first day of last year"|date("Y") }}</th>        
-    </tr>    
-    {% for child in children %}
+    </tr>  
+    {% if monthlyMeans.children is defined %}
+    {% for child in monthlyMeans.children %}
     <tr>
-        <td><a href="{{ path((routePrefix~'see'), { (entityName~'_id'): child.id }) }}">{{child}}</a></td>
-        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.children[child.id].one} %}</td>
-        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.children[child.id].three} %}</td>
-        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.children[child.id].six} %}</td>
-        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.children[child.id].thisYear} %}</td>
-        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.children[child.id].lastYear} %}</td>
+        <td><a href="{{ path((routePrefix~'see'), { (entityName~'_id'): child.entity.id }) }}">{{child.entity}}</a></td>
+        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: child.means.one} %}</td>
+        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: child.means.three} %}</td>
+        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: child.means.six} %}</td>
+        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: child.means.thisYear} %}</td>
+        <td class="text-right">{% include "::amountFormatting.html.twig" with {amount: child.means.lastYear} %}</td>
     </tr>
     {% endfor %}
+    {% endif %}
     <tr>
-        <th>{{entity}}</th>
-        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.one} %}</th>
-        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.three} %}</th>
-        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.six} %}</th>
-        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.thisYear} %}</th>
-        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.lastYear} %}</th>
+        <th>{{monthlyMeans.current.entity}}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.means.one} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.means.three} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.means.six} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.means.thisYear} %}</th>
+        <th class="text-right">{% include "::amountFormatting.html.twig" with {amount: monthlyMeans.current.means.lastYear} %}</th>
     </tr>
 </table>

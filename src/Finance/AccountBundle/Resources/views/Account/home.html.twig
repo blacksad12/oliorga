@@ -18,29 +18,38 @@
        data-page-size="20">
     <thead>
         <tr>
+            <th></th>
             <th>{%trans%}Account{%endtrans%}</th>
             <th>{%trans%}Number{%endtrans%}</th>
-            <th>{%trans%}Iban{%endtrans%}</th>
-            <th data-type="numeric">{%trans%}OpenDate{%endtrans%}</th>
-            <th data-type="numeric">{%trans%}CloseDate{%endtrans%}</th>
+            <th data-hide="all" >{%trans%}Iban{%endtrans%}</th>
+            <th data-hide="all" data-type="numeric">{%trans%}OpenDate{%endtrans%}</th>
+            <th data-hide="all" data-type="numeric">{%trans%}CloseDate{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}Balance{%endtrans%}</th>
         </tr>
     </thead>
     <tbody>
-    {%- for account in accounts %}
+    {%- for accountLine in accountArray %}
         <tr>
-            <td><a href="{{ path("finance_account_account_see", { "account_id": account.id }) }}">{{account}}</a></td>
-            <td>{{account.number}}</td>
-            <td>{{account.iban}}</td>
-            <td data-value="{{ account.openDate|date("U") }}">{{ account.openDate is not empty ? account.openDate|date("Y-m-d") }}</td>
-            <td data-value="{{ account.closeDate|date("U") }}">{{ account.closeDate is not empty ? account.closeDate|date("Y-m-d") }}</td>
+            <td></td>
+            <td><a href="{{ path("finance_account_account_see", { "account_id": accountLine.account.id }) }}">{{accountLine.account}}</a></td>
+            <td>{{accountLine.account.number}}</td>
+            <td>{{accountLine.account.iban}}</td>
+            <td data-value="{{ accountLine.account.openDate|date("U") }}">{{ accountLine.account.openDate is not empty ? accountLine.account.openDate|date("Y-m-d") }}</td>
+            <td data-value="{{ accountLine.account.closeDate|date("U") }}">{{ accountLine.account.closeDate is not empty ? accountLine.account.closeDate|date("Y-m-d") }}</td>
+            <td class="text-right">{% include "::amountFormatting.html.twig" with {amount : accountLine.balance} %}</td>
         </tr>
     {%- endfor %}
+        
     </tbody>
-    <tfoot class="hide-if-no-paging">
+    <tfoot>
         <tr>
-            <td colspan="7">
-                <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
-            </td>
+            <td></td>
+            <td><b>Total</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><b>{% include "::amountFormatting.html.twig" with {amount : total} %}</b></td>
         </tr>
     </tfoot>
 </table>

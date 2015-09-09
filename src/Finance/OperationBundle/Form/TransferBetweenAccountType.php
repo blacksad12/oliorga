@@ -16,7 +16,16 @@ class TransferBetweenAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                    
+            ->add('date', 'date', array(
+                'required'  => true,
+                'widget'    => 'single_text',
+                'input'     => 'datetime',
+                'format'    => 'dd/MM/yyyy',
+                'attr'      => array('class' => 'dateonly'),
+            ))            
+            ->add('amount', 'integer', array(
+                'required'  => true,
+            ))      
             ->add('sourceAccount', 'entity', array(
                 'class'         => "FinanceAccountBundle:Account",
                 'required'      => true,
@@ -30,7 +39,11 @@ class TransferBetweenAccountType extends AbstractType
                 'query_builder' => function(\Finance\AccountBundle\Entity\AccountRepository $r) {
                         return $r->createQueryBuilder('d')
                                 ;}
-            ))        ;
+            ))
+            ->add('isMarked', 'checkbox', array(
+                'required'  => false,
+                'label'     => 'Marked',
+            ));
     }
     
     /** ************************************************************************
