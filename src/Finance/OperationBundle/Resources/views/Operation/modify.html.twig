@@ -7,7 +7,8 @@
 {% endblock %}
 
 {% block body -%}
-<h1>{%trans%}Modify Operation{%endtrans%} <a href="{{ path("finance_operation_operation_see", { "operation_id": operation.id }) }}">{{operation}}</a></h1>
+<h1>{%trans%}Modify Operation{%endtrans%} <a href="{{ path("finance_operation_operation_see", { "operation_id": operation.id }) }}">{{operation}}</a>
+    <small> (on account <a href="{{ path("finance_account_account_see", { "account_id": operation.account.id }) }}">{{operation.account}}</a>)</small></h1>
 
 {% include "::form_default.html.twig" %}
 

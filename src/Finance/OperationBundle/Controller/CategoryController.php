@@ -37,27 +37,34 @@ class CategoryController extends Controller
      **************************************************************************/
     public function distributionAction()        
     {
-        $categories = $this->getDoctrine()
-                ->getRepository('FinanceOperationBundle:Category')
-                ->findTopParents();        
+        $categories = $this->getDoctrine()->getRepository('FinanceOperationBundle:Category')->findTopParents();
         $monthlyMeansForCategories = array();
+        $timeframeList = array('one', 'three', 'six', 'thisYear', 'lastYear');
+        $sumArray = array();
+        foreach($timeframeList as $timeframe) {
+            $sumArray[$timeframe] = array('credit' => 0, 'debit' => 0);
+        }        
+        
         foreach($categories as $key=>$category) {
             $monthlyMeansForCategories[$key] = $this->get('financeoperation.categoryhelper')->getMonthlyMeans(array('category' => $category));
+            foreach($timeframeList as $timeframe) {
+                if($monthlyMeansForCategories[$key]['current']['means'][$timeframe] > 0){
+                    $sumArray[$timeframe]['credit'] += $monthlyMeansForCategories[$key]['current']['means'][$timeframe];
+                } else {
+                    $sumArray[$timeframe]['debit'] += $monthlyMeansForCategories[$key]['current']['means'][$timeframe];
+                }
+            }
         }
+        
         $charts = array();
-        $charts['one']['credit']        = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'one', 'credit')->renderOptions();
-        $charts['one']['debit']         = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'one', 'debit')->renderOptions();
-        $charts['three']['credit']      = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'three', 'credit')->renderOptions();
-        $charts['three']['debit']       = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'three', 'debit')->renderOptions();
-        $charts['six']['credit']        = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'six', 'credit')->renderOptions();
-        $charts['six']['debit']         = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'six', 'debit')->renderOptions();
-        $charts['thisYear']['credit']   = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'thisYear', 'credit')->renderOptions();
-        $charts['thisYear']['debit']    = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'thisYear', 'debit')->renderOptions();
-        $charts['lastYear']['credit']   = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'lastYear', 'credit')->renderOptions();
-        $charts['lastYear']['debit']    = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, 'lastYear', 'debit')->renderOptions();
+        foreach($timeframeList as $timeframe) {
+            $charts[$timeframe]['credit'] = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, $timeframe, 'credit')->renderOptions();
+            $charts[$timeframe]['debit']  = $this->get('financeoperation.categoryhelper')->getAllCategoriesMonthlyMeansCharts($monthlyMeansForCategories, $timeframe, 'debit')->renderOptions();
+        }
                 
         return $this->render('FinanceOperationBundle:Category:distribution.html.twig', array(
-            'charts' => $charts,
+            'charts'    => $charts,
+            'sumArray'  => $sumArray,
         ));
     }
 
@@ -153,9 +160,10 @@ class CategoryController extends Controller
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
             $em = $this->getDoctrine()->getManager();
+            $route = $category->getParent() !== NULL ? ($this->generateUrl('finance_operation_category_see', array('category_id' => $category->getParent()->getId()))) : $this->generateUrl('finance_operation_category_home');
             $em->remove($category);
             $em->flush();
-            return $this->redirect($this->generateUrl(/* Redirect to some page */));          
+            return $this->redirect($route);          
         }
         else{
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;

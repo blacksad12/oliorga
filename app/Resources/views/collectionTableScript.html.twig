@@ -8,22 +8,33 @@
  # 
  ############################################################################# #}
 
+{% if allowAdd is not defined %}{% set allowAdd = true %}{% endif %}
 <script>    
     jQuery(document).ready(function() {
-        
+        {% if allowAdd %}
         $('.add_button').on('click', function(e) {
             e.preventDefault();
             var collectionHolder = $(this).closest('table').find('.collectionHolder'); // Get the tbody containing the collection's lines
             addLineForm(collectionHolder);
         });
+        {%endif%}
         
         // Add a link in the last column to delete the row
         $('.collectionHolder').find('tr').each(function() {
             addTagFormDeleteLink($(this));
         });
-        $('select').select2({width:'100%'});
+        //$('select').select2({width:'100%'});
+        $(".dateonly").datetimepicker({
+                weekStart: 1,
+                format : 'dd/mm/yyyy',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                minView: 'month',
+            });
     });    
     
+    {% if allowAdd %}
     // Add a new form line in the collection
     function addLineForm(collectionHolder) {
         // Get the HTML code of the prototype
@@ -43,6 +54,7 @@
             updateSelect2($newFormTr.find('.select2-ajax'));
         }#}
     }
+    {% endif %}
     
     function addTagFormDeleteLink($tagFormTr) {
         var $removeFormA = $('<td><a class="btn btn-sm btn-danger" href="#"> <span class="glyphicon glyphicon-trash"></span></a></td>');

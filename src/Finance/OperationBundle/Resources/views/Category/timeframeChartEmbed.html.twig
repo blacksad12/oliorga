@@ -1,0 +1,50 @@
+{# /src/Finance/OperationBundle/Resources/views/Category/timeframeChartEmbed.html.twig #}
+{% set timeframeToString = {
+    'one'       : 'Last Month',
+    'three'     : 'Last 3 Month',
+    'six'       : 'Last 6 Month',
+    'thisYear'  : "now"|date("Y"),
+    'lastYear'  : "first day of last year"|date("Y"),
+    
+} %}
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{timeframeToString[timeframe]|trans}}</h2>        
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 text-center">
+        <b>{%trans%}Income:{%endtrans%}</b> {% include "::amountFormatting.html.twig" with { amount: sumArray[timeframe].credit} %}
+    </div>
+    <div class="col-md-6">
+        <div class="text-center">
+            <b>{%trans%}Expenses:{%endtrans%}</b> {% include "::amountFormatting.html.twig" with { amount: sumArray[timeframe].debit} %}
+        </div>
+        <div class="text-center">
+            <b>{%trans%}Savings:{%endtrans%}</b> {% include "::amountFormatting.html.twig" with { amount: sumArray[timeframe].credit + sumArray[timeframe].debit} %}
+                {%- if sumArray[timeframe].credit != 0 %}
+                    {%- set percentSavings = 100* (sumArray[timeframe].credit + sumArray[timeframe].debit) / sumArray[timeframe].credit %}
+                    ({{ percentSavings|number_format(1, ',')~"\xc2\xa0"|raw~'%'}})
+                {%- endif %}
+        </div>
+    </div>    
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div style="margin-top: 20px;" id="chart-container-{{timeframe}}-credit"></div>
+    </div>
+    <div class="col-md-6">
+        <div style="margin-top: 20px;" id="chart-container-{{timeframe}}-debit"></div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(OnReady);
+    function OnReady(){
+        $('#chart-container-{{timeframe}}-credit').highcharts({{charts[timeframe].credit|raw}});
+        $('#chart-container-{{timeframe}}-debit').highcharts({{charts[timeframe].debit|raw}}); 
+    }
+</script>
+   
+

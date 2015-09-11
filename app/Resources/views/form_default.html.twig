@@ -7,7 +7,7 @@
 <hr>
 {{ form_start(form) }}
     {{ form_widget(form) }}    
-    <input value="Save" type="submit" class="btn btn-primary" />
+    {% block submitButton %}<input value="Save" {{submitButtonId is defined ? 'id="'~submitButtonId~'" ' }}type="submit" class="btn btn-primary" />{% endblock %}
 {{ form_end(form) }}
 
 

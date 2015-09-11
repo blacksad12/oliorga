@@ -1,0 +1,5 @@
+services:
+    financeoperation.boursoramaccpimporter:
+        class: Finance\OperationBundle\Service\Importer\BoursoramaCcpImporter
+        arguments: [ @doctrine, %operation.boursoramaccpimporter.stringtoentityidarray% ]
+    

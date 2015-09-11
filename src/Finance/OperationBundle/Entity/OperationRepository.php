@@ -82,10 +82,12 @@ class OperationRepository extends EntityRepository
     protected function filterByCategory(QueryBuilder $qb, array $parameters) {
         if(isset($parameters['category'])) {
             $qb->leftJoin('o.category', 'c');
+            $qb->leftJoin('c.parent', 'p');
             $qb->andWhere($qb->expr()->orX(
                     $qb->expr()->eq('o.category', ':category'),
-                    $qb->expr()->eq('c.parent', ':category'))
-                    );
+                    $qb->expr()->eq('c.parent', ':category'),
+                    $qb->expr()->eq('p.parent', ':category')
+                    ));
             $qb->setParameter('category', $parameters['category']);
         }
     }

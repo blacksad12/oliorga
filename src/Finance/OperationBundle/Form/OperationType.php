@@ -23,7 +23,7 @@ class OperationType extends AbstractType
                 'format'    => 'dd/MM/yyyy',
                 'attr'      => array('class' => 'dateonly'),
             ))            
-            ->add('amount', 'float', array(
+            ->add('amount', 'text', array(
                 'required'  => true,
             ))            
             ->add('comment', 'text', array(

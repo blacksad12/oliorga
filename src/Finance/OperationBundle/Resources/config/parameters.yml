@@ -1,0 +1,36 @@
+parameters:
+    operation.boursoramaccpimporter.stringtoentityidarray:
+        # For Operation
+        paymentMethod:
+            # string in 'label operation': id of the PaymentMethod
+            PRLV                    : 7     # Prélèvement
+            PAIEMENT CARTE          : 6     # Carte de débit
+            VIR SEPA                : 4     # Virement
+        stakeholder:
+            # string in 'label operation': id of the PaymentMethod
+            COMMISSARIAT A L ENER   : 14    # CEA
+            RATP                    : 41    # RATP
+            SNCF                    : 48    # SNCF
+            SFR                     : 33    # SFR
+            EDF                     : 17    # EDF
+            CAF DE L ESSONNE        : 11    # CAF91
+            BARBARA                 : 42    # Barbara
+            AGENCE ALVIMMO          : 2     # Alvimmo
+        category:
+            # string in 'label operation': id of the Category
+            COMMISSARIAT A L ENER   : 44    # Salaire / Salaire net
+            RATP                    : 51    # Transport / TEC
+            SNCF                    : 51    # Transport / TEC
+            EDF                     : 23    # Fournisseurs / Electricité
+            CAF DE L ESSONNE        : 7     # Prestations sociales / APL
+            AGENCE ALVIMMO          : 26    # Logement / Loyer
+            SFR FIXE ADSL           : 25    # Fournisseurs / Internet
+        # For TransferBetweenAccount
+        sourceAccount:
+            PRLV SEPA E-Cie vie     : 1     # Boursorama CCP
+            PRLV SEPA Spirica       : 1     # Boursorama CCP
+            RETRAIT DAB             : 1     # Boursorama CCP
+        destinationAccount:
+            PRLV SEPA E-Cie vie     : 17    # AV Boursorama Vie
+            PRLV SEPA Spirica       : 15    # AV Linxea Spirit
+            RETRAIT DAB             : 10    # Cash

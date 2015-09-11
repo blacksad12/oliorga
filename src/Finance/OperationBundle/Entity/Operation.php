@@ -27,7 +27,8 @@ class Operation extends AbstractOperation
      * 
      * Note : Proprietary side
      * @ORM\ManyToOne(targetEntity="Finance\OperationBundle\Entity\Category", inversedBy="operations", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @Assert\NotBlank(message="This value is mandatory: category")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $category;
     
@@ -70,7 +71,7 @@ class Operation extends AbstractOperation
     ////////////////////////////////////////////////////////////////////////////
     //                             Constructor
     ////////////////////////////////////////////////////////////////////////////
-    public function __construct(\Finance\AccountBundle\Entity\Account $account) {
+    public function __construct(\Finance\AccountBundle\Entity\Account $account=null) {
         $this->account = $account;
     }
 
@@ -116,7 +117,7 @@ class Operation extends AbstractOperation
      * @param \Finance\OperationBundle\Entity\Category $category
      * @return Operation
      */
-    public function setCategory(\Finance\OperationBundle\Entity\Category $category = null)
+    public function setCategory(\Finance\OperationBundle\Entity\Category $category = NULL)
     {
         $this->category = $category;
 

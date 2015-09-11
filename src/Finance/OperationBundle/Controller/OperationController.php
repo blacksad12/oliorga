@@ -64,6 +64,78 @@ class OperationController extends Controller
     }
     
     /** ************************************************************************
+     * 
+     * @Route("/processimportdata")
+     **************************************************************************/
+    public function getImportDataAction()        
+    {
+        $form = $this->createForm(new \Finance\OperationBundle\Form\ProcessImportDataType());
+       
+        return $this->render('FinanceOperationBundle:Operation:import.html.twig', array(
+            'form'      => $form->createView(),
+        ));
+    }
+    
+    /** ************************************************************************
+     * 
+     * @Route("/generateimportform")
+     **************************************************************************/
+    public function generateImportFormAction()        
+    {
+        $request            = $this->get('request');
+        $account            = $this->getDoctrine()->getRepository('FinanceAccountBundle:Account')->find($request->request->get('accountId'));
+        $abstractOperations = $this->get('financeoperation.boursoramaccpimporter')->processHtmlString($account, $request->request->get('htmlString'));
+        $form = $this->createForm(new \Finance\OperationBundle\Form\ImportType($this->get('router'), $account));
+
+        $form['accountId']->setData($account->getId());
+        $form['htmlString']->setData($request->request->get('htmlString'));
+        $form['operationList']->setData($abstractOperations['operations']);
+        $form['transferBetweenAccountList']->setData($abstractOperations['transferBetweenAccounts']);        
+                
+        return $this->render('FinanceOperationBundle:Operation:formImport.html.twig', array(
+            'form'          => $form->createView(),
+            'originalHtml'  => $abstractOperations['originalHtml'],
+        ));
+    }
+    
+    /** ************************************************************************
+     * 
+     * @param \Finance\AccountBundle\Entity\Account $account
+     * @ParamConverter("account", options={"mapping": {"account_id": "id"}})
+     * @Route("/persistimportform/{account_id}")
+     **************************************************************************/
+    public function persistImportFormAction(\Finance\AccountBundle\Entity\Account $account) {
+        $form = $this->createForm(new \Finance\OperationBundle\Form\ImportType($this->get('router'), $account));
+          
+        // ------------- Request Management ------------------------------------
+        $request = $this->get('request');
+        if ($request->getMethod() == 'POST') {
+          $form->bind($request);// Link Request and Form
+            if ($form->isValid()) {          
+                $em = $this->getDoctrine()->getManager();
+                foreach($form['operationList']->getData() as $operation) {
+                    $operation->setAccount($account);
+                    $operation->setIsMarked(true);
+                    $em->persist($operation);
+                }
+                foreach($form['transferBetweenAccountList']->getData() as $transferBetweenAccount) {
+                    $transferBetweenAccount->setIsMarked(true);
+                    $em->persist($transferBetweenAccount);
+                }
+                $em->flush();
+                return $this->forward('FinanceAccountBundle:Account:see', array(
+                    'account_id'    => $account->getId(),
+                ));   
+            }
+        }
+        
+        return $this->render('FinanceOperationBundle:Operation:formImport.html.twig', array(
+            'form'      => $form->createView(),
+        ));
+        
+    }
+    
+    /** ************************************************************************
      * Display a Operation
      * @param Operation $operation
      * @ParamConverter("operation", options={"mapping": {"operation_id": "id"}})

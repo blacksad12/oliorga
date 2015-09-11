@@ -1,0 +1,51 @@
+{# /src/Finance/OperationBundle/Resources/views/Operation/import.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}Import{%endtrans%} - {%trans%}Operation{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Import{%endtrans%} </h1>
+
+{% embed '::form_default.html.twig' %}
+    {% block submitButton %}<button id="button-process" type="button" class="btn btn-primary">{%trans%}Process{%endtrans%}</button>{% endblock %}
+{% endembed %}
+
+<hr>
+
+<div id="importFormContainer"></div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+    $(document).ready(OnReady);
+    function OnReady(){                   
+        $('#button-process').click(function(event) { 
+            event.stopImmediatePropagation();
+            generateImportForm();
+        });
+    }
+    
+    function generateImportForm(){
+        var select2data = $('#finance_operationbundle_processimportdata_account').select2('data');
+        var data = {};
+        data['accountId'] = select2data[0].id;
+        data['htmlString'] = tinyMCE.get('finance_operationbundle_processimportdata_data').getContent();
+        $("#importFormContainer").html("{% include "::ajaxLoader.html.twig"%}");
+        
+        $.ajax({
+            type: "POST",
+            data: data,
+            url: "{{ path('finance_operation_operation_generateimportform')}}",
+            success: function(html) {
+                $("#importFormContainer").html(html);
+            }
+        });
+    }
+        
+</script>
+    
+{% endblock %}

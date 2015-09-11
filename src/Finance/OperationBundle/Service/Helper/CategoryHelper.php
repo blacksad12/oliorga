@@ -121,7 +121,6 @@ class CategoryHelper
         $this->setChartConfiguration($chart);
         
         $monthlyBalanceHistory = $this->getMonthlyBalanceHistory($parameters);
-        
         $this->addChartSeries($chart, $parameters['category']->__toString(), $monthlyBalanceHistory['current'],true, 3);
         if(isset($monthlyBalanceHistory['children'])) {
             foreach($monthlyBalanceHistory['children'] as $categoryId=>$monthlyBalanceHistoryForChild) {
@@ -129,7 +128,6 @@ class CategoryHelper
                 $this->addChartSeries($chart, $category->__toString(), $monthlyBalanceHistoryForChild, false);
             }
         }
-        
         return $chart;
     }
     
@@ -219,12 +217,6 @@ class CategoryHelper
                     'value' => 0
                 )                
             ) 
-        );
-        $chart->legend = array(
-            'layout' => 'vertical',
-            'align' => 'right',
-            'verticalAlign' => 'middle',
-            'borderWidth' => 0
         );
         $chart->tooltip->formatter = new \Ghunti\HighchartsPHP\HighchartJsExpr(
             "function() {
@@ -322,7 +314,7 @@ class CategoryHelper
             'type' => 'pie',
         );        
         $chart->title = array(
-            'text' => $title,
+            'text' => null,
         );        
         $chart->yAxis = array(
             'labels' => array(
@@ -338,10 +330,6 @@ class CategoryHelper
                 )                
             ) 
         );
-//        $chart->tooltip = array(
-//            'headerFormat' => '<span style="font-size: 10px">{point.key}</span><br/>',
-//            'pointFormat' => '<b>{point.percentage:.1f}%</b>' 
-//        );
         $chart->tooltip->formatter = new \Ghunti\HighchartsPHP\HighchartJsExpr(
             "function() {
                 return '<b>'+ this.key +'</b><br/>' + 

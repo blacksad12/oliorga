@@ -1,0 +1,65 @@
+{# /src/Finance/OperationBundle/Resources/views/Operation/formImport.html.twig #}
+
+{% block form %}
+
+{{ form_start(form) }}
+    {% do form.operationList.setRendered %}
+    {% if form.operationList|length > 0 %}
+    <table align="center" class="table">
+        <thead>
+            <tr>
+                <th style="width: 115px">{%trans%}Date{%endtrans%}</th>
+                <th style="width: 115px">{%trans%}Amount{%endtrans%}</th>
+                <th>{%trans%}Comment{%endtrans%}</th>
+                <th>{%trans%}Category{%endtrans%} {%trans%}(Mandatory!){%endtrans%}</th>
+                <th>{%trans%}Imputation{%endtrans%}</th>
+                <th>{%trans%}Stakeholder{%endtrans%}</th>
+                <th>{%trans%}Payment Method{%endtrans%}</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody class="collectionHolder">
+            {% for operation in form.operationList %}
+            <tr>
+                <td>{{ form_widget(operation.date) }}</td>
+                <td>{{ form_widget(operation.amount) }}</td>
+                <td>{{ form_widget(operation.comment) }}</td>
+                <td>{{ form_widget(operation.category) }}</td>
+                <td>{{ form_widget(operation.imputation) }}</td>
+                <td>{{ form_widget(operation.stakeholder) }}</td>
+                <td>{{ form_widget(operation.paymentMethod) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    {% do form.transferBetweenAccountList.setRendered %}
+    {% if form.transferBetweenAccountList|length > 0 %}
+    <table align="center" class="table">
+        <thead>
+            <tr>
+                <th>{%trans%}Date{%endtrans%}</th>
+                <th>{%trans%}Amount{%endtrans%}</th>
+                <th>{%trans%}Source{%endtrans%}</th>
+                <th>{%trans%}Destination{%endtrans%}</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody class="collectionHolder">
+            {% for transferBetweenAccount in form.transferBetweenAccountList %}
+            <tr>
+                <td>{{ form_widget(transferBetweenAccount.date) }}</td>
+                <td>{{ form_widget(transferBetweenAccount.amount) }}</td>
+                <td>{{ form_widget(transferBetweenAccount.sourceAccount) }}</td>
+                <td>{{ form_widget(transferBetweenAccount.destinationAccount) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    <input type="submit" class="btn btn-primary" />
+    
+{{ form_end(form) }}
+
+{% include "::collectionTableScript.html.twig" with {allowAdd: false} %}
+{% endblock %}

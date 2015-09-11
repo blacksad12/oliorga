@@ -64,13 +64,13 @@ class SavingsHelper
         
     /** ************************************************************************
      * Get an array containing the monthly means of the amount of each Operation 
-     * matching $parameters, for the following timeframes:
+     * matching $monthlyBalanceHistory, for the following timeframes:
      * - ['one']      => from first day of last month to last day of last month
      * - ['three']    => from first day of 3 month ago to last day of last month
      * - ['six']      => from first day of 6 month ago to last day of last month
      * - ['thisYear'] => from 1st January this year to 31st December this year
      * - ['lastYear'] => from 1st January last year to 31st December last year
-     * @param array $parameters
+     * @param array $monthlyBalanceHistory
      * @return array
      **************************************************************************/
     public function getMonthlySavingsMeans(array $monthlyBalanceHistory) {
@@ -85,7 +85,7 @@ class SavingsHelper
     
     /** ************************************************************************
      * GetLastMonthMonthlyMean
-     * @param array $parameters
+     * @param array $monthlyBalanceHistory
      * @return float
      **************************************************************************/
     public function getLastMonthMonthlyMean(array $monthlyBalanceHistory) {
@@ -95,7 +95,7 @@ class SavingsHelper
     
     /** ************************************************************************
      * GetLastXMonthsMonthlyMean
-     * @param array $parameters
+     * @param array $monthlyBalanceHistory
      * @return float
      **************************************************************************/
     public function getLastXMonthsMonthlyMean(array $monthlyBalanceHistory, $numberOfMonths) {
@@ -109,26 +109,26 @@ class SavingsHelper
     
     /** ************************************************************************
      * GetThisYearMonthlyMean
-     * @param array $parameters
+     * @param array $monthlyBalanceHistory
      * @return float
      **************************************************************************/
     public function getThisYearMonthlyMean(array $monthlyBalanceHistory) {
         $now = new \DateTime;
-        $numberOfMonths = intval($now->format('m'));
-        return $this->getLastXMonthsMonthlyMean($monthlyBalanceHistory, $numberOfMonths);
+        $numberOfCompleteMonthsThisYear = intval($now->format('m'))-1;
+        return $this->getLastXMonthsMonthlyMean($monthlyBalanceHistory, $numberOfCompleteMonthsThisYear);
     }
     
     /** ************************************************************************
      * GetLastYearMonthlyMean
-     * @param array $parameters
+     * @param array $monthlyBalanceHistory
      * @return float
      **************************************************************************/
     public function getLastYearMonthlyMean(array $monthlyBalanceHistory) {
         $lastMonthIndex = count($monthlyBalanceHistory);
         $now = new \DateTime;
-        $numberOfMonthsThisYear = intval($now->format('m'));
+        $numberOfCompleteMonthsThisYear = intval($now->format('m'))-1;
         $savingsSum = 0;
-        for($i=$lastMonthIndex-$numberOfMonthsThisYear-12;$i<$lastMonthIndex-$numberOfMonthsThisYear;$i++) {
+        for($i=$lastMonthIndex-$numberOfCompleteMonthsThisYear-12;$i<$lastMonthIndex-$numberOfCompleteMonthsThisYear;$i++) {
             $savingsSum += $monthlyBalanceHistory[$i]['savings'];
         }
         return $savingsSum/12;
@@ -136,7 +136,7 @@ class SavingsHelper
     
     /** ************************************************************************
      * 
-     * @param array $parameters
+     * @param array $monthlyBalanceHistory
      **************************************************************************/
     public function getMonthlyBalanceHistoryChart(array $monthlyBalanceHistory) {
         $chart = new \Ghunti\HighchartsPHP\Highchart();

@@ -54,11 +54,11 @@
     </tr>
     <tr>
         <th>{%trans%}Imputation{%endtrans%}</th>
-        <td><a href="{{ path("finance_operation_imputation_see", { "imputation_id": operation.imputation.id }) }}">{{operation.imputation}}</a></td>
+        <td>{% if operation.imputation is not empty %}<a href="{{ path("finance_operation_imputation_see", { "imputation_id": operation.imputation.id }) }}">{{operation.imputation}}</a>{% endif %}</td>
     </tr>
     <tr>
         <th>{%trans%}Stakeholder{%endtrans%}</th>
-        <td><a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": operation.stakeholder.id }) }}">{{operation.stakeholder}}</a></td>
+        <td>{% if operation.stakeholder is not empty %}<a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": operation.stakeholder.id }) }}">{{operation.stakeholder}}</a>{% endif %}</td>
     </tr>
     <tr>
         <th>{%trans%}PaymentMethod{%endtrans%}</th>
