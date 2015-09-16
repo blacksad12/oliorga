@@ -20,6 +20,7 @@
         <tr>
             <th></th>
             <th>{%trans%}Account{%endtrans%}</th>
+            <th>{%trans%}Category{%endtrans%}</th>
             <th>{%trans%}Number{%endtrans%}</th>
             <th data-hide="all" >{%trans%}Iban{%endtrans%}</th>
             <th data-hide="all" data-type="numeric">{%trans%}OpenDate{%endtrans%}</th>
@@ -32,6 +33,7 @@
         <tr>
             <td></td>
             <td><a href="{{ path("finance_account_account_see", { "account_id": accountLine.account.id }) }}">{{accountLine.account}}</a></td>
+            <td>{{accountLine.account.category.className}}</td>
             <td>{{accountLine.account.number}}</td>
             <td>{{accountLine.account.iban}}</td>
             <td data-value="{{ accountLine.account.openDate|date("U") }}">{{ accountLine.account.openDate is not empty ? accountLine.account.openDate|date("Y-m-d") }}</td>
@@ -45,6 +47,7 @@
         <tr>
             <td></td>
             <td><b>Total</b></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

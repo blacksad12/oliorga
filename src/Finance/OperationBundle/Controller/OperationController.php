@@ -40,8 +40,14 @@ class OperationController extends Controller
     public function addAction(\Finance\AccountBundle\Entity\Account $account)        
     {
         $operation = new Operation($account);
-        
-        $form = $this->createForm(new OperationType(), $operation);
+        if($account->getCategory() instanceof \Finance\AccountBundle\Entity\Cash){
+            $paymentMethod = $this->getDoctrine()->getRepository('FinanceOperationBundle:PaymentMethod')->find(3); // Cash
+            $operation->setIsMarked(true);
+            $operation->setPaymentMethod($paymentMethod);
+            $form = $this->createForm(new \Finance\OperationBundle\Form\OperationCashType($operation), $operation);
+        } else {
+            $form = $this->createForm(new OperationType($operation), $operation);
+        }
 
         // ------------- Request Management ------------------------------------
         $request = $this->get('request');
