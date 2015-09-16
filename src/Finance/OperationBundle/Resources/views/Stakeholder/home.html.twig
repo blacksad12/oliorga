@@ -28,7 +28,7 @@
         <tr>
             <td></td>
             <td><a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": stakeholder.id }) }}">{{stakeholder.name}}</a></td>
-            <td><a href="{{ path("finance_operation_stakeholder_see", { "parent_id": stakeholder.parent.id }) }}">{{stakeholder.parent}}</a></td>
+            <td>{% if stakeholder.parent is not empty %}<a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": stakeholder.parent.id }) }}">{{stakeholder.parent}}</a>{% endif %}</td>
         </tr>
     {%- endfor %}
     </tbody>

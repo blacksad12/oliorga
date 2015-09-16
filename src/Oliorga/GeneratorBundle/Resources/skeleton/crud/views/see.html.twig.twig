@@ -3,7 +3,7 @@
 {{ '{% extends "::base.html.twig" %}' }}
 
 {{ '{% block title %}' }}
-{{ '{{'~entity|lower~'}} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
+{{ '{{'~entity|lower~'}} - {%trans%}'~entity~'{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
 {{ '{% endblock %}' }}
 
 {{ '{% block body -%}' }}
@@ -42,11 +42,12 @@
     {%- endfor %}
 
     {%- for field, metadata in fields.association %}
-
+    {% if metadata.nullable == 'yes' %}{{ '{% if '~entity|lower~'.'~field~' is not empty %}' }}{% endif %}
     <tr>
         <th>{{ '{%trans%}' }}{{ field[:1]|capitalize~field[1:] }}{{ '{%endtrans%}' }}</th>
         <td><a href="{{ '{{ path("'~metadata.route_name_prefix~'see", { "'~field~'_id": '~entity|lower~'.'~field~'.id }) }}' }}">{{ '{{'~entity|lower~'.'~field~'}}' }}</a></td>
     </tr>
+    {% if metadata.nullable == 'yes' %}{{ '{% endif %}' }}{% endif %}
 
     {%- endfor %}
 

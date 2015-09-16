@@ -1,0 +1,66 @@
+{# /src/Finance/OperationBundle/Resources/views/RecurrentOperation/see.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{{recurrentOperation}} - {%trans%}Recurrent Operation{%endtrans%} - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}Recurrent Operation{%endtrans%} {{recurrentOperation}}</h1>
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------- Sub nav ---------------------------------- #}
+{% include '::confirmDelete.html.twig' %}
+{#<div class="nav subnav">    
+    {% set seeMenu = knp_menu_get( 'FinanceOperationBundle:BuilderOperation:seeMenu' , [], {'operation': operation}) %} 
+    {{ mopa_bootstrap_menu(seeMenu, {'automenu': 'pills', 'stacked':false}) }}
+</div>#}
+{% embed '::seeMenu.html.twig' with {
+    routePrefix:    'finance_operation_recurrentoperation_',
+    entityId:       'recurrentOperation_id',
+    entity:         recurrentOperation
+} %}
+    {% block menuItemHome %}{% endblock %}
+    {% block menuItemAdd %}<li><a href="{{ path('finance_operation_recurrentoperation_add', { "account_id": recurrentOperation.account.id }) }}"><span class="glyphicon glyphicon-plus"></span> {%trans%}Add{%endtrans%}</a></li>{%endblock%}
+{% endembed %}
+
+
+{# -------------------------------------------------------------------------- #}
+{# ------------------------------ Operation info -------------------------------- #}
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>{%trans%}Recurrence Day{%endtrans%}</th>
+        <td>{{recurrentOperation.recurrenceDay}}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Amount{%endtrans%}</th>
+        <td>{% include '::amountFormatting.html.twig' with {amount : recurrentOperation.amount} %}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Comment{%endtrans%}</th>
+        <td>{{recurrentOperation.comment}}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Account{%endtrans%}</th>
+        <td><a href="{{ path("finance_account_account_see", { "account_id": recurrentOperation.account.id }) }}">{{recurrentOperation.account}}</a></td>
+    </tr>
+    <tr>
+        <th>{%trans%}Category{%endtrans%}</th>
+        <td><a href="{{ path("finance_operation_category_see", { "category_id": recurrentOperation.category.id }) }}">{{recurrentOperation.category}}</a></td>
+    </tr>
+    <tr>
+        <th>{%trans%}Imputation{%endtrans%}</th>
+        <td>{% if recurrentOperation.imputation is not empty %}<a href="{{ path("finance_operation_imputation_see", { "imputation_id": recurrentOperation.imputation.id }) }}">{{recurrentOperation.imputation}}</a>{% endif %}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Stakeholder{%endtrans%}</th>
+        <td>{% if recurrentOperation.stakeholder is not empty %}<a href="{{ path("finance_operation_stakeholder_see", { "stakeholder_id": recurrentOperation.stakeholder.id }) }}">{{recurrentOperation.stakeholder}}</a>{% endif %}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}PaymentMethod{%endtrans%}</th>
+        <td>{{recurrentOperation.paymentMethod}}</td>
+    </tr>
+</table>
+
+{% endblock %}

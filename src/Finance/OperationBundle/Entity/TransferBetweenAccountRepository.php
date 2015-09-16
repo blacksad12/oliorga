@@ -3,6 +3,7 @@
 namespace Finance\OperationBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * TransferBetweenAccountRepository
@@ -12,4 +13,114 @@ use Doctrine\ORM\EntityRepository;
  */
 class TransferBetweenAccountRepository extends EntityRepository
 {
+    /** ************************************************************************
+     * Get all the operations which match the criteria in $parameters
+     * @param array $parameters
+     * @return Operation[]
+     **************************************************************************/
+    public function getOperations(array $parameters) {
+        $this->checkParameters($parameters);
+        
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        
+        $qb->select('t');
+        $qb->from('FinanceOperationBundle:TransferBetweenAccount','t');        
+        
+        $this->filterBySourceAccount($qb, $parameters);
+        $this->filterByDestinationAccount($qb, $parameters);
+        $this->filterByDate($qb, $parameters);
+        $this->filterByMarked($qb, $parameters);
+        $this->filterByMonthlyRecurrent($qb, $parameters);
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    /** ************************************************************************
+     * Check if all the parameters are recognized by the class
+     * 
+     * @param array $parameters
+     * @throws \InvalidArgumentException
+     **************************************************************************/
+    protected function checkParameters(array $parameters) {
+        foreach($parameters as $parameterKey=>$parameterValue){
+            if(     $parameterKey == 'sourceAccount'        && $parameterValue instanceof \Finance\AccountBundle\Entity\Account){}
+            elseif( $parameterKey == 'destinationAccount'   && $parameterValue instanceof \Finance\AccountBundle\Entity\Account){}
+            elseif( $parameterKey == 'before'               && $parameterValue instanceof \DateTime){}
+            elseif( $parameterKey == 'after'                && $parameterValue instanceof \DateTime){}
+            elseif( $parameterKey == 'isMarked'             && is_bool($parameterValue)){}
+            elseif( $parameterKey == 'isMonthlyRecurrent'   && is_bool($parameterValue)){}
+            else{
+                throw new \InvalidArgumentException("The parameter with key: '".$parameterKey."' is not valid");
+            }
+        }
+    }
+    
+    /** ************************************************************************
+     * Filter by SourceAccount
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterBySourceAccount(QueryBuilder $qb, array $parameters) {
+        if(isset($parameters['sourceAccount'])) {
+            $qb->andWhere($qb->expr()->eq('t.sourceAccount', ':sourceAccount'));
+            $qb->setParameter('sourceAccount', $parameters['sourceAccount']);
+        }
+    }
+    
+    /** ************************************************************************
+     * Filter by DestinationAccount
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByDestinationAccount(QueryBuilder $qb, array $parameters) {
+        if(isset($parameters['destinationAccount'])) {
+            $qb->andWhere($qb->expr()->eq('t.destinationAccount', ':destinationAccount'));
+            $qb->setParameter('destinationAccount', $parameters['destinationAccount']);
+        }
+    }
+    
+    /** ************************************************************************
+     * Filter the result which are after startDate and/or before endDate
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByDate(QueryBuilder $qb, array $parameters) {
+        if(isset($parameters['after'])) {
+            $qb->andWhere($qb->expr()->gte('t.date', ':after'));
+            $qb->setParameter('after', $parameters['after']);
+        }
+        
+        if(isset($parameters['before'])) {
+            $qb->andWhere($qb->expr()->lte('t.date', ':before'));
+            $qb->setParameter('before', $parameters['before']);
+        }
+    }
+    
+    /** ************************************************************************
+     * Filter the result which are pointé or not pointé
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByMarked(QueryBuilder $qb, array $parameters) {
+        if(isset($parameters['isMarked'])) {
+            $qb->andWhere($qb->expr()->eq('t.isMarked', ':isMarked'));
+            $qb->setParameter('isMarked', $parameters['isMarked']);
+        }         
+    }
+    
+    /** ************************************************************************
+     * Filter the result which are monthly recurrent or not
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByMonthlyRecurrent(QueryBuilder $qb, array $parameters) {
+        $qb->andWhere($qb->expr()->eq('t.isMonthlyRecurrent', ':isMonthlyRecurrent'));
+        if(isset($parameters['isMonthlyRecurrent'])) {
+            $qb->setParameter('isMonthlyRecurrent', $parameters['isMonthlyRecurrent']);
+        } else {
+            $qb->setParameter('isMonthlyRecurrent', false);
+        }
+    }
+    
 }

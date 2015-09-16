@@ -72,6 +72,7 @@ class Operation extends AbstractOperation
     //                             Constructor
     ////////////////////////////////////////////////////////////////////////////
     public function __construct(\Finance\AccountBundle\Entity\Account $account=null) {
+        parent::__construct();
         $this->account = $account;
     }
 

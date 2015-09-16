@@ -3,7 +3,7 @@
 {{ '{% extends "::base.html.twig" %}' }}
 
 {{ '{% block title %}' }}
-{{ '{%trans%}Home{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
+{{ '{%trans%}Home{%endtrans%} - {%trans%}'~entity~'{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
 {{ '{% endblock %}' }}
 
 {{ '{% block body -%}' }}

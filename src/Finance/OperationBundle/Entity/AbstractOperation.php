@@ -52,6 +52,29 @@ abstract class AbstractOperation
      */
     private $isMarked;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isMonthlyRecurrent", type="boolean", nullable=true)
+     */
+    private $isMonthlyRecurrent;
+    
+    /**
+     * Day of month when the AbstractOperation is done, if $isMonthlyRecurrent is true
+     * @var integer
+     *
+     * @ORM\Column(name="recurrenceDay", type="integer", nullable=true)
+     */
+    private $recurrenceDay;
+
+    /**************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Constructor
+    ////////////////////////////////////////////////////////////////////////////
+    public function __construct() {
+        $this->isMonthlyRecurrent = false;
+    }
+
     /**************************************************************************/
     ////////////////////////////////////////////////////////////////////////////
     //                             To String
@@ -138,5 +161,51 @@ abstract class AbstractOperation
      */
     public function getIsMarked() {
         return $this->isMarked;
+    }
+
+    /**
+     * Set isMonthlyRecurrent
+     *
+     * @param boolean $isMonthlyRecurrent
+     * @return AbstractOperation
+     */
+    public function setIsMonthlyRecurrent($isMonthlyRecurrent)
+    {
+        $this->isMonthlyRecurrent = $isMonthlyRecurrent;
+
+        return $this;
+    }
+
+    /**
+     * Get isMonthlyRecurrent
+     *
+     * @return boolean 
+     */
+    public function getIsMonthlyRecurrent()
+    {
+        return $this->isMonthlyRecurrent;
+    }
+
+    /**
+     * Set recurrenceDay
+     *
+     * @param integer $recurrenceDay
+     * @return AbstractOperation
+     */
+    public function setRecurrenceDay($recurrenceDay)
+    {
+        $this->recurrenceDay = $recurrenceDay;
+
+        return $this;
+    }
+
+    /**
+     * Get recurrenceDay
+     *
+     * @return integer 
+     */
+    public function getRecurrenceDay()
+    {
+        return $this->recurrenceDay;
     }
 }

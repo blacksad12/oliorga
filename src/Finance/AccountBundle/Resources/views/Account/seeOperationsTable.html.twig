@@ -1,0 +1,153 @@
+{# /src/Finance/AccountBundle/Resources/views/Account/seeOperationsTable.html.twig #}
+
+{% if abstractOperations.operations|length>0 or abstractOperations.incomeTransfers|length>0 or abstractOperations.outcomeTransfers|length>0 %}
+{# -------------------------------------------------------------------------- #}
+{# ---------------------------- Operations info ----------------------------- #}
+<table class="table footable table-striped table-bordered table-condensed"
+        data-page-navigation="#pagination" 
+        data-page-size="50">
+     <thead>
+         <tr>
+             <th data-sort-initial="descending">{%trans%}Date{%endtrans%}</th>
+             <th>{%trans%}Debit{%endtrans%}</th>
+             <th>{%trans%}Credit{%endtrans%}</th>
+             <th>{%trans%}Category{%endtrans%}</th>
+             <th>{%trans%}Imputation{%endtrans%}</th>
+             <th>{%trans%}Stakeholder{%endtrans%}</th>
+             <th>{%trans%}Comment{%endtrans%}</th>
+             <th>{%trans%}Marked{%endtrans%}</th>                
+             <th>{%trans%}Actions{%endtrans%}</th>
+         </tr>
+     </thead>
+     <tbody>
+     {% for operation in abstractOperations.operations %}
+         <tr id="{{ operation.id}}">
+             <td data-value="{{operation.date|date('U')}}" >{% if operation.date %}{{ operation.date|date('d/m/Y') }}{% endif %}</td>
+             <td align='right'>{% if operation.amount < 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
+             <td align='right'>{% if operation.amount > 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
+             <td>{% if operation.category is not empty %}
+                 <a href="{{ path('finance_operation_category_see', { 'category_id': operation.category.id }) }}">{{ operation.category}}</a>
+                 {% endif %}
+             </td>
+             <td>{% if operation.imputation is not empty %}
+                 <a href="{{ path('finance_operation_imputation_see', { 'imputation_id': operation.imputation.id }) }}">{{ operation.imputation}}</a>
+                 {% endif %}
+             </td>
+             <td>{% if operation.stakeholder is not empty %}
+                 <a href="{{ path('finance_operation_stakeholder_see', { 'stakeholder_id': operation.stakeholder.id }) }}">{{ operation.stakeholder}}</a>
+                 {% endif %}
+             </td>
+             <td>{{ operation.comment }}</td>
+             <td class="td-mark">{{ operation.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_operation_see', { 'operation_id': operation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_operation_modify', { 'operation_id': operation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a href="{{ path('finance_operation_operation_duplicate', { 'oldOperation_id': operation.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
+             </td>
+         </tr>
+     {% endfor %}
+     {% for recurrentOperation in abstractOperations.recurrentOperations %}
+         {% set date = beginningOfMonth|date_modify("+"~(recurrentOperation.recurrenceDay-1)~" day") %}
+         
+         <tr id="{{ recurrentOperation.id}}">
+             <td data-value="{{date|date('U')}}" >{{ date|date('d/m/Y') }}</td>
+             <td align='right'>{% if recurrentOperation.amount < 0 %}{%include '::amountFormatting.html.twig' with { amount: recurrentOperation.amount} %}{%endif%}</td>
+             <td align='right'>{% if recurrentOperation.amount > 0 %}{%include '::amountFormatting.html.twig' with { amount: recurrentOperation.amount} %}{%endif%}</td>
+             <td>{% if recurrentOperation.category is not empty %}
+                 <a href="{{ path('finance_operation_category_see', { 'category_id': recurrentOperation.category.id }) }}">{{ recurrentOperation.category}}</a>
+                 {% endif %}
+             </td>
+             <td>{% if recurrentOperation.imputation is not empty %}
+                 <a href="{{ path('finance_operation_imputation_see', { 'imputation_id': recurrentOperation.imputation.id }) }}">{{ recurrentOperation.imputation}}</a>
+                 {% endif %}
+             </td>
+             <td>{% if recurrentOperation.stakeholder is not empty %}
+                 <a href="{{ path('finance_operation_stakeholder_see', { 'stakeholder_id': recurrentOperation.stakeholder.id }) }}">{{ recurrentOperation.stakeholder}}</a>
+                 {% endif %}
+             </td>
+             <td>{{ recurrentOperation.comment }}</td>
+             <td class="td-mark">{{ recurrentOperation.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_recurrentoperation_see', { 'recurrentOperation_id': recurrentOperation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_recurrentoperation_modify', { 'recurrentOperation_id': recurrentOperation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
+             </td>
+         </tr>
+     {% endfor %}
+     {% for incomeTransfer in abstractOperations.incomeTransfers %}
+         <tr id="{{ incomeTransfer.id}}">
+             <td data-value="{{incomeTransfer.date|date('U')}}">{% if incomeTransfer.date %}{{ incomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
+             <td align='right'></td>
+             <td align='right'>{% include '::amountFormatting.html.twig' with { amount: incomeTransfer.amount} %}</td>
+             <td>{%trans%}TransferBetweenAccount{%endtrans%}</td>
+             <td></td>
+             <td></td>
+             <td>Depuis <a href="{{ path('finance_account_account_see', { 'account_id': incomeTransfer.sourceAccount.id }) }}">{{ incomeTransfer.sourceAccount }}</a></td>
+             <td>{{ incomeTransfer.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferBetweenAccount_id': incomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferBetweenAccount_id': incomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_duplicate', { 'oldTransferBetweenAccount_id': incomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>        
+             </td>                
+         </tr>
+     {% endfor %}
+     {% for outcomeTransfer in abstractOperations.outcomeTransfers %}
+         <tr id="{{ outcomeTransfer.id}}">
+             <td data-value="{{outcomeTransfer.date|date('U')}}">{% if outcomeTransfer.date %}{{ outcomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
+             <td align='right'>-{% include '::amountFormatting.html.twig' with { amount: outcomeTransfer.amount} %}</td>
+             <td align='right'></td>
+             <td>{%trans%}TransferBetweenAccount{%endtrans%}</td>
+             <td></td>
+             <td></td>
+             <td>Vers <a href="{{ path('finance_account_account_see', { 'account_id': outcomeTransfer.destinationAccount.id }) }}">{{ outcomeTransfer.destinationAccount }}</a></td>
+             <td>{{ outcomeTransfer.isMarked ? 'P'}}</td>
+             <td>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferBetweenAccount_id': outcomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferBetweenAccount_id': outcomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
+                 <a href="{{ path('finance_operation_transferbetweenaccount_duplicate', { 'oldTransferBetweenAccount_id': outcomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
+                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
+             </td>
+         </tr>
+     {% endfor %}
+     </tbody>
+     {# Pagination #}
+     <tfoot class="hide-if-no-paging">
+         <tr>
+             <td colspan="10">
+                 <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
+             </td>
+         </tr>
+     </tfoot>
+ </table>
+        
+<script>
+    $(document).ready(Mark_OnReady);
+    function Mark_OnReady(){
+        $( ".toggle-mark-link" ).click(function( event ) {
+            event.stopImmediatePropagation();
+            Mark_OnClick($(this).closest('tr').attr('id'));
+        });
+    }
+    function Mark_OnClick(abstractOperationId){
+        var data = 'abstractOperationId=' + abstractOperationId;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('finance_operation_abstractoperation_togglemark')}}",
+            data: data,
+            cache: false,
+            success: Mark_OnSuccess,
+            error: function(){alert('Error. Mark not changed');}
+        }); 
+        return false;
+    }        
+    function Mark_OnSuccess(data){
+        var content = data.isMarked === true ? 'P' : '';
+        $("tr#"+data.abstractOperationId).find('.td-mark').html(content);       
+    }
+</script>
+
+{% else %}
+    <p>{%trans%}No operations{%endtrans%}
+{% endif %}

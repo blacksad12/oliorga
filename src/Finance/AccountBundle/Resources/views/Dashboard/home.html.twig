@@ -10,6 +10,14 @@
 <h1>{%trans%}Dashboard{%endtrans%}</h1>
 <hr>
 
+{% for user in users %}
+<h2>{{user.person}}</h2>
+<p>
+  <a href="{{path('finance_operation_category_distribution', {'user_id': user.id})}}" role="button" class="btn btn-primary btn-lg">Categories' distribution</a>
+  <a href="{{path('finance_account_dashboard_seesavingsforuser', {'user_id': user.id})}}" role="button" class="btn btn-primary btn-lg">Savings evolution</a>
+</p>
+{% endfor %}
+<h2>{%trans%}All{%endtrans%}</h2>
 <p>
   <a href="{{path('finance_operation_category_distribution')}}" role="button" class="btn btn-primary btn-lg">Categories' distribution</a>
   <a href="{{path('finance_account_dashboard_seesavings')}}" role="button" class="btn btn-primary btn-lg">Savings evolution</a>

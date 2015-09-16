@@ -33,21 +33,33 @@
 {# ------------------------------ Account info -------------------------------- #}
 <table class="table table-hover table-condensed">
     <tr>
+        <th>{%trans%}Owner{%endtrans%}</th>
+        <td>{{account.owner.person}}</td>
+    </tr>
+    {% if account.number is not null %}
+    <tr>
         <th>{%trans%}Number{%endtrans%}</th>
         <td>{{account.number}}</td>
     </tr>
+    {% endif %}
+    {% if account.iban is not null %}
     <tr>
         <th>{%trans%}Iban{%endtrans%}</th>
         <td>{{account.iban}}</td>
     </tr>
+    {% endif %}
+    {% if account.openDate is not null %}
     <tr>
         <th>{%trans%}OpenDate{%endtrans%}</th>
         <td>{{ account.openDate is not empty ? account.openDate|date("Y-m-d") }}</td>
     </tr>
+    {% endif %}
+    {% if account.closeDate is not null %}
     <tr>
         <th>{%trans%}CloseDate{%endtrans%}</th>
         <td>{{ account.closeDate is not empty ? account.closeDate|date("Y-m-d") }}</td>
     </tr>
+    {% endif %}
     <tr>
         <th>{%trans%}Category{%endtrans%}</th>
         <td>{#<a href="{{ path("finance_account_category_see", { "category_id": account.category.id }) }}">#}{{account.category}}{#</a>#}</td>
@@ -57,134 +69,93 @@
         <td>{#<a href="{{ path("finance_institution_institution_see", { "institution_id": account.institution.id }) }}">#}{{account.institution}}{#</a>#}</td>
     </tr>
     <tr>
-        <th>{%trans%}Balance{%endtrans%}</th>
-        <td>{% include '::amountFormatting.html.twig' with {amount : balance} %}</td>
+        <th>{%trans%}Current balance{%endtrans%}</th>
+        <td>{% include '::amountFormatting.html.twig' with {amount : balances.today} %}</td>
     </tr>
     <tr>
         <th>{%trans%}Marked balance{%endtrans%}</th>
-        <td>{% include '::amountFormatting.html.twig' with {amount : markedBalance} %}</td>
+        <td>{% include '::amountFormatting.html.twig' with {amount : balances.marked} %}</td>
     </tr>
+    <tr>
+        <th>{%trans%}Balance end of this month{%endtrans%}</th>
+        <td>{% include '::amountFormatting.html.twig' with {amount : balances.thisMonth} %}</td>
+    </tr>
+    <tr>
+        <th>{%trans%}Balance end of next month{%endtrans%}</th>
+        <td>{% include '::amountFormatting.html.twig' with {amount : balances.nextMonth} %}</td>
+    </tr>
+    
 </table>
     
-{# -------------------------------------------------------------------------- #}
-{# ------------------------------ Operations info -------------------------------- #}
-<table class="table footable table-striped table-bordered table-condensed"
-        data-page-navigation="#pagination" 
-        data-page-size="50">
-     <thead>
-         <tr>
-             <th data-sort-initial="descending">{%trans%}Date{%endtrans%}</th>
-             <th>{%trans%}Debit{%endtrans%}</th>
-             <th>{%trans%}Credit{%endtrans%}</th>
-             <th>{%trans%}Category{%endtrans%}</th>
-             <th>{%trans%}Imputation{%endtrans%}</th>
-             <th>{%trans%}Stakeholder{%endtrans%}</th>
-             <th>{%trans%}Comment{%endtrans%}</th>
-             <th>{%trans%}Marked{%endtrans%}</th>                
-             <th>{%trans%}Actions{%endtrans%}</th>
-         </tr>
-     </thead>
-     <tbody>
-     {% for operation in operations %}
-         <tr id="{{ operation.id}}">
-             <td data-value="{{operation.date|date('U')}}" >{% if operation.date %}{{ operation.date|date('d/m/Y') }}{% endif %}</td>
-             <td align='right'>{% if operation.amount < 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
-             <td align='right'>{% if operation.amount > 0 %}{%include '::amountFormatting.html.twig' with { amount: operation.amount} %}{%endif%}</td>
-             <td>{% if operation.category is not empty %}
-                 <a href="{{ path('finance_operation_category_see', { 'category_id': operation.category.id }) }}">{{ operation.category}}</a>
-                 {% endif %}
-             </td>
-             <td>{% if operation.imputation is not empty %}
-                 <a href="{{ path('finance_operation_imputation_see', { 'imputation_id': operation.imputation.id }) }}">{{ operation.imputation}}</a>
-                 {% endif %}
-             </td>
-             <td>{% if operation.stakeholder is not empty %}
-                 <a href="{{ path('finance_operation_stakeholder_see', { 'stakeholder_id': operation.stakeholder.id }) }}">{{ operation.stakeholder}}</a>
-                 {% endif %}
-             </td>
-             <td>{{ operation.comment }}</td>
-             <td class="td-mark">{{ operation.isMarked ? 'P'}}</td>
-             <td>
-                 <a href="{{ path('finance_operation_operation_see', { 'operation_id': operation.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-                 <a href="{{ path('finance_operation_operation_modify', { 'operation_id': operation.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
-                 <a href="{{ path('finance_operation_operation_duplicate', { 'oldOperation_id': operation.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
-                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
-             </td>
-         </tr>
-     {% endfor %}
-     {% for incomeTransfer in incomeTransfers %}
-         <tr id="{{ incomeTransfer.id}}">
-             <td data-value="{{incomeTransfer.date|date('U')}}">{% if incomeTransfer.date %}{{ incomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
-             <td align='right'></td>
-             <td align='right'>{% include '::amountFormatting.html.twig' with { amount: incomeTransfer.amount} %}</td>
-             <td>{%trans%}TransferBetweenAccount{%endtrans%}</td>
-             <td></td>
-             <td></td>
-             <td>Depuis <a href="{{ path('finance_account_account_see', { 'account_id': incomeTransfer.sourceAccount.id }) }}">{{ incomeTransfer.sourceAccount }}</a></td>
-             <td>{{ incomeTransfer.isMarked ? 'P'}}</td>
-             <td>
-                 <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferBetweenAccount_id': incomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-                 <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferBetweenAccount_id': incomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
-                 <a href="{{ path('finance_operation_transferbetweenaccount_duplicate', { 'oldTransferBetweenAccount_id': incomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
-                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>        
-             </td>                
-         </tr>
-     {% endfor %}
-     {% for outcomeTransfer in outcomeTransfers %}
-         <tr id="{{ outcomeTransfer.id}}">
-             <td data-value="{{outcomeTransfer.date|date('U')}}">{% if outcomeTransfer.date %}{{ outcomeTransfer.date|date('d/m/Y') }}{% endif %}</td>
-             <td align='right'>-{% include '::amountFormatting.html.twig' with { amount: outcomeTransfer.amount} %}</td>
-             <td align='right'></td>
-             <td>{%trans%}TransferBetweenAccount{%endtrans%}</td>
-             <td></td>
-             <td></td>
-             <td>Vers <a href="{{ path('finance_account_account_see', { 'account_id': outcomeTransfer.destinationAccount.id }) }}">{{ outcomeTransfer.destinationAccount }}</a></td>
-             <td>{{ outcomeTransfer.isMarked ? 'P'}}</td>
-             <td>
-                 <a href="{{ path('finance_operation_transferbetweenaccount_see', { 'transferBetweenAccount_id': outcomeTransfer.id }) }}" title="Voir"><span class="glyphicon glyphicon-eye-open"></span></a>
-                 <a href="{{ path('finance_operation_transferbetweenaccount_modify', { 'transferBetweenAccount_id': outcomeTransfer.id }) }}" title="Editer"><span class="glyphicon glyphicon-edit"></span></a>
-                 <a href="{{ path('finance_operation_transferbetweenaccount_duplicate', { 'oldTransferBetweenAccount_id': outcomeTransfer.id }) }}" title="Dupliquer"><span class="glyphicon glyphicon-repeat"></span></a>
-                 <a style="cursor: pointer;" class="toggle-mark-link"><span class="glyphicon glyphicon-ok"></span></a>
-             </td>
-         </tr>
-     {% endfor %}
-     </tbody>
-     {# Pagination #}
-     <tfoot class="hide-if-no-paging">
-         <tr>
-             <td colspan="10">
-                 <div class="text-center"><ul id="pagination" class="pagination pagination-centered"></ul></div>
-             </td>
-         </tr>
-     </tfoot>
- </table>
-        
-<script>
-    $(document).ready(Mark_OnReady);
-    function Mark_OnReady(){
-        $( ".toggle-mark-link" ).click(function( event ) {
-            event.stopImmediatePropagation();
-            Mark_OnClick($(this).closest('tr').attr('id'));
+
+<div id='operationsTableContainer'>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+    {% for i in 5..1 %}   
+        {% set date = "now"|date_modify("-"~i~" month") %}
+        <li role="presentation"><a href="#{{ date|date("Y-m") }}" aria-controls="{{ date|date("Y-m") }}" role="tab" data-toggle="tab">{{ date|date("F Y") }}</a></li>         
+    {% endfor %}
+        <li role="presentation" class="active"><a href="#{{ "now"|date("Y-m") }}" aria-controls="{{ "now"|date("Y-m") }}" role="tab" data-toggle="tab">{{ "now"|date("F Y") }}</a></li>
+    {% for i in 1..2 %}
+        {% set date = "now"|date_modify("+"~i~" month") %}
+        <li role="presentation"><a href="#{{ date|date("Y-m") }}" aria-controls="{{ date|date("Y-m") }}" role="tab" data-toggle="tab">{{ date|date("F Y") }}</a></li>         
+    {% endfor %}
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+    {% for i in 5..1 %}   
+        {% set date = "now"|date_modify("-"~i~" month") %}
+        <div role="tabpanel" class="tab-pane" id="{{ date|date("Y-m") }}">...</div>
+    {% endfor %}
+        <div role="tabpanel" class="tab-pane active success" id="{{ "now"|date("Y-m") }}"></div>
+    {% for i in 1..2 %}   
+        {% set date = "now"|date_modify("+"~i~" month") %}
+        <div role="tabpanel" class="tab-pane" id="{{ date|date("Y-m") }}">...</div>
+    {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}
+
+    
+{% block javascripts %}
+{{parent()}}
+
+<script type="text/javascript">
+    $(document).ready(OnReady);
+    var loadedTabId = [];
+    function OnReady(){
+        var activeTab = $("#operationsTableContainer").find('.tab-content').find('.active');
+        LoadOperations(activeTab);
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var activeTab = $("#operationsTableContainer").find('.tab-content').find($(this).attr('href'));
+            LoadOperations(activeTab); 
         });
     }
-    function Mark_OnClick(abstractOperationId){
-        var data = 'abstractOperationId=' + abstractOperationId;
+    function LoadOperations($activeTab){
+        var data = {};
+        data['accountId'] = {{account.id}};
+        var dateArray = $activeTab.attr('id').split("-");
+        data['month'] = dateArray[1];     
+        data['year'] = dateArray[0];     
         $.ajax({
             type: "POST",
-            url: "{{ path('finance_operation_abstractoperation_togglemark')}}",
+            url: "{{ path('finance_account_account_displayoperationsofmonth') }}",
             data: data,
             cache: false,
-            success: Mark_OnSuccess,
-            error: function(){alert('Error. Mark not changed');}
+            success: function(htmlTable) {
+                DisplayOperationsTable(htmlTable, $activeTab);
+            }
         }); 
         return false;
     }        
-    function Mark_OnSuccess(data){
-        var content = data.isMarked === true ? 'P' : '';
-        $("tr#"+data.abstractOperationId).find('.td-mark').html(content);       
+    function DisplayOperationsTable($htmlTable, $activeTab){
+        $activeTab.html($htmlTable);
+        $('.footable').footable();
     }
 </script>
-            
-            
-
+        
+    
 {% endblock %}

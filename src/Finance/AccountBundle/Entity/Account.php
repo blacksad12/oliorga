@@ -36,7 +36,7 @@ class Account
      * 
      * Note : Proprietary side
      * @ORM\ManyToOne(targetEntity="Finance\InstitutionBundle\Entity\Institution", inversedBy="accounts", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $institution;
 
@@ -90,6 +90,15 @@ class Account
      * @ORM\OneToMany(targetEntity="Finance\OperationBundle\Entity\TransferBetweenAccount", mappedBy="destinationAccount", cascade={"persist"})
      */
     private $incomeTransfers;
+    
+    /**
+     * @var Oliorga\AppBundle\Entity\User
+     * 
+     * Note : Proprietary side
+     * @ORM\ManyToOne(targetEntity="Oliorga\AppBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $owner;
 
     /**************************************************************************/
     ////////////////////////////////////////////////////////////////////////////
@@ -105,7 +114,7 @@ class Account
     //                             To String
     ////////////////////////////////////////////////////////////////////////////
     public function __toString() {
-        return $this->getCategory().' '.$this->getInstitution();
+        return $this->getCategory().' '.$this->getInstitution().' ('.$this->getOwner()->getPerson()->getName().')';
     }
     
     /**************************************************************************/
@@ -227,7 +236,7 @@ class Account
      * @param \Finance\InstitutionBundle\Entity\Institution $institution
      * @return Account
      */
-    public function setInstitution(\Finance\InstitutionBundle\Entity\Institution $institution)
+    public function setInstitution(\Finance\InstitutionBundle\Entity\Institution $institution = NULL)
     {
         $this->institution = $institution;
 
@@ -341,5 +350,28 @@ class Account
     public function getOperations()
     {
         return $this->operations;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param \Oliorga\AppBundle\Entity\User $owner
+     * @return Account
+     */
+    public function setOwner(\Oliorga\AppBundle\Entity\User $owner = NULL)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \Oliorga\AppBundle\Entity\User 
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }

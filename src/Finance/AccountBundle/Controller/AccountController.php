@@ -78,16 +78,27 @@ class AccountController extends Controller
     public function seeAction(Account $account)
     {
         $em = $this->getDoctrine()->getManager();
-        $operations         = $em->getRepository('FinanceOperationBundle:Operation')->findByAccount($account);
-        $incomeTransfers    = $em->getRepository('FinanceOperationBundle:TransferBetweenAccount')->findByDestinationAccount($account);
-        $outcomeTransfers   = $em->getRepository('FinanceOperationBundle:TransferBetweenAccount')->findBySourceAccount($account);
+        $now = new \DateTime();
+        $operations         = $em->getRepository('FinanceOperationBundle:Operation')->getOperations(array('account' => $account, 'before' => $now));
+        $incomeTransfers    = $em->getRepository('FinanceOperationBundle:TransferBetweenAccount')->getOperations(array('destinationAccount' => $account, 'before' => $now));
+        $outcomeTransfers   = $em->getRepository('FinanceOperationBundle:TransferBetweenAccount')->getOperations(array('sourceAccount' => $account, 'before' => $now));
         
-        $balance = $em->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array(
+        $balances = array();
+        $balances['today'] = $em->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array(
             'account'   => $account,
+            'before'    => $now,
             ));
-        $markedBalance = $em->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array(
+        $balances['marked'] = $em->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array(
             'account'   => $account,
             'isMarked'  => true,
+            ));
+        $balances['thisMonth'] = $em->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array(
+            'account'   => $account,
+            'before'    => $now->modify("last day of this month"),
+            ));
+        $balances['nextMonth'] = $em->getRepository('FinanceOperationBundle:AbstractOperation')->getBalance(array(
+            'account'   => $account,
+            'before'    => $now->modify("last day of next month"),
             ));
         
         return $this->render('FinanceAccountBundle:Account:see.html.twig', array(
@@ -95,8 +106,7 @@ class AccountController extends Controller
             'operations'        => $operations,
             'incomeTransfers'   => $incomeTransfers,
             'outcomeTransfers'  => $outcomeTransfers,
-            'balance'           => $balance,
-            'markedBalance'     => $markedBalance,
+            'balances'          => $balances,
           ));
     }
     
@@ -151,5 +161,34 @@ class AccountController extends Controller
             throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException;
         }
     }
+    
+    /** ************************************************************************
+     * 
+     * @Route("/displayoperationsofmonth")
+     **************************************************************************/
+    public function displayOperationsOfMonthAction()        
+    {
+        $em                 = $this->getDoctrine()->getManager();
+        $request            = $this->get('request');
+        $account            = $this->getDoctrine()->getRepository('FinanceAccountBundle:Account')->find($request->request->get('accountId'));
+        
+        $beginningOfMonth   = \DateTime::createFromFormat('Y-m-d', $request->get('year').'-'.$request->get('month').'-01');
+        $endOfMonth         = clone $beginningOfMonth;
+        $endOfMonth->modify('last day of this month');
+        
+        $abstractOperations = array();
+        $abstractOperations['operations']       = $em->getRepository('FinanceOperationBundle:Operation')->getOperations(array('account' => $account, 'before' => $endOfMonth, 'after' => $beginningOfMonth));
+        $abstractOperations['incomeTransfers']  = $em->getRepository('FinanceOperationBundle:TransferBetweenAccount')->getOperations(array('destinationAccount' => $account, 'before' => $endOfMonth, 'after' => $beginningOfMonth));
+        $abstractOperations['outcomeTransfers'] = $em->getRepository('FinanceOperationBundle:TransferBetweenAccount')->getOperations(array('sourceAccount' => $account, 'before' => $endOfMonth, 'after' => $beginningOfMonth));
+        $abstractOperations['recurrentOperations'] = $em->getRepository('FinanceOperationBundle:Operation')->getOperations(array('account' => $account, 'isMonthlyRecurrent' => true));
+        
+        return $this->render('FinanceAccountBundle:Account:seeOperationsTable.html.twig', array(
+            'beginningOfMonth'      => $beginningOfMonth,
+            'endOfMonth'            => $endOfMonth,
+            'abstractOperations'    => $abstractOperations,
+        ));
+    }
+    
+    
     
 }

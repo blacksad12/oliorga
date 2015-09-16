@@ -1,0 +1,15 @@
+{# /src/Finance/OperationBundle/Resources/views/RecurrentOperation/add.html.twig #}
+
+{% extends "::base.html.twig" %}
+
+{% block title %}
+{%trans%}New Recurrent Operation{%endtrans%} - {%trans%}Recurrent Operation{%endtrans%} - {%trans%}Operation{%endtrans%} - Finance - {{ parent() }}
+{% endblock %}
+
+{% block body -%}
+<h1>{%trans%}New Recurrent Operation{%endtrans%} 
+    <small>({%trans%}for account{%endtrans%} <a href="{{ path('finance_account_account_see', { 'account_id': account.id }) }}">{{account}}</a>)</small></h1>
+
+{% include '::form_default.html.twig' %}
+
+{% endblock %}

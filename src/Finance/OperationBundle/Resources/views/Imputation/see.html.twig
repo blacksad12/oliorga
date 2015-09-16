@@ -3,7 +3,7 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-{{imputation}} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{{imputation}} - {%trans%}Imputation{%endtrans%} - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
@@ -27,22 +27,43 @@
 {# -------------------------------------------------------------------------- #}
 {# ------------------------------ Imputation info -------------------------------- #}
 <table class="table table-hover table-condensed">
-    <tr>
-        <th>{%trans%}Name{%endtrans%}</th>
-        <td>{{imputation.name}}</td>
-    </tr>
+    {% if imputation.startDate is not empty %}
     <tr>
         <th>{%trans%}StartDate{%endtrans%}</th>
-        <td>{{ imputation.startDate is not empty ? imputation.startDate|date("Y-m-d") }}</td>
+        <td>{{ imputation.startDate is not empty ? imputation.startDate|date("d/m/Y") }}</td>
     </tr>
+    {% endif %}
+    {% if imputation.endDate is not empty %}
     <tr>
         <th>{%trans%}EndDate{%endtrans%}</th>
-        <td>{{ imputation.endDate is not empty ? imputation.endDate|date("Y-m-d") }}</td>
+        <td>{{ imputation.endDate is not empty ? imputation.endDate|date("d/m/Y") }}</td>
     </tr>
+    {% endif %}
+    {% if imputation.parent is not empty %}
     <tr>
         <th>{%trans%}Parent{%endtrans%}</th>
-        <td><a href="{{ path("finance_operation_imputation_see", { "parent_id": imputation.parent.id }) }}">{{imputation.parent}}</a></td>
+        <td><a href="{{ path("finance_operation_imputation_see", { "imputation_id": imputation.parent.id }) }}">{{imputation.parent}}</a></td>
     </tr>
+    {% endif %}
+    {% if balance is defined %}
+    <tr>
+        <th>{%trans%}Balance{%endtrans%}</th>
+        <td><b>{% include '::amountFormatting.html.twig' with {amount:balance} %}</b></td>
+    </tr>
+    {% endif %}
 </table>
+
+{% if monthlyMeans is defined %}
+{% include 'FinanceOperationBundle:Operation:monthlyMeans.html.twig' with {
+    routePrefix : 'finance_operation_imputation_',
+    entityName  : 'imputation'
+}%}
+{% endif %}
+
+{% include 'FinanceOperationBundle:Operation:seeEmbed.html.twig' with {
+    hideAccount         : true,
+    hidePaymentMethod   : true,
+}
+%}
 
 {% endblock %}

@@ -10,6 +10,10 @@ services:
         class: Finance\OperationBundle\Service\Helper\CategoryHelper
         arguments: [ "@doctrine.orm.entity_manager", @doctrine, @financeoperation.operationhelper, @router ]
     
+    financeoperation.imputationhelper:
+        class: Finance\OperationBundle\Service\Helper\ImputationHelper
+        arguments: [ "@doctrine.orm.entity_manager", @doctrine, @financeoperation.operationhelper, @router ]
+    
     financeoperation.transferbetweenaccounthelper:
         class: Finance\OperationBundle\Service\Helper\TransferBetweenAccountHelper
     

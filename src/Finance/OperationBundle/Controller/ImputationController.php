@@ -68,10 +68,28 @@ class ImputationController extends Controller
      **************************************************************************/
     public function seeAction(Imputation $imputation)
     {
+        $temporalImputation = $imputation->getStartDate() !== NULL && $imputation->getEndDate() !== NULL;
+        $operations         = $this->getDoctrine()->getRepository('FinanceOperationBundle:Operation')->getOperations(array('imputation' => $imputation));
         
-        return $this->render('FinanceOperationBundle:Imputation:see.html.twig', array(
-            'imputation'      => $imputation,            
-          ));
+        if($temporalImputation) {
+            $balance = $this->getDoctrine()->getRepository('FinanceOperationBundle:Operation')->getBalance(array('imputation' => $imputation));
+            return $this->render('FinanceOperationBundle:Imputation:see.html.twig', array(
+                'imputation'    => $imputation, 
+                'operations'    => $operations,
+                'balance'       => $balance,
+            ));
+        }
+        else {
+            $monthlyMeans   = $this->get('financeoperation.imputationhelper')->getMonthlyMeans(array('imputation' => $imputation));
+        
+            return $this->render('FinanceOperationBundle:Imputation:see.html.twig', array(
+                'imputation'    => $imputation, 
+                'operations'    => $operations,
+                'monthlyMeans'  => $monthlyMeans,
+            ));
+        }
+        
+        
     }
     
     /** ************************************************************************

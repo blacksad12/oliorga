@@ -3,7 +3,7 @@
 {{ '{% extends "::base.html.twig" %}' }}
 
 {{ '{% block title %}' }}
-{{ '{%trans%}Modify '~entity~'{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
+{{ '{%trans%}Modify '~entity~'{%endtrans%} - {%trans%}'~entity~'{%endtrans%} - {%trans%}'~bundleShort~'{%endtrans%} - {{ parent() }}' }}
 {{ '{% endblock %}' }}
 
 {{ '{% block body -%}' }}

@@ -26,8 +26,11 @@ class OperationRepository extends EntityRepository
         
         $this->filterByCategory($qb, $parameters);
         $this->filterByImputation($qb, $parameters);
+        $this->filterByStakeholder($qb, $parameters);
+        $this->filterByAccount($qb, $parameters);
         $this->filterByDate($qb, $parameters);
         $this->filterByMarked($qb, $parameters);
+        $this->filterByMonthlyRecurrent($qb, $parameters);
                
         $result = $qb->getQuery()->getSingleResult();
         return $result['balance'];
@@ -49,8 +52,11 @@ class OperationRepository extends EntityRepository
         
         $this->filterByCategory($qb, $parameters);
         $this->filterByImputation($qb, $parameters);
+        $this->filterByStakeholder($qb, $parameters);
+        $this->filterByAccount($qb, $parameters);
         $this->filterByDate($qb, $parameters);
         $this->filterByMarked($qb, $parameters);
+        $this->filterByMonthlyRecurrent($qb, $parameters);
                
         return $qb->getQuery()->getResult();
     }
@@ -63,11 +69,14 @@ class OperationRepository extends EntityRepository
      **************************************************************************/
     protected function checkParameters(array $parameters) {
         foreach($parameters as $parameterKey=>$parameterValue){
-            if(     $parameterKey == 'category'         && $parameterValue instanceof Category){}
-            elseif( $parameterKey == 'imputation'       && $parameterValue instanceof Imputation){}
-            elseif( $parameterKey == 'startDate'        && $parameterValue instanceof \DateTime){}
-            elseif( $parameterKey == 'endDate'          && $parameterValue instanceof \DateTime){}
-            elseif( $parameterKey == 'isMarked'         && is_bool($parameterValue)){}
+            if(     $parameterKey == 'category'             && $parameterValue instanceof Category){}
+            elseif( $parameterKey == 'imputation'           && $parameterValue instanceof Imputation){}
+            elseif( $parameterKey == 'stakeholder'          && $parameterValue instanceof Stakeholder){}
+            elseif( $parameterKey == 'account'              && $parameterValue instanceof \Finance\AccountBundle\Entity\Account){}
+            elseif( $parameterKey == 'before'               && $parameterValue instanceof \DateTime){}
+            elseif( $parameterKey == 'after'                && $parameterValue instanceof \DateTime){}
+            elseif( $parameterKey == 'isMarked'             && is_bool($parameterValue)){}
+            elseif( $parameterKey == 'isMonthlyRecurrent'   && is_bool($parameterValue)){}
             else{
                 throw new \InvalidArgumentException("The parameter with key: '".$parameterKey."' is not valid");
             }
@@ -82,11 +91,11 @@ class OperationRepository extends EntityRepository
     protected function filterByCategory(QueryBuilder $qb, array $parameters) {
         if(isset($parameters['category'])) {
             $qb->leftJoin('o.category', 'c');
-            $qb->leftJoin('c.parent', 'p');
+            $qb->leftJoin('c.parent', 'pc');
             $qb->andWhere($qb->expr()->orX(
                     $qb->expr()->eq('o.category', ':category'),
                     $qb->expr()->eq('c.parent', ':category'),
-                    $qb->expr()->eq('p.parent', ':category')
+                    $qb->expr()->eq('pc.parent', ':category')
                     ));
             $qb->setParameter('category', $parameters['category']);
         }
@@ -99,8 +108,44 @@ class OperationRepository extends EntityRepository
      **************************************************************************/
     protected function filterByImputation(QueryBuilder $qb, array $parameters) {
         if(isset($parameters['imputation'])) {
-            $qb->andWhere($qb->expr()->eq('o.imputation', ':imputation'));
+            $qb->leftJoin('o.imputation', 'i');
+            $qb->leftJoin('i.parent', 'pi');
+            $qb->andWhere($qb->expr()->orX(
+                    $qb->expr()->eq('o.imputation', ':imputation'),
+                    $qb->expr()->eq('i.parent', ':imputation'),
+                    $qb->expr()->eq('pi.parent', ':imputation')
+                    ));
             $qb->setParameter('imputation', $parameters['imputation']);
+        }
+    }
+    
+    /** ************************************************************************
+     * Filter by Stakeholder
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByStakeholder(QueryBuilder $qb, array $parameters) {
+        if(isset($parameters['stakeholder'])) {
+            $qb->leftJoin('o.stakeholder', 's');
+            $qb->leftJoin('s.parent', 'ps');
+            $qb->andWhere($qb->expr()->orX(
+                    $qb->expr()->eq('o.stakeholder', ':stakeholder'),
+                    $qb->expr()->eq('s.parent', ':stakeholder'),
+                    $qb->expr()->eq('ps.parent', ':stakeholder')
+                    ));
+            $qb->setParameter('stakeholder', $parameters['stakeholder']);
+        }
+    }
+    
+    /** ************************************************************************
+     * Filter by Account
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByAccount(QueryBuilder $qb, array $parameters) {
+        if(isset($parameters['account'])) {
+            $qb->andWhere($qb->expr()->eq('o.account', ':account'));
+            $qb->setParameter('account', $parameters['account']);
         }
     }
     
@@ -110,14 +155,14 @@ class OperationRepository extends EntityRepository
      * @param array $parameters
      **************************************************************************/
     protected function filterByDate(QueryBuilder $qb, array $parameters) {
-        if(isset($parameters['startDate'])) {
-            $qb->andWhere($qb->expr()->gte('o.date', ':startDate'));
-            $qb->setParameter('startDate', $parameters['startDate']);
+        if(isset($parameters['after'])) {
+            $qb->andWhere($qb->expr()->gte('o.date', ':after'));
+            $qb->setParameter('after', $parameters['after']);
         }
         
-        if(isset($parameters['endDate'])) {
-            $qb->andWhere($qb->expr()->lte('o.date', ':endDate'));
-            $qb->setParameter('endDate', $parameters['endDate']);
+        if(isset($parameters['before'])) {
+            $qb->andWhere($qb->expr()->lte('o.date', ':before'));
+            $qb->setParameter('before', $parameters['before']);
         }
     }
     
@@ -131,6 +176,20 @@ class OperationRepository extends EntityRepository
             $qb->andWhere($qb->expr()->eq('o.isMarked', ':isMarked'));
             $qb->setParameter('isMarked', $parameters['isMarked']);
         }         
+    }
+    
+    /** ************************************************************************
+     * Filter the result which are monthly recurrent or not
+     * @param QueryBuilder $qb
+     * @param array $parameters
+     **************************************************************************/
+    protected function filterByMonthlyRecurrent(QueryBuilder $qb, array $parameters) {
+        $qb->andWhere($qb->expr()->eq('o.isMonthlyRecurrent', ':isMonthlyRecurrent'));
+        if(isset($parameters['isMonthlyRecurrent'])) {
+            $qb->setParameter('isMonthlyRecurrent', $parameters['isMonthlyRecurrent']);
+        } else {
+            $qb->setParameter('isMonthlyRecurrent', false);
+        }
     }
     
     /** ************************************************************************

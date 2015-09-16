@@ -3,7 +3,7 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}
-{%trans%}Home{%endtrans%} - {%trans%}Operation{%endtrans%} - {{ parent() }}
+{%trans%}Home{%endtrans%} - {%trans%}Imputation{%endtrans%} - {{ parent() }}
 {% endblock %}
 
 {% block body -%}
@@ -19,20 +19,19 @@
        data-page-size="15">
     <thead>
         <tr>
-            <th data-toggle="true"></th>
             <th>{%trans%}Name{%endtrans%}</th>
-            <th data-type="numeric">{%trans%}StartDate{%endtrans%}</th>
-            <th data-type="numeric">{%trans%}EndDate{%endtrans%}</th>
-            <th>{%trans%}Parent{%endtrans%}</th>        </tr>
+            <th>{%trans%}Parent{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}From{%endtrans%}</th>
+            <th data-type="numeric">{%trans%}To{%endtrans%}</th>
+        </tr>
     </thead>
     <tbody>
     {%- for imputation in imputations %}
         <tr>
-            <td></td>
             <td><a href="{{ path("finance_operation_imputation_see", { "imputation_id": imputation.id }) }}">{{imputation.name}}</a></td>
-            <td data-value="{{ imputation.startDate|date("U") }}">{{ imputation.startDate is not empty ? imputation.startDate|date("Y-m-d") }}</td>
-            <td data-value="{{ imputation.endDate|date("U") }}">{{ imputation.endDate is not empty ? imputation.endDate|date("Y-m-d") }}</td>
-            <td><a href="{{ path("finance_operation_imputation_see", { "parent_id": imputation.parent.id }) }}">{{imputation.parent}}</a></td>
+            <td>{% if imputation.parent is not empty %}<a href="{{ path("finance_operation_imputation_see", { "imputation_id": imputation.parent.id }) }}">{{imputation.parent}}</a>{% endif %}</td>
+            <td data-value="{{ imputation.startDate|date("U") }}">{{ imputation.startDate is not empty ? imputation.startDate|date("d/m/Y") }}</td>
+            <td data-value="{{ imputation.endDate|date("U") }}">{{ imputation.endDate is not empty ? imputation.endDate|date("d/m/Y") }}</td>
         </tr>
     {%- endfor %}
     </tbody>

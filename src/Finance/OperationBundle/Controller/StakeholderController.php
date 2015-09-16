@@ -68,9 +68,11 @@ class StakeholderController extends Controller
      **************************************************************************/
     public function seeAction(Stakeholder $stakeholder)
     {
+        $operations = $this->getDoctrine()->getRepository('FinanceOperationBundle:Operation')->getOperations(array('stakeholder' => $stakeholder));
         
         return $this->render('FinanceOperationBundle:Stakeholder:see.html.twig', array(
-            'stakeholder'      => $stakeholder,            
+            'stakeholder'   => $stakeholder,
+            'operations'    => $operations,
           ));
     }
     
